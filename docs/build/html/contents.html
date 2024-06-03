@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Package contents &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using custom input tracks" href="eep_tracks.html" />
+    <link rel="prev" title="Using METISSE" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            METISSE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using METISSE</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Package contents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sse-specific-subroutines">SSE specific subroutines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modules-and-other-files">Modules and other files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#flowchart">Flowchart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="eep_tracks.html">Using custom input tracks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METISSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Package contents</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/contents.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="package-contents">
+<h1>Package contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h1>
+<p>All the programs and subroutines are written in Modern Fortran.</p>
+<p>The METISSE package contains two types of files in the source (<em>src</em>) directory:</p>
+<section id="sse-specific-subroutines">
+<h2>SSE specific subroutines<a class="headerlink" href="#sse-specific-subroutines" title="Link to this heading"></a></h2>
+<p>METISSE has been developed as an alternative to SSE (Hurley et al. 2000) and, therefore, contains similar subroutines as SSE. The following subroutines replicate the behaviour of the SSE subroutines externally, with similar names and input/output variables.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>METISSE_zcnsts.f90</p></td>
+<td><p>Controls metallicity (Z) related part of the package.</p></td>
+</tr>
+<tr class="row-odd"><td><p>METISSE_star.f90</p></td>
+<td><p>Find relevant tracks from the input set and interpolate in mass to get a track of a given mass.</p></td>
+</tr>
+<tr class="row-even"><td><p>METISSE_hrdiag.f90</p></td>
+<td><p>Interpolate within the new track to determine stellar parameters at a given age. Also, compute the evolutionary phase of the star including the remnant phases and their properties.</p></td>
+</tr>
+<tr class="row-odd"><td><p>METISSE_deltat.f90</p></td>
+<td><p>Calculate the time steps depending on the stage of evolution.</p></td>
+</tr>
+<tr class="row-even"><td><p>METISSE_mlwind.f90</p></td>
+<td><p>Derive the mass loss through stellar winds.</p></td>
+</tr>
+<tr class="row-odd"><td><p>METISSE_gntage.f90</p></td>
+<td><p>Determine the age of a giant star after merger or rejuvenation.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="modules-and-other-files">
+<h2>Modules and other files<a class="headerlink" href="#modules-and-other-files" title="Link to this heading"></a></h2>
+<p>The following Fortran modules contain more general data structures and subroutines specific to METISSE that can be accessed by SSE-specific subroutines as required.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>track_support.f90</p></td>
+<td><p>Contains general data structures and functions needed throughout the program.</p></td>
+</tr>
+<tr class="row-odd"><td><p>interp_support.f90</p></td>
+<td><p>Contains functions required for interpolation.</p></td>
+</tr>
+<tr class="row-even"><td><p>remnant_support.f90</p></td>
+<td><p>Contains functions needed to calculate properties of remnant phases.</p></td>
+</tr>
+<tr class="row-odd"><td><p>z_support.f90</p></td>
+<td><p>Together with METISSE_zcnsts, it reads all input namelists and files, including EEP files, and sets Z parameters and other metallicity-based functions.</p></td>
+</tr>
+<tr class="row-even"><td><p>sse_support.f90</p></td>
+<td><p>Contains subroutines to calculate SSE-specific quantities.</p></td>
+</tr>
+</tbody>
+</table>
+<p>In addition to the previously mentioned modules, there is an additional file called <em>METISSE_miscellaneous.f90</em>. This file contains miscellaneous subroutines that are necessary for METISSE to function in standalone mode or other contexts. Ideally, these subroutines should also be organized into a module. However, this is not possible because Fortran 77 does not support the use of modules.</p>
+<p>It contains:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>alloc_track.f90</p></td>
+<td><p>Allocate the track object.</p></td>
+</tr>
+<tr class="row-odd"><td><p>dealloc_track.f90</p></td>
+<td><p>Deallocate the track object and arrays within.</p></td>
+</tr>
+<tr class="row-even"><td><p>initialize_front_end</p></td>
+<td><p>Inform METISSE what code is using it.</p></td>
+</tr>
+<tr class="row-odd"><td><p>set_star_type</p></td>
+<td><p>Set star type to <code class="docutils literal notranslate"><span class="pre">rejuvenated</span></code> before calling star.</p></td>
+</tr>
+</tbody>
+</table>
+<p>A combination of these files is used depending on how METISSE is being used.</p>
+<p><strong>In the standalone mode:</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>main_metisse.f90</p></td>
+<td><p>Main program for running METISSE. Can only evolve single stars. Reads the input files and sets up relevant parameters and data structures before evolving stars of given masses.</p></td>
+</tr>
+<tr class="row-odd"><td><p>evolv_metisse.f90</p></td>
+<td><p>Controls the evolution of each star and writes output to files.</p></td>
+</tr>
+<tr class="row-even"><td><p>assign_commons_main.f90</p></td>
+<td><p>Assign values for variables used in METISSE from SSE_input_controls.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>As part of other codes:</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>File Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>assign_commons_xyz.f90</p></td>
+<td><p>To assign common variables when METISSE is used with other code say ‘xyz’.</p></td>
+</tr>
+<tr class="row-odd"><td><p>comenv_lambda.f90</p></td>
+<td><p>Get appropriate ZAMS radius and calculate common envelope lambda.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="flowchart">
+<h1>Flowchart<a class="headerlink" href="#flowchart" title="Link to this heading"></a></h1>
+<p>Here is a flowchart describing the workflow of METISSE:</p>
+<p><img alt="METISSE's flowchart" src="_images/METISSE_flowchart.png" /></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Using METISSE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="eep_tracks.html" class="btn btn-neutral float-right" title="Using custom input tracks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
