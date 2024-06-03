@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using custom input tracks &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Package contents" href="contents.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            METISSE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents.html">Package contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contents.html#flowchart">Flowchart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using custom input tracks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METISSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Using custom input tracks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/eep_tracks.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-custom-input-tracks">
+<h1>Using custom input tracks<a class="headerlink" href="#using-custom-input-tracks" title="Link to this heading"></a></h1>
+<p>METISSE, can use any set of tracks computed with MESA or other stellar evolution codes.
+Prior to use in METISSE, the input tracks need to be converted to EEP format, ensuring that key evolutionary points, such as the zero-age main sequence (ZAMS), are aligned across all files.</p>
+<p>Information about EEP tracks is then provided through the <code class="docutils literal notranslate"><span class="pre">&amp;metallicity_controls</span></code> inlist, which we also call as the <code class="docutils literal notranslate"><span class="pre">metallicity</span> <span class="pre">file</span></code>. Each metallicity file contains details about the input tracks for a specific metallicity, including the path to the folder containing the EEP tracks, the metallicity value, and other relevant information or metadata.</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">metallicity_controls</span>
+<span class="w">    </span><span class="c">! Location of the folder containing input files for a given metallicity</span>
+
+<span class="w">    </span><span class="n">INPUT_FILES_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+
+<span class="w">    </span><span class="c">! Metallicity of input tracks</span>
+<span class="w">    </span><span class="c">! It is only used to cross-check </span>
+<span class="w">    </span><span class="c">! against input Z to avoid mistakes</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">Z_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+
+<span class="w">    </span><span class="c">! Details about the file structure (see format_defaults.dat)</span>
+<span class="w">    </span><span class="c">! Empty string will raise an error</span>
+
+<span class="w">    </span><span class="n">format_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+
+<span class="w">    </span><span class="c">! Interpolating in all columns of input files can slow down computations </span>
+<span class="w">    </span><span class="c">! By default METISSE only interpolates in the essential columns </span>
+<span class="w">    </span><span class="c">! and the additional columns specified in the format_file.</span>
+<span class="w">    </span><span class="c">! Using fewer columns means fewer calculations, therefore faster runs.</span>
+<span class="w">    </span><span class="c">! If read_all_columns is true then all columns are used.</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">read_all_columns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+
+<span class="w">    </span><span class="c">! NOTE that for binary evolution calculations, ONLY default columns are used,</span>
+<span class="w">    </span><span class="c">! irrespective of whether read_all_columns is true or not.</span>
+<span class="w">    </span><span class="c">! Quantities interpolated using any other columns are currently discarded.</span>
+
+
+<span class="w">    </span><span class="c">! Extra columns to be used for interpolation if read_all_columns is false </span>
+<span class="w">    </span><span class="c">! Useful only for single-star evolution calculations with implicit mass loss.</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! The interpolated quantities are printed in MIST (Choi et al. 2016) style files</span>
+<span class="w">    </span><span class="c">! if write_eep_file is true.</span>
+<span class="w">    </span><span class="c">! You can list up to 100 column names here, as strings separated by a comma </span>
+<span class="w">    </span><span class="c">! (irrespective of the order or whitespace between the strings).</span>
+
+<span class="w">    </span><span class="n">extra_columns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+
+<span class="w">    </span><span class="c">! Alternatively, you can list the extra columns names in a text file </span>
+<span class="w">    </span><span class="c">! (one column name per line) and specify the location of that file in extra_columns_file</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">extra_columns_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+
+<span class="w">  </span>
+<span class="w">    </span><span class="c">! Z PARAMETERS/ mass cutoffs</span>
+<span class="w">    </span><span class="c">! If &lt; 0 then the values are calculated by the code</span>
+<span class="w">    </span><span class="c">! If&gt;0 then these values are instead used </span>
+
+<span class="w">    </span><span class="n">Mhook</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="w">    </span><span class="n">Mhef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="w">    </span><span class="n">Mfgb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="w">    </span><span class="n">Mup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="w">    </span><span class="n">Mec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+
+<span class="w">    </span><span class="c">! Extra mass cutoff- if any</span>
+
+<span class="w">    </span><span class="n">Mextra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span><span class="w">       </span>
+
+<span class="w">    </span><span class="c">! Hydrogen and helium abundance</span>
+<span class="w">    </span><span class="c">! Default is SSE formulae</span>
+<span class="w">    </span><span class="c">! If Z_H &lt;0 then it is calculated from Z as 0.76 - 3*Z</span>
+<span class="w">    </span><span class="c">! If Z_He &lt;0 then it is calculated from Z as 0.24 + 2*Z</span>
+
+<span class="w">    </span><span class="n">Z_H</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="w">    </span><span class="n">Z_He</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+
+<span class="o">/</span>
+</pre></div>
+</div>
+<p>In addition to the metallicity files, user also needs to specify the format of input files through <code class="docutils literal notranslate"><span class="pre">&amp;format_controls</span></code> inlist. An example format file looks like this:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">format_controls</span>
+
+<span class="w">    </span><span class="c">!-------FILE DETAILS-------------</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! e.g., &#39;.eep&#39;,&#39;.dat&#39;</span>
+<span class="w">    </span><span class="n">file_extension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! Set read_eep_files to true only for MIST-like files</span>
+<span class="w">    </span><span class="c">! generated from A Dotter&#39;s ISO code (Dotter 2016).</span>
+<span class="w">    </span><span class="c">! If true; then extra_char, total_cols</span>
+<span class="w">    </span><span class="c">! and other information are pre-specified.</span>
+<span class="w">    </span><span class="c">! Set it to false other type of files</span>
+
+<span class="w">    </span><span class="n">read_eep_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! Header for reading column names from files</span>
+<span class="w">    </span><span class="c">! i.e. the line number where column names are listed</span>
+<span class="w">    </span><span class="c">! Set it to &lt;=0 if the input files do not contain column names</span>
+<span class="w">    </span><span class="c">! and list the names in the column_name_file</span>
+<span class="w">   </span>
+<span class="w">    </span><span class="n">header_location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! Any extra character present in the header line (if any)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">extra_char</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+
+<span class="w">    </span><span class="c">! If the header is &lt;=0, then column names cannot be determined from the input files</span>
+<span class="w">    </span><span class="c">! For such cases, specify &#39;column_name_file&#39; for determining the name and the order of columns</span>
+<span class="w">    </span><span class="c">! Note that this is different from the key_columns_file which specifies what subset of these columns is to be used</span>
+
+<span class="w">    </span><span class="n">column_name_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! Total number of columns</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">total_cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+
+<span class="w">    </span><span class="c">!-------EEP DETAILS-------------</span>
+<span class="w">    </span><span class="n">PreMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">ZAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">IAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">TAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">BGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">cHeIgnition_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">cHeBurn_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">TA_cHeB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+
+<span class="w">    </span><span class="n">TPAGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">cCBurn_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">post_AGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">WD_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+
+<span class="w">    </span><span class="c">!files will be read from this EEP/line number</span>
+<span class="w">    </span><span class="c">!if &lt;0, then ZAMS_EEP is used</span>
+<span class="w">    </span><span class="n">Initial_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="c">!to this EEP/line</span>
+<span class="w">    </span><span class="c">! if &lt;0 then maximum of the above listed EEPs is used</span>
+<span class="w">    </span><span class="n">Final_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">Extra_EEP1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">Extra_EEP2</span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="n">Extra_EEP3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+
+<span class="w">    </span><span class="c">! Usually two to four tracks neighboring are used for interpolation.</span>
+<span class="w">    </span><span class="c">! However, if any of them is incomplete,</span>
+<span class="w">    </span><span class="c">! then the interpolated track is also rendered incomplete.</span>
+<span class="w">    </span><span class="c">! If fix_track is true, METISSE relaxes the criteria for finding</span>
+<span class="w">    </span><span class="c">! the neighboring tracks in above cases and tries to get a complete track.</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">fix_track</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+
+<span class="w">    </span><span class="c">! if fix_track is true, then</span>
+<span class="w">    </span><span class="c">! the completeness of tracks is determined by the following two:</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! for stars with M&lt; Mec</span>
+<span class="w">    </span><span class="n">low_mass_final_eep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">    </span><span class="c">! for stars with M&gt;= Mec</span>
+<span class="w">    </span><span class="n">high_mass_final_eep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+
+<span class="w">    </span><span class="c">! When fixing an incomplete track</span>
+<span class="w">    </span><span class="c">! Search for the new neighboring tracks for interpolation </span>
+<span class="w">    </span><span class="c">! within the mass range of initial_mass - (initial_mass*lookup_index) </span>
+<span class="w">    </span><span class="c">! and initial_mass + (initial_mass*lookup_index)]</span>
+<span class="w"> </span>
+<span class="w">    </span><span class="n">lookup_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span>
+
+
+<span class="w">    </span><span class="c">!-------COLUMN NAMES---------------------------------</span>
+<span class="w">    </span><span class="c">! Since columns can be named in different ways</span>
+<span class="w">    </span><span class="c">! Use this section to names of some important columns</span>
+<span class="w">    </span><span class="c">! Make sure units are correct</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! ESSENTIAL columns-----------------------------------</span>
+<span class="w">    </span><span class="c">! Code will stop if it cannot determine these columns </span>
+
+<span class="w">    </span><span class="c">!age in units of yrs</span>
+<span class="w">    </span><span class="n">age_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">!mass of the star in solar units</span>
+<span class="w">    </span><span class="n">mass_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+
+<span class="w">    </span><span class="c">! luminosity in solar units</span>
+<span class="w">    </span><span class="c">! If not supplied then log_L_colname is used</span>
+<span class="w">    </span><span class="n">Lum_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! log of luminosity (alternative to Lum_colname)</span>
+<span class="w">    </span><span class="c">! used if Lum_colname is an empty string(&#39;&#39;)</span>
+<span class="w">    </span><span class="n">log_L_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w"> </span>
+<span class="w">    </span><span class="c">! Radius in solar units</span>
+<span class="w">    </span><span class="c">! If not supplied then log_R_colname is used</span>
+<span class="w">    </span><span class="n">Radius_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! log of radius (alternative to Radius_colname)</span>
+<span class="w">    </span><span class="c">! used if Radius_colname is an empty string(&#39;&#39;)</span>
+<span class="w">    </span><span class="n">log_R_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! Effective/surface temperature in K OR</span>
+<span class="w">    </span><span class="c">! If not supplied  then log_T_colname is used</span>
+<span class="w">    </span><span class="n">Teff_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! log of surface temperature (alternative to Teff_colname)</span>
+<span class="w">    </span><span class="c">! used if Teff_colname is an empty string(&#39;&#39;)</span>
+<span class="w">    </span><span class="n">log_T_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! d(star_mass)/dt in msolar per year</span>
+<span class="w">    </span><span class="c">! If not supplied then log_mdot_colname is used</span>
+<span class="w">    </span><span class="n">mdot_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! log10(abs(star_mdot)) (alternative to mdot_colname)</span>
+<span class="w">    </span><span class="c">! used if mdot_colname is an empty string(&#39;&#39;)</span>
+<span class="w">    </span><span class="n">log_mdot_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">   </span>
+<span class="w">    </span><span class="c">! mass of He enriched/H depleted core in solar units</span>
+<span class="w">    </span><span class="n">he_core_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! mass of C enriched/He depleted core in solar units</span>
+<span class="w">    </span><span class="n">c_core_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+
+<span class="w">    </span><span class="c">!</span>
+<span class="w">    </span><span class="c">! (OPTIONAL) additional columns----------------------</span>
+<span class="w">    </span><span class="c">! </span>
+<span class="w">    </span><span class="c">! The code will not stop if these column names are not provided</span>
+<span class="w">    </span><span class="c">! However, it will revert to using SSE formulae for these quantities</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! radius of He enriched/H depleted core</span>
+<span class="w">    </span><span class="c">! in solar units (can not use log)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">he_core_radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! radius of C enriched/He depleted core</span>
+<span class="w">    </span><span class="c">!in solar units (can not use log)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">co_core_radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! mass of the convective envelope in solar units</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">mass_conv_envelope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! radius of the convective envelope in solar units</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">radius_conv_envelope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">!moment of inertia (for tidal/spin calculations)</span>
+<span class="w">    </span><span class="n">moment_of_inertia</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! These are required for determining Mup and Mhook</span>
+<span class="w">    </span><span class="c">! If they are not supplied, then user-defined values for Mup and Mhook are used</span>
+<span class="w">    </span><span class="c">! If Mup and Mhook are not supplied either, then SSE&#39;s formulae are used</span>
+
+<span class="w">    </span><span class="c">! central temperature in log units</span>
+<span class="w">    </span><span class="n">log_Tc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! helium-4 mass fraction at centre</span>
+<span class="w">    </span><span class="n">he4_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! carbon-12 mass fraction at centre</span>
+<span class="w">    </span><span class="n">c12_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! oxygen-16 mass fraction at centre</span>
+<span class="w">    </span><span class="n">o16_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c">! NOT FUNCTIONAL- do not use</span>
+<span class="w">    </span><span class="c">! list of columns related to the evolution of core</span>
+<span class="w">    </span><span class="c">! these are interpolated based on the original age of the star before mass loss</span>
+<span class="w">    </span><span class="c">!number_of_core_columns = 0</span>
+<span class="w">    </span><span class="c">!core_columns = &#39;age,log_L,Mc_He,Mc_CO&#39;</span>
+<span class="o">/</span>
+</pre></div>
+</div>
+<p>Similar to <code class="docutils literal notranslate"><span class="pre">&amp;SSE_input_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">&amp;METISSE_input_controls</span></code>, refer to <code class="docutils literal notranslate"><span class="pre">src/defaults/metallicity_defaults.inc</span></code> and <code class="docutils literal notranslate"><span class="pre">src/defaults/format_defaults.inc</span></code> for most upto date variable names for all inlists and their default values. <strong>Do not modify any file inside the defaults folder</strong>.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="contents.html" class="btn btn-neutral float-left" title="Package contents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
