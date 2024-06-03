@@ -231,7 +231,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
         if (i==2) then
             call set_zparameters_he()
             call copy_and_deallocatex(sa_he)
-            call get_minmax(sa_he,Mmax_he_array,Mmin_he_array)
+            call get_minmax(sa_he(1)% is_he_track,Mmax_he_array,Mmin_he_array)
 
             use_sse_NHe = .false.
             allocate(core_cols_he(4))
@@ -247,7 +247,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
             call set_zparameters(zpars)
             call copy_and_deallocatex(sa)
             
-            call get_minmax(sa,Mmax_array,Mmin_array)
+            call get_minmax(sa(1)% is_he_track,Mmax_array,Mmin_array)
 
             allocate(core_cols(6))
             core_cols = -1
