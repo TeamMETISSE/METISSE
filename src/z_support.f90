@@ -21,7 +21,7 @@ module z_support
 
     character:: extra_char
 
-    type(eep_track), allocatable :: xa(:)
+    type(track), allocatable :: xa(:)
 
     real(dp) :: mass, max_age, min_mass, max_mass
     !used to set star_type_from_history
@@ -267,10 +267,9 @@ module z_support
     end subroutine get_files_from_path
 
     subroutine read_eep(x)      !from iso/iso_eep_support.f90
-    type(eep_track), intent(inout) :: x
+    type(track), intent(inout) :: x
     integer :: ierr, io, j
 
-    logical :: read_phase
     character(LEN=8) :: phase_info
     character(LEN=strlen) :: eepfile
     character(LEN=10) :: type_label
@@ -279,7 +278,6 @@ module z_support
 
     ierr = 0
     debug = .false.
-    read_phase = .false.
 
     eepfile = trim(x% filename)
 
@@ -306,11 +304,8 @@ module z_support
     if (debug) print*,'reading',eepfile,x% neep
     
     if(index(phase_info,'YES')/=0) then
-       x% has_phase = .true.
-       allocate(x% phase(x% ntrack))
        x% ncol = x% ncol - 1
     else
-       x% has_phase = .false.
        x% ncol = x% ncol
     endif
     
@@ -340,7 +335,7 @@ module z_support
     
     !adapted from read_history_file of iso_eep_support
     subroutine read_input_file(x)
-        type(eep_track), intent(inout) :: x
+        type(track), intent(inout) :: x
         character(LEN=8192) :: line
         integer :: i, io, j,ierr
         logical :: debug
@@ -443,107 +438,6 @@ module z_support
         end do
     end subroutine split
 
-    subroutine copy_and_deallocatex(y)
-        type(eep_track), allocatable :: y(:)
-        integer :: i, n, start
-        logical :: debug
-
-        debug = .false.
-    
-        if (allocated(y)) deallocate(y)
-        allocate(y(size(xa)))
-    
-        !copy header
-        y% filename = xa% filename
-        y% initial_mass = xa% initial_mass
-        y% ntrack = xa% ntrack
-        y% initial_Y = xa% initial_Y
-        y% initial_Z = xa% initial_Z
-        y% Fe_div_H = xa% Fe_div_H
-        y% alpha_div_Fe = xa% alpha_div_Fe
-        y% v_div_vcrit = xa% v_div_vcrit
-        y% star_type = xa% star_type
-        y% is_he_track = xa% is_he_track
-        
-        !determine key columns
-        call get_key_columns(xa(1)% cols, xa(1)% ncol, xa(1)% is_he_track)
-        if (debug) print*,'key_cols', size(key_cols),xa(1)% ncol
-
-        !copy columns and the track
-        do n = 1,size(xa)
-            if (read_all_columns) then
-                if (debug) print*, 'using all columns'
-                y(n)% ncol = xa(n)% ncol
-                allocate(y(n)% tr(y(n)% ncol, y(n)% ntrack), y(n)% cols(y(n)% ncol))
-                y(n)% cols% name = xa(n)% cols% name
-                y(n)% tr = xa(n)% tr
-            else
-                y(n)% ncol = size(key_cols)
-                allocate(y(n)% tr(y(n)% ncol, y(n)% ntrack), y(n)% cols(y(n)% ncol))
-                do i = 1, y(n)% ncol
-                    if (debug .and. n==1) print*, 'key column ',i,':',key_cols(i)% name,key_cols(i)% loc
-                    y(n)% cols(i)% name = key_cols(i)% name
-                    y(n)% tr(i,:) = xa(n)% tr(key_cols(i)% loc,:)
-                end do
-            endif
-            ! copy eep information
-            y(n)% neep = xa(n)% neep
-            allocate(y(n)% eep(y(n)% neep))
-            y(n)% eep = xa(n)% eep
-            ! copy FSPS phase information if there
-            y(n)% has_phase = xa(n)% has_phase
-            if (y(n)% has_phase) then
-                allocate(y(n)% phase(y(n)% ntrack))
-                y(n)% phase = xa(n)% phase
-            endif
-            ! check for mass loss
-            y(n)% has_mass_loss = check_mass_loss(y(n))
-            
-!             recalibrate age from ZAMS
-            start = ZAMS_EEP
-            if (y(n)% is_he_track)start = ZAMS_HE_EEP
-            y(n)% tr(i_age2,:) = y(n)% tr(i_age2,:)- y(n)% tr(i_age2,start)
-!
-!            print*,'test input', y(n)% initial_mass,y(n)% ntrack
-            if (.false.) then
-            if (y(n)% ntrack< get_min_ntrack(y(n)% star_type, y(n)% is_he_track)) then
-            print*, 'input track is incomplete', y(n)% initial_mass,y(n)% ntrack
-            endif
-            
-            if (y(n)% star_type == star_high_mass .and. (y(n)% tr(i_co_core,y(n)% ntrack)<tiny)) then
-            print*,'track has zero co_core',y(n)% initial_mass,y(n)% tr(i_co_core,y(n)% ntrack)
-            endif
-            endif
-        end do
-        
-        !Now deallocate xa
-        deallocate(xa)
-        deallocate(key_cols)
-    end subroutine
-
-    subroutine get_minmax(x,Mmax,Mmin)
-    
-        type(eep_track) :: x(:)
-        real(dp), allocatable :: Mmax(:), Mmin(:)
-        integer :: i,j,nmax
-        
-        nmax = maxval(x% ntrack)
-        allocate(Mmax(nmax), Mmin(nmax))
-        Mmax = 0.d0
-        Mmin = huge(0.0d0)    !largest float
-        
-        do i = 1,size(x)
-            !Find maximum and minimum mass at each eep
-            do j = 1, nmax
-                if (x(i)% ntrack>=j) then
-                    Mmax(j) = max(Mmax(j),x(i)% tr(i_mass,j))
-                    Mmin(j) = min(Mmin(j),x(i)% tr(i_mass,j))
-                endif
-            end do
-        end do
-        
-    end subroutine
-    
     !locating essential columns here
     subroutine locate_column_numbers(cols,ncol,is_he_track)
         type(column), intent(in) :: cols(:)
@@ -653,7 +547,7 @@ module z_support
     end function locate_column
       
     subroutine make_logcolumn(x, itemp)
-        type(eep_track) :: x(:)
+        type(track) :: x(:)
         integer :: itemp,k
         do k = 1, size(x)
             x(k)% tr(itemp,:) = log10(x(k)% tr(itemp,:))
@@ -662,7 +556,7 @@ module z_support
     end subroutine make_logcolumn
     
     subroutine make_pow10column(x, itemp,newname)
-        type(eep_track) :: x(:)
+        type(track) :: x(:)
         integer :: itemp,k
         character(LEN=col_width), intent(in), optional :: newname
         do k = 1, size(x)
@@ -962,7 +856,7 @@ module z_support
 
     
   subroutine set_star_type_from_history(x)
-    type(eep_track), intent(inout) :: x
+    type(track), intent(inout) :: x
     integer :: n
 
     !set the WDCS primary EEP if center_gamma < center_gamma_limit
@@ -1030,29 +924,173 @@ module z_support
         endif
     endif
 
-  end subroutine set_star_type_from_history
-
-    logical function check_mass_loss(x)
-    type(eep_track), intent(in) :: x
-    real(dp) :: dm
-
-    dm = (x% tr(i_mass,1)-x% tr(i_mass,x% ntrack))/x% initial_mass
-    if (dm<tiny) then
-        check_mass_loss = .false.
-    else
-        check_mass_loss = .true.
-    endif
-    end function
+    end subroutine set_star_type_from_history
 
     subroutine set_star_type_from_label(label,x)
         character(LEN=10), intent(in) :: label
-        type(eep_track), intent(inout) :: x
+        type(track), intent(inout) :: x
         integer :: n,i
         n = size(star_label)
         do i=1,n
             if(label==star_label(i)) x% star_type = i
         enddo
     end subroutine set_star_type_from_label
+
+    subroutine copy_and_deallocatex(y)
+        type(track), allocatable :: y(:)
+        integer :: i, n, k, start, abs_min_ntrack
+        logical :: debug
+
+        debug = .false.
+    
+        if (allocated(y)) deallocate(y)
+        allocate(y(size(xa)))
+    
+        !determine key columns
+        call get_key_columns(xa(1)% cols, xa(1)% ncol, xa(1)% is_he_track)
+        if (debug) print*,'key_cols', size(key_cols),xa(1)% ncol
+
+        k = 0
+        !copy columns and the track
+        do n = 1,size(xa)
+           
+            if (xa(n)% star_type == star_high_mass .and. (xa(n)% tr(i_co_core,xa(n)% ntrack)<tiny)) then
+                if (verbose) print*, 'skipping ',xa(n)% filename, 'REASON: zero co_core',xa(n)% tr(i_co_core,xa(n)% ntrack)
+                cycle
+            endif
+            
+            xa(n)% complete = .true.
+            
+            if (xa(n)% ntrack< get_min_ntrack(xa(n)% star_type, xa(n)% is_he_track)) then
+                abs_min_ntrack = TAMS_EEP
+                if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
+                if (xa(n)% ntrack < abs_min_ntrack) then
+                    if (verbose) print*, 'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
+                    cycle
+                endif
+                xa(n)% complete = .false.
+            endif
+            
+            k = k+1
+            
+            !copy header
+            y(k)% filename = xa(n)% filename
+            y(k)% initial_mass = xa(n)% initial_mass
+            y(k)% ntrack = xa(n)% ntrack
+            y(k)% initial_Y = xa(n)% initial_Y
+            y(k)% initial_Z = xa(n)% initial_Z
+            y(k)% Fe_div_H = xa(n)% Fe_div_H
+            y(k)% alpha_div_Fe = xa(n)% alpha_div_Fe
+            y(k)% v_div_vcrit = xa(n)% v_div_vcrit
+            y(k)% star_type = xa(n)% star_type
+            y(k)% is_he_track = xa(n)% is_he_track
+            y(k)% complete = xa(n)% complete
+        
+        
+        
+            if (read_all_columns) then
+                if (debug) print*, 'using all columns'
+                y(k)% ncol = xa(n)% ncol
+                allocate(y(k)% tr(y(k)% ncol, y(k)% ntrack), y(k)% cols(y(k)% ncol))
+                y(k)% cols% name = xa(n)% cols% name
+                y(k)% tr = xa(n)% tr
+            else
+                y(k)% ncol = size(key_cols)
+                allocate(y(k)% tr(y(k)% ncol, y(k)% ntrack), y(k)% cols(y(k)% ncol))
+                do i = 1, y(k)% ncol
+                    if (debug .and. n==1) print*, 'key column ',i,':',key_cols(i)% name,key_cols(i)% loc
+                    y(k)% cols(i)% name = key_cols(i)% name
+                    y(k)% tr(i,:) = xa(n)% tr(key_cols(i)% loc,:)
+                end do
+            endif
+            ! copy eep information
+            y(k)% neep = xa(n)% neep
+            allocate(y(k)% eep(y(k)% neep))
+            y(k)% eep = xa(n)% eep
+            
+            ! check for mass loss
+            y(k)% has_mass_loss = check_mass_loss(y(k))
+            
+!             recalibrate age from ZAMS
+            start = ZAMS_EEP
+            
+            if (y(k)% is_he_track)start = ZAMS_HE_EEP
+            y(k)% tr(i_age2,:) = y(k)% tr(i_age2,:)- y(k)% tr(i_age2,start)
+!
+!            print*,'test input', y(k)% initial_mass,y(k)% ntrack
+            
+        end do
+        
+        
+        !sort the array based on intial mass if not sorted already
+        call sort_minitial(y)
+        !Now deallocate xa
+        deallocate(xa)
+        deallocate(key_cols)
+    end subroutine
+
+    logical function check_mass_loss(x)
+        type(track), intent(in) :: x
+        real(dp) :: dm
+
+        dm = (x% tr(i_mass,1)-x% tr(i_mass,x% ntrack))/x% initial_mass
+        if (dm<tiny) then
+            check_mass_loss = .false.
+        else
+            check_mass_loss = .true.
+        endif
+    end function
+    
+    subroutine sort_minitial(y)
+        type(track):: y(:), temp
+        real(dp), allocatable :: list(:)
+        integer :: i, a, loc, n
+
+        list = y% initial_mass
+        n = size(list)
+        
+        !sort array and swap tracks where needed
+        do i = 1, n-1
+            a = minloc(list(i:n),dim=1)
+            loc = (i - 1) + a
+            if (loc/=i) then
+                print*, 'swapping input tracks at',loc,i
+                temp = y(loc)
+                y(loc) = y(i)
+                y(i) = temp
+            endif
+        end do
+    end subroutine sort_minitial
+    
+    subroutine get_minmax(is_he_track,Mmax,Mmin)
+        logical , intent(in) :: is_he_track
+        type(track), pointer :: x(:)
+        real(dp), allocatable :: Mmax(:), Mmin(:)
+        integer :: i,j,nmax
+        
+        if (is_he_track) then
+            x => sa_he
+        else
+            x => sa
+        endif
+        
+        nmax = maxval(x% ntrack)
+        allocate(Mmax(nmax), Mmin(nmax))
+        Mmax = 0.d0
+        Mmin = huge(0.0d0)    !largest float
+        
+        do i = 1,size(x)
+            !Find maximum and minimum mass at each eep
+            do j = 1, nmax
+                if (x(i)% ntrack>=j) then
+                    Mmax(j) = max(Mmax(j),x(i)% tr(i_mass,j))
+                    Mmin(j) = min(Mmin(j),x(i)% tr(i_mass,j))
+                endif
+            end do
+        end do
+        
+        nullify(x)
+    end subroutine get_minmax
 
     subroutine set_zparameters(zpars)
         real(dp), intent(out) :: zpars(20)
@@ -1271,7 +1309,6 @@ module z_support
         endif
         
         Z04 = initial_Z**0.4
-
         
         !Redefine these for use later in the code
         Mhook = zpars(1)
@@ -1279,7 +1316,6 @@ module z_support
         Mfgb = zpars(3)
         Mup = zpars(4)
         Mec = zpars(5)
-    
     
         if (debug) print*, 'zpars:',  zpars(1:5)
         deallocate(mass_list)
@@ -1319,9 +1355,8 @@ module z_support
         if (verbose) write(*,'(a,f7.1)') ' Minimum initial mass', Mcrit_he(1)% mass
         if (verbose) write(*,'(a,f7.1)') ' Maximum initial mass', Mcrit_he(9)% mass
 
-        allocate(mass_list(num_tracks))
-        mass_list = xa% initial_mass
-
+        allocate(mass_list(num_tracks),source=xa% initial_mass)
+        
         !if already defined, do index search here otherwise search below
         do i = 2, size(Mcrit_he)-1
             if (.not. defined(Mcrit_he(i)% mass)) cycle
@@ -1438,26 +1473,6 @@ module z_support
         m_cutoff = pack(m_cutoff,mask = m_cutoff .ne. 0)
         deallocate(mloc)
     end subroutine sort_mcutoff
-
-    subroutine sort(mloc, list)
-        integer, intent(in) :: mloc(:)
-        integer, allocatable, intent(out) :: list(:)
-        integer :: val,n
-        integer :: i, a, loc
-
-        n = size(mloc)
-        allocate(list(n))
-        list=pack(mloc,mask = mloc .ne. 0)
-        
-        !sort array
-        do i = 0, n-1
-            val = minval(list(i:n-1))
-            a = minloc(list(i:n-1),dim=1)
-            loc = (i - 1) + a
-            list(loc) = list(i)
-            list(i) = val
-        end do
-    end subroutine sort
 
     !ZPARS
     !finds critical masses and their locations

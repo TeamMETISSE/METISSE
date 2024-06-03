@@ -20,7 +20,7 @@ module interp_support
         type(track), pointer :: t
 
         integer :: iseg, keyword,min_index
-        type(eep_track), pointer :: a(:), s(:)
+        type(track), pointer :: a(:), s(:)
         real(dp) :: f(3), dx, x(4), y(4), alfa, beta
         integer :: i, j, k, mlo, mhi,nt,age_col,start
         integer, allocatable :: eeps(:), excl_cols(:)
@@ -175,7 +175,7 @@ module interp_support
         logical, intent(in) :: is_he_track
         integer, intent(out) :: iseg,min_index,keyword
         
-        type(eep_track), pointer :: s(:)
+        type(track), pointer :: s(:)
         real(dp), allocatable :: mass_list(:)
         integer, allocatable :: bounds(:), cutoff(:)
         integer :: m_low,m_high,num_list,min_index1,j
@@ -266,7 +266,7 @@ module interp_support
 
     subroutine write_header(b,a)
         implicit none
-        type(eep_track):: a
+        type(track):: a
         type(track), pointer :: b
         
         b% star_type = a% star_type
@@ -292,13 +292,13 @@ module interp_support
         integer :: min_index,iseg
         logical, intent(in) :: exclude_core
         
-        type(eep_track), pointer :: s(:)
+        type(track), pointer :: s(:)
         real(dp), allocatable :: mass_list(:)
         integer :: m_low,m_high,num_list
         integer :: i, m1, up_count,low_count,temp(4)
         integer :: min_ntrack, low_lim, upp_lim
         real(dp) :: upper_tol, lower_tol
-        type(eep_track) :: a(2)
+        type(track) :: a(2)
         
         min_ntrack = get_min_ntrack(t% star_type, t% is_he_track)
         !check length
@@ -406,7 +406,7 @@ module interp_support
     subroutine fix_incomplete_tracks(a,t,min_ntrack,exclude_core)
     !this has been modified for use with fix_incomplete_tracks only
         implicit none
-        type(eep_track), intent(in) :: a(:)
+        type(track), intent(in) :: a(:)
         type(track), pointer :: t
         integer, intent(in) :: min_ntrack
         logical, intent(in) :: exclude_core
@@ -1054,7 +1054,7 @@ module interp_support
         type(track), pointer :: t
         integer :: eep_m,id
 
-        type(eep_track), pointer :: s(:)
+        type(track), pointer :: s(:)
         real(dp), pointer :: age_list(:)
         real(dp), allocatable:: mlist(:), Mmax(:), Mmin(:)
         real(dp) :: alfa,beta,age

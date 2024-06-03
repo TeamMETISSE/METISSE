@@ -155,20 +155,20 @@ module track_support
 
   !holds an evolutionary track for input, use an array of these for multiple tracks
 
-    type eep_track
-        character(len=strlen) :: filename
-        type(column), allocatable :: cols(:)
-
-        logical :: has_phase = .false., ignore=.false.
-        logical :: has_mass_loss, is_he_track
-        integer :: ncol, ntrack, neep
-        integer :: star_type = unknown
-
-        integer, allocatable :: eep(:), phase(:)
-        real(dp) :: initial_mass, initial_Z, initial_Y, Fe_div_H,  v_div_vcrit, alpha_div_Fe
-        real(dp), allocatable :: tr(:,:)
-
-    end type eep_track
+!    type eep_track
+!        character(len=strlen) :: filename
+!        type(column), allocatable :: cols(:)
+!
+!        logical :: has_phase = .false., ignore=.false.
+!        logical :: has_mass_loss, is_he_track
+!        integer :: ncol, ntrack, neep
+!        integer :: star_type = unknown
+!
+!        integer, allocatable :: eep(:), phase(:)
+!        real(dp) :: initial_mass, initial_Z, initial_Y, Fe_div_H,  v_div_vcrit, alpha_div_Fe
+!        real(dp), allocatable :: tr(:,:)
+!
+!    end type eep_track
 
     !holds current parameters of star-- used by track
     type star_parameters
@@ -196,6 +196,7 @@ module track_support
 
     !holds interpolated track
     type track
+        character(len=strlen) :: filename
         logical :: complete = .true., post_agb = .false.
         logical :: has_mass_loss = .false., is_he_track = .false.
 
@@ -227,7 +228,7 @@ module track_support
     end type track
     
     !defining array for input tracks
-    type(eep_track), allocatable, target :: sa(:), sa_he(:)
+    type(track), allocatable, target :: sa(:), sa_he(:)
     type(track), allocatable, target :: tarr(:)
     real(dp) :: initial_Z
 
@@ -605,7 +606,7 @@ module track_support
 
 !    subroutine alloc_track(filename,x)
 !        character(len=strlen), intent(in) :: filename
-!        type(eep_track), pointer :: x
+!        type(track), pointer :: x
 !        allocate(x)
 !        x% neep = primary
 !        x% filename = trim(filename)
