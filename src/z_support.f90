@@ -954,22 +954,22 @@ module z_support
         !copy columns and the track
         do n = 1,size(xa)
            
-            if (xa(n)% star_type == star_high_mass .and. (xa(n)% tr(i_co_core,xa(n)% ntrack)<tiny)) then
-                if (verbose) print*, 'skipping ',xa(n)% filename, 'REASON: zero co_core',xa(n)% tr(i_co_core,xa(n)% ntrack)
-                cycle
-            endif
-            
-            xa(n)% complete = .true.
-            
-            if (xa(n)% ntrack< get_min_ntrack(xa(n)% star_type, xa(n)% is_he_track)) then
-                abs_min_ntrack = TAMS_EEP
-                if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
-                if (xa(n)% ntrack < abs_min_ntrack) then
-                    if (verbose) print*, 'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
-                    cycle
-                endif
-                xa(n)% complete = .false.
-            endif
+!            if (xa(n)% star_type == star_high_mass .and. (xa(n)% tr(i_co_core,xa(n)% ntrack)<tiny)) then
+!                if (verbose) print*, 'skipping ',xa(n)% filename, 'REASON: zero co_core',xa(n)% tr(i_co_core,xa(n)% ntrack)
+!                cycle
+!            endif
+!
+!            xa(n)% complete = .true.
+!
+!            if (xa(n)% ntrack< get_min_ntrack(xa(n)% star_type, xa(n)% is_he_track)) then
+!                abs_min_ntrack = TAMS_EEP
+!                if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
+!                if (xa(n)% ntrack < abs_min_ntrack) then
+!                    if (verbose) print*, 'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
+!                    cycle
+!                endif
+!                xa(n)% complete = .false.
+!            endif
             
             k = k+1
             
@@ -1016,8 +1016,6 @@ module z_support
             
             if (y(k)% is_he_track)start = ZAMS_HE_EEP
             y(k)% tr(i_age2,:) = y(k)% tr(i_age2,:)- y(k)% tr(i_age2,start)
-!
-!            print*,'test input', y(k)% initial_mass,y(k)% ntrack
             
         end do
         
@@ -1104,7 +1102,7 @@ module z_support
 
         logical:: debug
 
-        debug = .true.
+        debug = .false.
         
         ! default is SSE
         Mup_core = 1.6d0
