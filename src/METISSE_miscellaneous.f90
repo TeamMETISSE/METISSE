@@ -8,7 +8,7 @@ subroutine initialize_front_end(front_end_name)
     use track_support
     character (len=*), intent(in) :: front_end_name
 
-!    print*, 'in front end',trim(front_end_name)
+    if (verbose)print*, 'Setting front end to',trim(front_end_name)
 
     if (ANY((/'MAIN','main'/)== trim(front_end_name))) then
         ! METISSE's main code as described in Agrawal et al. 2020
@@ -28,7 +28,6 @@ subroutine initialize_front_end(front_end_name)
     else
         print*, "Error: Unrecongnized front_end_name for METISSE"
         print*, "Choose from 'MAIN', 'SSE', 'BSE', 'COSMIC' "
-        STOP
     endif
     
 end subroutine initialize_front_end

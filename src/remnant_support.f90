@@ -35,8 +35,7 @@
 
         debug_rem = .false.
         check_remnant_phase = .false.
-        !mcmax1 = 0.d0
-    
+        
         mc_threshold = pars% core_mass
         
         if (pars% phase <= TPAGB) then       !without envelope loss
@@ -49,11 +48,15 @@
             return
         endif
 
-        if (mc_max<=0.0) then
-            write(UNIT=err_unit,fmt=*)"Fatal error: negative mc_max ", mc_max
-            call stop_code
+        if (mc_max<=0.d0 .or. mc_threshold<=0.d0) then
+            write(UNIT=err_unit,fmt=*)"Fatal error: non-positive core mass",mc_max, mc_threshold
+            code_error = .true.
+            !assigning an ad-hoc non-zero core mass so the code doesn't break
+            !TODO: fix very low-mass stars that form hewd and may get caught in this
+            mc_threshold = 0.7*pars% McHe
+            mc_max = mc_threshold
         endif
-
+        
         if(mc_threshold>=mc_max .or. abs(mc_max-mc_threshold)<tiny .or. end_of_file)then
             !mc = MIN(mc_max,mc_threshold)
             pars% core_mass = mc_threshold
