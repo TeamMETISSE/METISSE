@@ -1,27 +1,36 @@
-subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
+subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     use track_support
     use z_support
 
     real(dp), intent(in) :: z
+    character(len=*), intent(in) :: path_to_tracks, path_to_he_tracks
     real(dp), intent(out) :: zpars(20)
-    character(len=*), intent(in), optional :: path_to_tracks, path_to_he_tracks
+    integer, intent(out) :: ierr
     
     character(LEN=strlen), allocatable :: track_list(:)
     character(LEN=strlen) :: USE_DIR, find_cmd,rnd
-    integer :: i,ierr,j,nloop,jerr
+    integer :: i,j,nloop,jerr
     integer :: num_tracks
     
     logical :: load_tracks
     logical :: debug, res
     
     debug = .false.
+    ierr = 0
     
-    if (debug) print*, 'in METISSE_zcsnts',z, trim(path_to_tracks),trim(path_to_he_tracks)
+    ! At this point in the code front_end might not be assigned
+    ! So we return ierr and let zcnsts.f of overlying code
+    ! decide how to deal with errors.
+
+    code_error = .false.
+    
     if (front_end <0) then
         print*, 'Fatal error: front_end is not initialized for METISSE'
-        call stop_code
+        ierr = 1; return
     endif
         
+    if (debug) print*, 'in METISSE_zcsnts',z, trim(path_to_tracks),trim(path_to_he_tracks)
+    
     ! read one set of stellar tracks (of input Z)
     load_tracks = .false.
     
@@ -51,7 +60,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
     
     if (debug) print*, '**** Metallicity is ',z,'initializing METISSE_zcnsts ****'
             
-    ierr = 0
     nloop = 2
     use_sse_NHe = .true.
     
@@ -73,7 +81,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
 
     !read user inputs from evolve_metisse.in or use inputs from code directly
     if (front_end == main .or. front_end == bse) then
-        call read_metisse_input(ierr); if (ierr/=0) STOP
+        call read_metisse_input(ierr); if (ierr/=0) call stop_code
     elseif (front_end == COSMIC) then
         TRACKS_DIR = path_to_tracks
         TRACKS_DIR_HE = path_to_he_tracks
@@ -81,6 +89,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
         if (TRACKS_DIR_HE/='') call get_metisse_input(TRACKS_DIR_HE,metallicity_file_list_he)
     else
         print*, "Error: reading inputs; unrecognized front_end_name for METISSE"
+        ierr = 1; return
     endif
     
     metallicity_file_list = pack(metallicity_file_list,mask=len_trim(metallicity_file_list)>0)
@@ -89,7 +98,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
     
     if (size(metallicity_file_list)<1) then
         print*, "Error: metallicity_file_list is empty"
-        STOP
+        ierr = 1; return
     endif
     
     if (size(metallicity_file_list_he)<1) then
@@ -136,7 +145,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
         else
             if (verbose) print*, 'Reading main (hydrogen star) tracks'
             call get_metallcity_file_from_Z(initial_Z,metallicity_file_list,ierr)
-            if (ierr/=0) STOP
+            if (ierr/=0) return
             USE_DIR = TRACKS_DIR
         endif
         
@@ -149,13 +158,13 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
         endif
     
         !read file-format
-        call read_format(format_file,ierr); if (ierr/=0) STOP
+        call read_format(format_file,ierr); if (ierr/=0) return
             
         !get filenames from input_files_dir
         
         if (trim(INPUT_FILES_DIR) == '' )then
             print*,"Error: INPUT_FILES_DIR is not defined for Z= ", initial_Z
-            STOP
+            ierr = 1; return
         endif
         
         if (verbose) print*,"Reading input files from: ", trim(INPUT_FILES_DIR)
@@ -167,7 +176,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
             if (ierr/=0) then
             if (debug)print*, trim(find_cmd), 'not found; appending ',trim(USE_DIR)
             INPUT_FILES_DIR = trim(USE_DIR)//'/'//trim(INPUT_FILES_DIR)
-            ierr =0
+            ierr = 0
             endif
         endif
         
@@ -176,7 +185,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
         if (ierr/=0) then
             print*,'Error: failed to read input files.'
             print*,'Check if INPUT_FILES_DIR is correct.'
-            STOP
+            return
         endif
 
         num_tracks = size(track_list)
@@ -198,7 +207,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
         if (read_eep_files) then
             if (debug) print*,"reading eep files"
             do j=1,num_tracks
-                call read_eep(xa(j))
+                call read_eep(xa(j),ierr)
+                if (ierr/=0) return
                 if(debug) write(*,'(a100,f8.2,99i8)') trim(xa(j)% filename), xa(j)% initial_mass, xa(j)% ncol
             end do
         else
@@ -211,18 +221,19 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks)
                 if(ierr/=0) then
                     print*,"Failed while trying to read column_name_file"
                     print*,"Check if header location and column_name_file are correct "
-                    STOP
+                    return
                 endif
 
                 if (size(temp_cols) /= total_cols) then
                     print*,'Number of columns in the column_name_file does not matches with the total_cols'
                     print*,'Check if column_name_file and total_cols are correct'
-                    STOP
+                    return
                 endif
             end if
 
             do j=1,num_tracks
-                call read_input_file(xa(j))
+                call read_input_file(xa(j),ierr)
+                if (ierr/=0) return
                 if(debug) write(*,'(a100,f8.2,99i8)') trim(xa(j)% filename), xa(j)% initial_mass, xa(j)% ncol
             end do
         endif

@@ -231,7 +231,8 @@ module track_support
     type(track), allocatable, target :: sa(:), sa_he(:)
     type(track), allocatable, target :: tarr(:)
     real(dp) :: initial_Z
-
+    logical :: code_error
+    
     !variable declaration-- for main
     integer :: number_of_tracks
     character(len=strlen) :: input_mass_file
@@ -385,10 +386,14 @@ module track_support
         endif
     end function binary_search
     
-    subroutine stop_code()
-        print*, 'Error encountered; stopping METISSE'
-        print*, 'See error file (fort.99) or terminal for details'
-        STOP
+    subroutine stop_code(i)
+        integer, optional:: i
+        print*, 'Fatal error: terminating METISSE'
+        if (present(i)) then
+            if (i==5) print*, 'See terminal for details'
+            if (i==99) print*, 'See error file (fort.99)for details'
+        endif
+        if (front_end /=COSMIC) STOP
     end subroutine stop_code
     
     subroutine write_eep_track(x,mt,filename)

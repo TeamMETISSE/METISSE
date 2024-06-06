@@ -14,9 +14,13 @@ program metisse_main
 
     !set the front end for METISSE
     call initialize_front_end('main')
-    initial_z = -1.d0
-    !read files of input metallicity and load them
-    call METISSE_zcnsts(initial_Z,zpars,'','')
+    
+    initial_Z = -1.d0
+    
+    ! read input metallicity and load the crresponding EEP tracks
+    ! path for tracks are read from inlists
+    call METISSE_zcnsts(initial_Z,zpars,'','',ierr)
+    if (ierr/=0) STOP 'Fatal error: terminating METISSE'
     
     ! sets remnant schmeme from SSE_input_controls
     call assign_commons_main()
@@ -27,19 +31,20 @@ program metisse_main
     if (read_mass_from_file) then
         !reads mass and age values from path for mass_file
         open(101, FILE= trim(input_mass_file), action="read",iostat =ierr)
-            do i=1,number_of_tracks
-                read(101,*) mass_array(i)
-            end do
-         close(101)
-
+        
         if (ierr/=0) then
             print*,'Erorr reading input masses from', trim(input_mass_file)
             print*,'check if input_mass_file is correct'
-            call stop_code
+            STOP 'Fatal error: terminating METISSE'
         endif
+        
+        do i=1,number_of_tracks
+            read(101,*) mass_array(i)
+        end do
+        close(101)
     else
         if (number_of_tracks>1) then
-            call uniform_distribution (number_of_tracks, min_mass, max_mass, mass_array)
+            call uniform_distribution(number_of_tracks,min_mass,max_mass,mass_array)
         else
             mass_array = min_mass
         endif

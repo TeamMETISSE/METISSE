@@ -34,7 +34,7 @@ module interp_support
         if (mass/=mass .or. mass<=0.d0) then
             write(UNIT=err_unit,fmt=*)"Fatal Error: Invalid mass",mass,t% pars% phase
             t% ierr = -1
-!            call stop_code
+!            call stop_code(err_unit)
             return
         endif
         
@@ -522,7 +522,7 @@ module interp_support
                 start = start-1
                 if (start <1)  then
                     write(UNIT=err_unit,fmt=*)"Error in mod_PAV, start<1",i,n
-!                    call stop_code
+!                    call stop_code(err_unit)
                 endif
             end do
             if (debug) print*,'start, old_start', start, old_start
@@ -683,7 +683,7 @@ module interp_support
                         write(UNIT=err_unit,fmt=*) 'Warning: NaN encountered during interpolation age',&
                             t% initial_mass,input_age,j,mhi,mlo,t% pars% phase
                         t% ierr = -1
-            !            call stop_code
+            !            call stop_code(err_unit)
                         return
                     endif
                 end do
@@ -698,7 +698,7 @@ module interp_support
 
                 if (age< x(2) .or. age> x(3)) then
                    write(UNIT=err_unit,fmt=*)"Error in cubic interpolation in interp_support"
-!                   call stop_code
+!                   call stop_code(err_unit)
                 endif
 
                 do j = jstart,jend
@@ -725,7 +725,7 @@ module interp_support
 
         if (t% pars% mass <0.0) then
             write(UNIT=err_unit,fmt=*)"Fatal Error: mass <0 in interpolate age",input_age,t% pars% phase
-!            call stop_code
+!            call stop_code(err_unit)
         endif
         if (debug) print*, 'exiting interpolate_age'
         

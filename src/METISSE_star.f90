@@ -258,6 +258,8 @@ subroutine METISSE_star(kw,mass,mt,tm,tn,tscls,lums,GB,zpars,dtm,id)
     t% MS_time = tm
     t% nuc_time = tn
 
+    if(t% ierr<0) code_error = .true.
+
     if (debug)print*, "in star end", mt,delta,kw,tm,tn,t%initial_mass,t% zams_mass
     if (debug) print*, '-----------------------------'
 

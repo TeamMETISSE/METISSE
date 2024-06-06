@@ -15,7 +15,7 @@ subroutine assign_commons_main()
         else
             print*,"Error: Invalid Option for WD_mass_scheme."
             print*,"Choose from 'Mestel' and 'Modified_mestel'. "
-            STOP
+            call stop_code
         endif
 
         if (BHNS_mass_scheme == 'original_SSE') then
@@ -29,7 +29,7 @@ subroutine assign_commons_main()
         else
             print*,"Error: Invalid Option for BHNS_mass_scheme."
             print*,"Choose from 'original_SSE','Belczynski2002','Belczynski2008','Eldridge_Tout2004'. "
-            STOP
+            call stop_code
         endif
         !call cutoffs_for_Belzynski_methods(ns_flag,mc1,mc2)
 
