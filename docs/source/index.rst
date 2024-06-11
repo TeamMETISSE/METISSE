@@ -11,7 +11,7 @@ Welcome to METISSE's documentation!
 
 **Prequisite:** METISSE requires gcc/6.4.0 or above
 
-The code package is available `here <https://github.com/TeamMETISSE>`_
+The code package is available `here <https://github.com/TeamMETISSE/METISSE>`_
 
 In addition to above, METISSE also requires a set of EEP tracks with a given metallicity to interpolate a stellar track for the same metallicity and a specific mass.
 EEP tracks for a range of mass and metallicity, computed using MESA, and ready for use with METISSE can be downloaded from this link. 
