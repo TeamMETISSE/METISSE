@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome to METISSE’s documentation! &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
@@ -46,7 +46,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="contents.html">Package contents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents.html#flowchart">Flowchart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Using METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE as a standalone code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE with other codes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eep_tracks.html">Using custom input tracks</a></li>
 </ul>
 
@@ -77,17 +79,24 @@
   <section id="welcome-to-metisse-s-documentation">
 <h1>Welcome to METISSE’s documentation!<a class="headerlink" href="#welcome-to-metisse-s-documentation" title="Link to this heading"></a></h1>
 <p><strong>METISSE</strong> is an acronym for <strong>MET</strong>hod of <strong>I</strong>nterpolation for <strong>S</strong>ingle <strong>S</strong>tar <strong>E</strong>volution. It is a code package designed for rapidly computing the evolution of a large number of stars by interpolating within a set of pre-computed evolutionary tracks. The input tracks for interpolation are computed from stellar structure and evolution codes such as MESA. It is important that the input tracks should be in EEP format, meaning that significant evolutionary points like zero-age main sequence (ZAMS) should occur at the same line number across each file. METISSE can be used as a standalone code or in conjunction with other codes for evolving populations of single and binary stars.</p>
+<p><strong>Prequisite:</strong> METISSE requires gcc/6.4.0 or above</p>
+<p>The code package is available <a class="reference external" href="https://github.com/TeamMETISSE">here</a></p>
+<p>In addition to above, METISSE also requires a set of EEP tracks with a given metallicity to interpolate a stellar track for the same metallicity and a specific mass.
+EEP tracks for a range of mass and metallicity, computed using MESA, and ready for use with METISSE can be downloaded from this link.</p>
+<p>After downloading, the path of this folder should be provided to METISSE. This path and other inputs should be provided to METISSE depending on how METISSE is used (in standalone mode or in conjunction with other codes).</p>
 <p>More details including code capabilities are described in:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://arxiv.org/abs/2005.13177">Agrawal et al 2020</a></p></li>
-<li><p><a class="reference external" href="https://arxiv.org/abs/2303.10187">Agrawal et al 2023</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/2005.13177">Agrawal et al. 2020</a></p></li>
+<li><p><a class="reference external" href="https://arxiv.org/abs/2303.10187">Agrawal et al. 2023</a></p></li>
 </ul>
 <p>Check out the following sections for further information.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contents.html">Package contents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contents.html#flowchart">Flowchart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Using METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE as a standalone code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html#examples">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE with other codes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eep_tracks.html">Using custom input tracks</a></li>
 </ul>
 </div>
