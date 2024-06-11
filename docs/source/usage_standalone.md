@@ -58,7 +58,7 @@ are supplied using `SSE_input_controls` namelist contained in *evolve_metisse.in
 
   !OUTPUT CONTROLS
 
-    ! 'write_track_to_file' generates a SSE-style output file 
+    ! 'write_track_to_file' generates an SSE-style output file 
     ! only at the END of the evolution
 
     write_track_to_file = .true.
@@ -180,11 +180,11 @@ These contain the following stellar parameters until max_age. Time and age at hy
 
 **2. files ending with .eep :**
 
-For debugging purposes, METISSE can write mass-interpolated track to output file with the same columns as input files (plus phase column) and a MIST-style file structure. 
-This output file only contains data from ZAMS to the end of nuclear burning phases, i.e., it does not contain information about remnant phase. 
+For debugging purposes, METISSE can write a mass-interpolated track to an output file with the same columns as input files (plus a phase column) and a MIST-style file structure. 
+This output file only contains data from ZAMS to the end of nuclear-burning phases, i.e., it does not contain information about the remnant phase. 
 It is controlled by `write_eep_file` in METISSE_input_controls.
 
 
-# Examples
+## Examples
 
 
