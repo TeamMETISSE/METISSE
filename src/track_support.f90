@@ -709,7 +709,6 @@ module track_support
     
     
     logical function check_ge(x,y) result(z)
-    !TODO: needs to be checked before use
     real(dp), intent(in) :: x,y
         if (x.ge.y .or. abs(x-y)<tiny) then
             z = .true.
@@ -720,7 +719,6 @@ module track_support
     end function check_ge
     
     logical function check_le(x,y) result(z)
-    !TODO: needs to be checked before use
     real(dp), intent(in) :: x,y
         if (x.le.y .or. abs(x-y)<tiny) then
             z = .true.
@@ -731,22 +729,21 @@ module track_support
     end function check_le
     
     logical function check_equal(x,y,limit) result(z)
-    real(dp), intent(in) :: x,y
-    real(dp), intent(in), optional :: limit
-    real(dp) :: diff, threshold
+        real(dp), intent(in) :: x,y
+        real(dp), intent(in), optional :: limit
+        real(dp) :: threshold
 
-    if (present(limit)) then
-        threshold = limit
+        if (present(limit)) then
+            threshold = limit
         else
-    threshold = 1d-4
-    endif
-        diff = abs(x-y)
-        if (diff.le.threshold) then
+            threshold = tiny
+        endif
+        
+        if (abs(x-y).le.threshold) then
             z = .true.
         else
             z = .false.
         endif
-        return
     end function check_equal
 
     logical function defined(x) result(y)
