@@ -23,7 +23,7 @@ module track_support
     
     logical :: verbose, use_sse_NHe
     logical :: write_track_to_file, write_eep_file, write_error_to_file
-    integer :: err_unit
+    integer :: err_unit, out_unit
 
     integer :: front_end = -1
     integer, parameter :: main = 0
@@ -153,23 +153,6 @@ module track_support
     real(dp), allocatable :: Mmax_array(:), Mmin_array(:)
     real(dp), allocatable :: Mmax_he_array(:), Mmin_he_array(:)
 
-  !holds an evolutionary track for input, use an array of these for multiple tracks
-
-!    type eep_track
-!        character(len=strlen) :: filename
-!        type(column), allocatable :: cols(:)
-!
-!        logical :: has_phase = .false., ignore=.false.
-!        logical :: has_mass_loss, is_he_track
-!        integer :: ncol, ntrack, neep
-!        integer :: star_type = unknown
-!
-!        integer, allocatable :: eep(:), phase(:)
-!        real(dp) :: initial_mass, initial_Z, initial_Y, Fe_div_H,  v_div_vcrit, alpha_div_Fe
-!        real(dp), allocatable :: tr(:,:)
-!
-!    end type eep_track
-
     !holds current parameters of star-- used by track
     type star_parameters
         integer :: phase,extra
@@ -194,7 +177,7 @@ module track_support
         real(dp) :: Rzams, Lzams      !zams values
     end type
 
-    !holds interpolated track
+    !holds interpolated track,use an array of these for multiple tracks
     type track
         character(len=strlen) :: filename
         logical :: complete = .true., post_agb = .false.
@@ -282,7 +265,7 @@ module track_support
             endif
         endif
         
-        if (size(list)<1) print*, 'error in list size',size(list),size_list
+        if (size(list)<1) write(err_unit,*)'error in list size',size(list),size_list
         if (value < list(1)) then             !from num_binary_search.inc
             min_index = 1; return
         elseif (check_equal(value, list(size_list)))then
@@ -293,7 +276,6 @@ module track_support
 
         min_index = minloc(abs(list-value), dim=1)
     end subroutine index_search
-
 
     ! from ISO (Dotter et al. 2016), adapted from MESA; modified by PA to avoid 0 loc
 
@@ -425,11 +407,7 @@ module track_support
     
     open(io,file=trim(eep_filename),action='write',status='unknown')
     have_phase = 'YES'
-
-    !write(io,'(a25,a8)') '# MIST version number  = ', x% version_string
-    !write(io,'(a25,i8)') '# MESA revision number = ', x% MESA_revision_number
-    !                     123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-    ! write(io,'(a88)') '# --------------------------------------------------------------------------------------'
+    
     write(io,'(a88)') '#  Yinit        Zinit   [Fe/H]   [a/Fe]  v/vcrit                                        '
     write(io,'(a2,f6.4,1p1e13.5,0p3f9.2)') '# ', x% initial_Y, x% initial_Z, x% Fe_div_H, x% alpha_div_Fe, x% v_div_vcrit
     write(io,'(a88)') '# --------------------------------------------------------------------------------------'
@@ -608,15 +586,6 @@ module track_support
         write(120,FMT) tphys,pars% age,pars% mass,pars% core_mass,pars% McHe, pars% McCO &
                     ,pars% log_L,pars% log_Teff,pars% log_R,pars% phase ,pars% extra
     end subroutine write_dat_track
-
-!    subroutine alloc_track(filename,x)
-!        character(len=strlen), intent(in) :: filename
-!        type(track), pointer :: x
-!        allocate(x)
-!        x% neep = primary
-!        x% filename = trim(filename)
-!        allocate(x% eep(x% neep))
-!      end subroutine alloc_track
 
     subroutine distance_along_track(t)
       type(track), intent(inout) :: t
