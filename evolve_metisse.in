@@ -1,0 +1,32 @@
+!   NOTE: SSE_input_controls in evolve.in are read only when METISSE is called directly though its main unit.
+!   Otherwise, values provided by the overlying code are used.
+
+&SSE_input_controls
+
+initial_Z = 0.02
+
+max_age = 1.2d4   !max age in Myrs
+
+number_of_tracks = 10
+min_mass = 1.0
+max_mass = 50.0
+
+BHNS_mass_scheme = 'Belczynski2008'
+
+write_track_to_file = .false.        !SSE like output file
+
+/
+
+&METISSE_input_controls
+
+
+metallicity_file_list = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Hydrogen/H_Z0p02_metallicity.in'
+				
+
+metallicity_file_list_he = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Helium/He_Z0p02_metallicity.in'
+
+verbose = .true.
+
+/
+
+
