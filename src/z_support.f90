@@ -360,7 +360,7 @@ module z_support
         open(unit=io,file=trim(x% filename),status='old',action='read')
         !read lines of header as comments
 
-        if (header_location >0)then
+        if (header_location>0)then
             do i = 1,header_location-1
                 read(io,*) !header
             end do
@@ -385,10 +385,6 @@ module z_support
             if(ierr/=0) exit
             j=j+1
         enddo
-
-        x% ntrack = j
-        x% ncol = total_cols
-        x% cols% name = temp_cols% name
         
         rewind(io)
         ierr = 0
@@ -400,7 +396,12 @@ module z_support
             enddo
         endif
 
-        allocate(x% tr(total_cols, x% ntrack))
+        x% ntrack = j
+        
+        x% ncol = total_cols
+        allocate(x% tr(x% ncol, x% ntrack),x% cols(x% ncol))
+
+        x% cols% name = temp_cols% name
 
         do j=1, x% ntrack
             read(io,'(a)') line
@@ -425,8 +426,12 @@ module z_support
             x% eep = pack(key_eeps,mask = key_eeps .le. x% ntrack)
         endif
 
-        x% initial_mass = maxval(x% tr(i_mass,:))
-        x% initial_mass = max(x% initial_mass,maxval(x% tr(i_mass,:)))
+        if (x% is_he_track) then
+            x% initial_mass = x% tr(i_mass,ZAMS_HE_EEP)
+        else
+            x% initial_mass = x% tr(i_mass,ZAMS_EEP)
+        endif
+        
         call set_star_type_from_history(x)
         x% initial_Z = initial_Z
         x% initial_Y = Z_He
