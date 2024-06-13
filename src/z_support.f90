@@ -142,7 +142,6 @@ module z_support
         
         debug = .false.
 
-        if (verbose) write(*,'(a,f7.3)') ' Input Z is', Z_req
         ierr = 0
         found_z = .false.
         
@@ -152,7 +151,7 @@ module z_support
                 call read_metallicity_file(file_list(i),ierr)
                 if (ierr/=0) cycle
                 if (.not. defined (Z_files)) then
-                    print*, 'Warning: Z_files not defined in "'//trim(file_list(i))//'"'
+                    write(out_unit,*)'Warning: Z_files not defined in "'//trim(file_list(i))//'"'
                 else
                     if (debug) print*, 'Z_files is', Z_files
                     if (relative_diff(Z_files,Z_req) < Z_accuracy_limit) then
@@ -237,6 +236,7 @@ module z_support
         ierr = 0
         
         find_cmd = 'find '//trim(path)//'/*'//trim(extension)//' -maxdepth 1 > .file_name.txt'
+        
         call system(find_cmd,ierr)
         
         if (ierr/=0) return
@@ -953,41 +953,62 @@ module z_support
         enddo
     end subroutine set_star_type_from_label
 
-    subroutine copy_and_deallocatex(y)
+    subroutine count_tracks(num_tracks)
+    
+    integer :: i, n, abs_min_ntrack
+        real(dp) :: co_core, he_core, min_val
+        logical :: debug
+        integer, intent(out):: num_tracks
+        
+        debug = .false.
+
+        do n = 1,size(xa)
+            xa(n)% complete = .true.
+            co_core = xa(n)% tr(i_co_core,xa(n)% ntrack)
+            he_core = xa(n)% tr(i_he_core,xa(n)% ntrack)
+            min_val = 0.01* xa(n)% tr(i_mass,xa(n)% ntrack)
+            if (xa(n)% star_type == star_high_mass) then
+                if (co_core< min_val .or. he_core< min_val .or. he_core< co_core) then
+                write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: invalid core mass',co_core, he_core, xa(n)% initial_mass
+                    xa(n)% complete = .false.
+                endif
+            endif
+
+            if (xa(n)% ntrack< get_min_ntrack(xa(n)% star_type, xa(n)% is_he_track)) then
+                abs_min_ntrack = TAMS_EEP
+                if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
+                if (xa(n)% ntrack < abs_min_ntrack) then
+                    write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
+                    xa(n)% complete = .false.
+                endif
+                
+            endif
+        end do
+        num_tracks = count(xa% complete)
+        end subroutine
+        
+        
+    subroutine copy_and_deallocatex(num_tracks,y)
+        integer,intent(in) ::num_tracks
         type(track), allocatable :: y(:)
-        integer :: i, n, k, start, abs_min_ntrack
+        integer :: i, n, k, start
         logical :: debug
 
         debug = .false.
-    
-        if (allocated(y)) deallocate(y)
-        allocate(y(size(xa)))
-    
+
         !determine key columns
         call get_key_columns(xa(1)% cols, xa(1)% ncol, xa(1)% is_he_track)
         if (debug) print*,'key_cols', size(key_cols),xa(1)% ncol
-
-        k = 0
+        
         !copy columns and the track
-        do n = 1,size(xa)
-           
-!            if (xa(n)% star_type == star_high_mass .and. (xa(n)% tr(i_co_core,xa(n)% ntrack)<tiny)) then
-!                if (verbose) print*, 'skipping ',xa(n)% filename, 'REASON: zero co_core',xa(n)% tr(i_co_core,xa(n)% ntrack)
-!                cycle
-!            endif
-!
-!            xa(n)% complete = .true.
-!
-!            if (xa(n)% ntrack< get_min_ntrack(xa(n)% star_type, xa(n)% is_he_track)) then
-!                abs_min_ntrack = TAMS_EEP
-!                if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
-!                if (xa(n)% ntrack < abs_min_ntrack) then
-!                    if (verbose) print*, 'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
-!                    cycle
-!                endif
-!                xa(n)% complete = .false.
-!            endif
+
+        if (allocated(y)) deallocate(y)
+        allocate(y(num_tracks))
             
+        k = 0
+        
+        do n = 1,size(xa)
+            if(xa(n)% complete .eqv. .false.) cycle
             k = k+1
             
             !copy header
@@ -1002,8 +1023,6 @@ module z_support
             y(k)% star_type = xa(n)% star_type
             y(k)% is_he_track = xa(n)% is_he_track
             y(k)% complete = xa(n)% complete
-        
-        
         
             if (read_all_columns) then
                 if (debug) print*, 'using all columns'
@@ -1035,7 +1054,6 @@ module z_support
             y(k)% tr(i_age2,:) = y(k)% tr(i_age2,:)- y(k)% tr(i_age2,start)
             
         end do
-        
         
         !sort the array based on intial mass if not sorted already
         call sort_minitial(y)
@@ -1107,15 +1125,14 @@ module z_support
         nullify(x)
     end subroutine get_minmax
 
-    subroutine set_zparameters(zpars)
+    subroutine set_zparameters(num_tracks,zpars)
+        integer,intent(in) :: num_tracks
         real(dp), intent(out) :: zpars(20)
         real(dp) :: old_co_frac,co_fraction,change_frac
         real(dp) :: smass,Teff,last_val,he_diff, mup_max
-        real(dp), allocatable :: T_centre(:)
+        real(dp), allocatable :: T_centre(:), mass_list(:)
         integer :: len_track, i, min_index
         integer:: j_bagb, j_tagb, start
-        real(dp), allocatable :: mass_list(:)
-        integer :: num_tracks
 
         logical:: debug
 
@@ -1124,10 +1141,10 @@ module z_support
         ! default is SSE
         Mup_core = 1.6d0
         Mec_core = 2.2d0
+        
         !first calculate zpars the SSE way for use as backup
         call calculate_sse_zpars(initial_z,zpars)
 
-        num_tracks = size(xa)
         Mcrit% mass= -1.d0
         Mcrit% loc = 0
 
@@ -1145,10 +1162,12 @@ module z_support
         Mcrit(9)% mass = xa(num_tracks)% initial_mass
         Mcrit(9)% loc = num_tracks+1 !TODO: explain why+1?
 
-        if (verbose) write(*,'(a,f7.1)') ' Minimum initial mass', Mcrit(1)% mass
-        if (verbose) write(*,'(a,f7.1)') ' Maximum initial mass', Mcrit(9)% mass
+        write(out_unit,'(a,f7.1)') ' Minimum initial mass', Mcrit(1)% mass
+        write(out_unit,'(a,f7.1)') ' Maximum initial mass', Mcrit(9)% mass
 
-        allocate(mass_list(num_tracks),source=xa% initial_mass)
+        allocate(mass_list(num_tracks))
+        mass_list = pack(xa% initial_mass,mask = xa% complete)
+        
         old_co_frac = 0.d0
 
         !if already defined, do index search here otherwise search below
@@ -1157,14 +1176,14 @@ module z_support
             call index_search (num_tracks, mass_list, Mcrit(i)% mass, min_index)
             Mcrit(i)% mass = xa(min_index)% initial_mass
             Mcrit(i)% loc = min_index
-!            if (debug) print*, i, Mcrit(i)% mass
+            if (debug) print*, i, Mcrit(i)% mass
         end do
 
         start = max(Mcrit(1)% loc, Mcrit(2)% loc)
         
-        do i = start, num_tracks
+        do i = start, size(xa)
+            if(xa(i)% complete .eqv. .false.) cycle
             smass = xa(i)% initial_mass
-            !print*,smass, xa(i)% star_type
             len_track = xa(i)% ntrack
             
             if (smass<=3.0 .and. i_Tc>0) then
@@ -1297,7 +1316,9 @@ module z_support
         if (debug) print*,"Mup_core =", Mup_core
         if (debug) print*,"Mec_core =", Mec_core
 
+        if (allocated(m_cutoff)) deallocate( m_cutoff)
         allocate (m_cutoff(size(Mcrit)))
+        
         m_cutoff = Mcrit% loc
         call sort_mcutoff(m_cutoff)
         if (debug) print*, "m_cutoffs: ", m_cutoff
@@ -1336,11 +1357,11 @@ module z_support
         deallocate(mass_list)
     end subroutine set_zparameters
 
-    subroutine set_zparameters_he()
+    subroutine set_zparameters_he(num_tracks)
         real(dp) :: smass,frac_mcenv
-        integer :: len_track, i, min_index, start!,j,jstart,jend
+        integer :: len_track, i, min_index, start
         real(dp), allocatable :: mass_list(:)
-        integer :: num_tracks
+        integer, intent(in) :: num_tracks
 
         logical:: debug
 
@@ -1362,15 +1383,14 @@ module z_support
         Mcrit_he(7)% mass = Mec
         Mcrit_he(8)% mass = Mextra
         
-        num_tracks = size(xa)
-
         Mcrit_he(9)% mass = xa(num_tracks)% initial_mass
         Mcrit_he(9)% loc = num_tracks+1
 
-        if (verbose) write(*,'(a,f7.1)') ' Minimum initial mass', Mcrit_he(1)% mass
-        if (verbose) write(*,'(a,f7.1)') ' Maximum initial mass', Mcrit_he(9)% mass
+        write(out_unit,'(a,f7.1)') ' Minimum initial mass', Mcrit_he(1)% mass
+        write(out_unit,'(a,f7.1)') ' Maximum initial mass', Mcrit_he(9)% mass
 
-        allocate(mass_list(num_tracks),source=xa% initial_mass)
+        allocate(mass_list(num_tracks))
+        mass_list = pack(xa% initial_mass,mask = xa% complete)
         
         !if already defined, do index search here otherwise search below
         do i = 2, size(Mcrit_he)-1
@@ -1383,9 +1403,9 @@ module z_support
 
         start = max(Mcrit_he(1)% loc, Mcrit_he(2)% loc)
         
-        do i = start, num_tracks
+        do i = start, size(xa)
+            if (xa(i)% complete .eqv. .false.) cycle
             smass = xa(i)% initial_mass
-            !print*,smass, xa(i)% star_type
             len_track = xa(i)% ntrack
              
             IF (.not. defined(Mcrit_he(3)% mass) .and. i_logTe>0)THEN
@@ -1449,6 +1469,7 @@ module z_support
         !Mec
         Mcrit_he(7)% loc = max(Mcrit_he(7)% loc,1)
 
+        if (allocated(m_cutoff_he)) deallocate( m_cutoff_he)
         allocate (m_cutoff_he(size(Mcrit_he)))
         m_cutoff_he = Mcrit_he% loc
         call sort_mcutoff(m_cutoff_he)

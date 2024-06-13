@@ -12,6 +12,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     integer :: i,j,nloop,jerr
     integer :: num_tracks
     
+    
     logical :: load_tracks
     logical :: debug, res
     
@@ -29,6 +30,15 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         ierr = 1; return
     endif
         
+    !Some unit numbers are reserved: 5 is standard input, 6 is standard output.
+    if (verbose) then
+        out_unit = 6   !will write to screen
+    else
+        out_unit = 1000    !will write to file
+        open(1000,file='tracks_log.txt',action='write',status='unknown')
+    endif
+    
+    
     if (debug) print*, 'in METISSE_zcsnts',z, trim(path_to_tracks),trim(path_to_he_tracks)
     
     ! read one set of stellar tracks (of input Z)
@@ -58,15 +68,15 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         return
     endif
     
-    if (debug) print*, '**** Metallicity is ',z,'initializing METISSE_zcnsts ****'
-            
+    write(out_unit,'(a,f10.6)') ' Input Z is :', Z
+    if (debug) print*, 'Initializing METISSE_zcnsts'
+
     nloop = 2
     use_sse_NHe = .true.
     
     if (allocated(core_cols)) deallocate(core_cols)
     if (allocated(core_cols_he)) deallocate(core_cols_he)
-
-    if (allocated(m_cutoff)) deallocate(m_cutoff)
+    
     if (allocated(Mmax_array)) deallocate(Mmax_array, Mmin_array)
     
     if (allocated(metallicity_file_list)) deallocate(metallicity_file_list,metallicity_file_list_he)
@@ -74,7 +84,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         
     ! use input file/path to locate list of *metallicity.in files
     ! these file contain information about eep tracks, their metallicity and format
-    
     
     !read defaults option first
     call read_defaults()
@@ -102,8 +111,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     endif
     
     if (size(metallicity_file_list_he)<1) then
-        print*, "Error: metallicity_file_list_he is empty"
-        print*, "Switching to SSE formulae for helium stars "
+        write(out_unit,*) "Error: metallicity_file_list_he is empty"
+        write(out_unit,*) "Switching to SSE formulae for helium stars "
         nloop = 1
     endif
     
@@ -135,7 +144,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     
             Final_EEP_HE = -1
     
-            if (verbose) print*, 'Reading naked helium star tracks'
+            write(out_unit,*) 'Reading naked helium star tracks'
             call get_metallcity_file_from_Z(initial_Z,metallicity_file_list_he,ierr)
             if (ierr/=0) then
                 print*, "Switching to SSE formulae for helium stars "
@@ -143,7 +152,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             endif
             USE_DIR = TRACKS_DIR_HE
         else
-            if (verbose) print*, 'Reading main (hydrogen star) tracks'
+            write(out_unit,*) 'Reading main (hydrogen star) tracks'
             call get_metallcity_file_from_Z(initial_Z,metallicity_file_list,ierr)
             if (ierr/=0) return
             USE_DIR = TRACKS_DIR
@@ -167,19 +176,19 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             ierr = 1; return
         endif
         
-        if (verbose) print*,"Reading input files from: ", trim(INPUT_FILES_DIR)
-
         if (front_end == COSMIC) then
-            find_cmd = 'find '//trim(INPUT_FILES_DIR)//'/*'//trim(file_extension)//' -maxdepth 1 > .file_name.txt'
-
-            call execute_command_line(find_cmd,exitstat=ierr,cmdstat=jerr,cmdmsg=rnd)
-            if (ierr/=0) then
-            if (debug)print*, trim(find_cmd), 'not found; appending ',trim(USE_DIR)
+!            find_cmd = 'find '//trim(INPUT_FILES_DIR)//'/*'//trim(file_extension)//' -maxdepth 1 > .file_name.txt'
+!
+!            call execute_command_line(find_cmd,exitstat=ierr,cmdstat=jerr)
+!            if (ierr/=0) then
+!            write(out_unit,*) trim(INPUT_FILES_DIR), 'not found; appending ',trim(USE_DIR), ierr, jerr
             INPUT_FILES_DIR = trim(USE_DIR)//'/'//trim(INPUT_FILES_DIR)
-            ierr = 0
-            endif
+!            ierr = 0
+!            endif
         endif
         
+        write(out_unit,*)"Reading input files from: ", trim(INPUT_FILES_DIR)
+
         call get_files_from_path(INPUT_FILES_DIR,file_extension,track_list,ierr)
         
         if (ierr/=0) then
@@ -189,7 +198,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         endif
 
         num_tracks = size(track_list)
-        if (verbose) print*,"Number of input tracks: ", num_tracks
+        
+        write(out_unit,*)"Found: ", num_tracks, " tracks"
         allocate(xa(num_tracks))
         xa% filename = track_list
         set_cols = .true.
@@ -240,8 +250,9 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         
         ! Processing the input tracks
         if (i==2) then
-            call set_zparameters_he()
-            call copy_and_deallocatex(sa_he)
+            call count_tracks(num_tracks)
+            call set_zparameters_he(num_tracks)
+            call copy_and_deallocatex(num_tracks,sa_he)
             call get_minmax(sa_he(1)% is_he_track,Mmax_he_array,Mmin_he_array)
 
             use_sse_NHe = .false.
@@ -250,13 +261,13 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             core_cols_he(1) = i_he_age
             core_cols_he(2) = i_logL
             core_cols_he(3) = i_co_core
-            if (i_he_RCO > 0) core_cols_he(4) = i_he_RCO
+            if (i_he_RCO>0) core_cols_he(4) = i_he_RCO
         else
-           
             !reset z parameters where available
             !and determine cutoff masses
-            call set_zparameters(zpars)
-            call copy_and_deallocatex(sa)
+            call count_tracks(num_tracks)
+            call set_zparameters(num_tracks,zpars)
+            call copy_and_deallocatex(num_tracks,sa)
             
             call get_minmax(sa(1)% is_he_track,Mmax_array,Mmin_array)
 
@@ -268,8 +279,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             core_cols(3) = i_he_core
             core_cols(4) = i_co_core
 
-            if (i_RHe_core > 0) core_cols(5) = i_RHe_core
-            if (i_RCO_core > 0) core_cols(6) = i_RCO_core
+            if (i_RHe_core>0) core_cols(5) = i_RHe_core
+            if (i_RCO_core>0) core_cols(6) = i_RCO_core
         endif
         deallocate(track_list)
     end do
