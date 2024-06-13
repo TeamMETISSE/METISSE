@@ -327,7 +327,13 @@ module z_support
         if (set_cols) call locate_column_numbers(x% cols, x% ncol,x% is_he_track,ierr)
         if (ierr/=0) return
         
-        x% initial_mass = max(x% initial_mass,maxval(x% tr(i_mass,:)))
+        if (x% is_he_track) then
+            x% initial_mass = x% tr(i_mass,ZAMS_HE_EEP)
+        else
+            x% initial_mass = x% tr(i_mass,ZAMS_EEP)
+        endif
+        
+!        max(x% initial_mass,maxval(x% tr(i_mass,:)))
     !    call set_star_type_from_label(type_label,x)
         call set_star_type_from_history(x)
 
@@ -1130,7 +1136,7 @@ module z_support
         real(dp), intent(out) :: zpars(20)
         real(dp) :: old_co_frac,co_fraction,change_frac
         real(dp) :: smass,Teff,last_val,he_diff, mup_max
-        real(dp), allocatable :: T_centre(:), mass_list(:)
+        real(dp), allocatable, dimension(:) :: T_centre, mass_list
         integer :: len_track, i, min_index
         integer:: j_bagb, j_tagb, start
 
