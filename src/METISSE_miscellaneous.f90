@@ -74,6 +74,8 @@ subroutine dealloc_track()
         deallocate(tarr(i)% bounds)
         if((tarr(i)% ierr/=0).and.verbose) write(UNIT=err_unit,fmt=*)'Error in evolving the system',i
 
+    code_error = .false.
+
     end do
     deallocate(tarr)
 end subroutine dealloc_track

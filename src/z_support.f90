@@ -1176,8 +1176,9 @@ module z_support
         write(out_unit,'(a,f7.1)') ' Minimum initial mass', Mcrit(1)% mass
         write(out_unit,'(a,f7.1)') ' Maximum initial mass', Mcrit(9)% mass
 
-        allocate(mass_list(num_tracks))
-        mass_list = pack(xa% initial_mass,mask = xa% complete)
+!        allocate(mass_list(size(xa)))
+        mass_list = xa% initial_mass
+        mass_list = pack(mass_list,mask = xa% complete.eqv..true.)
         
         old_co_frac = 0.d0
 
@@ -1369,15 +1370,20 @@ module z_support
     end subroutine set_zparameters
 
     subroutine set_zparameters_he(num_tracks)
+            integer, intent(in) :: num_tracks
+
         real(dp) :: smass,frac_mcenv
         integer :: len_track, i, min_index, start
         real(dp), allocatable :: mass_list(:)
-        integer, intent(in) :: num_tracks
 
         logical:: debug
 
         debug = .false.
 
+        ! this way avoids Fortran runtime warning: An array temporary was created
+        allocate(mass_list(size(xa)),source=xa% initial_mass)
+        mass_list = pack(mass_list,mask = xa% complete.eqv..true.)
+        
         Mcrit_he% mass= -1.d0
         Mcrit_he% loc = 0
 
@@ -1399,9 +1405,6 @@ module z_support
 
         write(out_unit,'(a,f7.1)') ' Minimum initial mass', Mcrit_he(1)% mass
         write(out_unit,'(a,f7.1)') ' Maximum initial mass', Mcrit_he(9)% mass
-
-        allocate(mass_list(num_tracks))
-        mass_list = pack(xa% initial_mass,mask = xa% complete)
         
         !if already defined, do index search here otherwise search below
         do i = 2, size(Mcrit_he)-1
@@ -1409,7 +1412,6 @@ module z_support
             call index_search (num_tracks, mass_list, Mcrit_he(i)% mass, min_index)
             Mcrit_he(i)% mass = xa(min_index)% initial_mass
             Mcrit_he(i)% loc = min_index
-!            if (debug) print*, i, Mcrit_he(i)% mass
         end do
 
         start = max(Mcrit_he(1)% loc, Mcrit_he(2)% loc)
@@ -1442,17 +1444,6 @@ module z_support
                         Mcrit_he(5)% loc = i
                         if (debug) print*,"Mfgb2",smass,i
                     endif
-!                elseif (len_track>= Final_EEP_HE)) then
-!                    jstart = TAMS_HE_EEP
-!                    jend = Final_EEP_HE
-!                    do j = jstart,jend
-!                        if (xa(i)% tr(i_mcenv,j)/xa(i)% tr(i_mass,j).ge.0.12d0) then
-!                            Mcrit_he(5)% mass = smass
-!                            Mcrit_he(5)% loc = i
-!                            if (debug) print*,"Mfgb",smass,i
-!                            exit
-!                        endif
-!                    enddo
                 endif
             ENDIF
 
@@ -1486,7 +1477,7 @@ module z_support
         call sort_mcutoff(m_cutoff_he)
         if (debug) print*, "m_cutoffs he : ", m_cutoff_he
 
-        deallocate(mass_list)
+!        deallocate(mass_list)
     end subroutine set_zparameters_he
     
     subroutine sort_mcutoff(m_cutoff)

@@ -29,14 +29,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         print*, 'Fatal error: front_end is not initialized for METISSE'
         ierr = 1; return
     endif
-        
-    !Some unit numbers are reserved: 5 is standard input, 6 is standard output.
-    if (verbose) then
-        out_unit = 6   !will write to screen
-    else
-        out_unit = 1000    !will write to file
-        open(1000,file='tracks_log.txt',action='write',status='unknown')
-    endif
     
     
     if (debug) print*, 'in METISSE_zcsnts',z, trim(path_to_tracks),trim(path_to_he_tracks)
@@ -68,16 +60,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         return
     endif
     
-    write(out_unit,'(a,f10.6)') ' Input Z is :', Z
     if (debug) print*, 'Initializing METISSE_zcnsts'
-
-    nloop = 2
-    use_sse_NHe = .true.
-    
-    if (allocated(core_cols)) deallocate(core_cols)
-    if (allocated(core_cols_he)) deallocate(core_cols_he)
-    
-    if (allocated(Mmax_array)) deallocate(Mmax_array, Mmin_array)
     
     if (allocated(metallicity_file_list)) deallocate(metallicity_file_list,metallicity_file_list_he)
 
@@ -100,6 +83,30 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         print*, "Error: reading inputs; unrecognized front_end_name for METISSE"
         ierr = 1; return
     endif
+    
+        nloop = 2
+    use_sse_NHe = .true.
+    
+    if (allocated(core_cols)) deallocate(core_cols)
+    if (allocated(core_cols_he)) deallocate(core_cols_he)
+    
+    if (allocated(Mmax_array)) deallocate(Mmax_array, Mmin_array)
+    
+    !Some unit numbers are reserved: 5 is standard input, 6 is standard output.
+    if (verbose) then
+        out_unit = 6   !will write to screen
+    else
+        out_unit = 1000    !will write to file
+        open(1000,file='tracks_log.txt',action='write',status='unknown')
+    endif
+    
+    if (write_error_to_file) then
+        err_unit = 99   !will write to fort.99
+    else
+        err_unit = 6      !will write to screen
+    endif
+    write(out_unit,'(a,f10.6)') ' Input Z is :', Z
+
     
     metallicity_file_list = pack(metallicity_file_list,mask=len_trim(metallicity_file_list)>0)
     
@@ -128,7 +135,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     i_he_Rcenv = -1
     i_he_MoI = -1
     i_he_age = -1
-            
+        
     do i = nloop,1, -1
         !read metallicity related variables
         
@@ -248,9 +255,10 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             end do
         endif
         
+        call count_tracks(num_tracks)
+
         ! Processing the input tracks
         if (i==2) then
-            call count_tracks(num_tracks)
             call set_zparameters_he(num_tracks)
             call copy_and_deallocatex(num_tracks,sa_he)
             call get_minmax(sa_he(1)% is_he_track,Mmax_he_array,Mmin_he_array)
@@ -265,7 +273,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         else
             !reset z parameters where available
             !and determine cutoff masses
-            call count_tracks(num_tracks)
             call set_zparameters(num_tracks,zpars)
             call copy_and_deallocatex(num_tracks,sa)
             
@@ -285,20 +292,12 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         deallocate(track_list)
     end do
 
-    !TODO: 1. check for monotonicity of initial masses
-    ! 2. incompleteness of the tracks
-    ! 3. BGB phase
+    !TODO: 1. check BGB phase
     if (debug) print*,sa% initial_mass
     
     if (front_end /= main) call assign_commons()
     ! for main, commons are assigned within the METISSE_main 
 
-    !Some unit numbers are reserved: 5 is standard input, 6 is standard output.
-    if (write_error_to_file) then
-        err_unit = 99   !will write to fort.99
-    else
-        err_unit = 6      !will write to screen
-    endif
         
         
 end subroutine METISSE_zcnsts
