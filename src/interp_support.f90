@@ -879,13 +879,13 @@ module interp_support
             endif
             if (i_mcenv>0) pars% mcenv = new_line(i_mcenv,1)
             if (i_rcenv>0) pars% rcenv = new_line(i_rcenv,1)
-            if (i_MoI>0) pars% moi = new_line(i_MoI,1)
+!            if (i_MoI>0) pars% moi = new_line(i_MoI,1)
         elseif(pars% phase >= He_MS) then
             pars% core_mass = pars% McCO
             if (i_he_RCO>0) pars% core_radius = new_line(i_he_RCO,1)
             if (i_he_mcenv>0) pars% mcenv = new_line(i_he_mcenv,1)
             if (i_he_rcenv>0) pars% rcenv = new_line(i_he_rcenv,1)
-            if (i_he_MoI>0) pars% moi = new_line(i_he_MoI,1)
+!            if (i_he_MoI>0) pars% moi = new_line(i_he_MoI,1)
         endif
             
     end subroutine

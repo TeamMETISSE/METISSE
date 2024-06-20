@@ -41,42 +41,35 @@
 
     !-------COLUMN NAMES---------------------------------
     ! Since columns can be named in different ways
-    ! Use this section to names of some important columns
-    ! Make sure units are correct
+    ! Use this section to names of some of the important columns
+    ! Kindly ensure that the units are correct
     
     ! ESSENTIAL columns-----------------------------------
     ! Code will stop if it cannot locate these columns
 
-    !age in units of yrs
+    !age in years
     age_colname = ''
     
     !mass of the star in solar units
     mass_colname = ''
-
-    ! luminosity in solar units
-    ! If not supplied then log_L_colname is used
+    
+    ! log10 of luminosity (in solar units)
+    log_L_colname = ''
+    
+    ! Stellar luminosity in solar units (alternative to log_L_colname)
+    ! Used only if log_L_colname is not supplied
+    ! Either log_L_colname or Lum_colname should be provided
     Lum_colname = ''
     
-    ! log of luminosity (alternative to Lum_colname)
-    ! used if Lum_colname is an empty string('')
-    log_L_colname = ''
- 
-    ! Radius in solar units
-    ! If not supplied then log_R_colname is used
-    Radius_colname = ''
     
-    ! log of radius (alternative to Radius_colname)
-    ! used if Radius_colname is an empty string('')
+    ! log10 of radius (in solar units)
     log_R_colname = ''
-    
-    ! Effective/surface temperature in K OR
-    ! If not supplied  then log_T_colname is used
-    Teff_colname = ''
-    
-    ! log of surface temperature (alternative to Teff_colname)
-    ! used if Teff_colname is an empty string('')
-    log_T_colname = ''
-    
+     
+     
+    ! Stellar radius in solar units (alternative to log_R_colname)
+    ! Used only if log_R_colname is not supplied
+    ! Either log_R_colname or Radius_colname should be provided
+    Radius_colname = ''
    
     ! mass of He enriched/H depleted core in solar units
     he_core_mass = ''
@@ -111,12 +104,18 @@
     
     radius_conv_envelope = ''
     
-    !moment of inertia (for tidal/spin calculations)
-    moment_of_inertia = ''
-    
-    ! These are required for determining Mup and Mhook
-    ! If they are not supplied, then user-defined values for Mup and Mhook are used
-    ! If Mup and Mhook are not supplied either, then SSE's formulae are used
+    ! The following are required for determining various zparameters
+    ! If these are not supplied, then user-defined values for zparameters are used
+    ! If zparameters are not supplied either (in metallicity file), then SSE's formulae are used
+
+
+    ! log10 of surface temperature (in K)
+    log_T_colname = ''
+     
+     
+    ! Surface temperature in K (alternative to log_T_colname)
+    ! Used only if log_T_colname is not supplied
+    Teff_colname = ''
 
     ! central temperature in log units
     log_Tc = ''
@@ -129,12 +128,6 @@
     
     ! oxygen-16 mass fraction at centre
     o16_mass_frac = ''
-    
-    ! NOT FUNCTIONAL- do not use
-    ! list of columns related to the evolution of core
-    ! these are interpolated based on the original age of the star before mass loss
-    !number_of_core_columns = 0
-    !core_columns = 'age,log_L,Mc_He,Mc_CO'
 
 
     !-------EEP DETAILS for Hydrogen stars-------------

@@ -133,8 +133,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     i_he_RCO = -1
     i_he_mcenv = -1
     i_he_Rcenv = -1
-    i_he_MoI = -1
     i_he_age = -1
+!    i_he_MoI = -1
         
     do i = nloop,1, -1
         !read metallicity related variables

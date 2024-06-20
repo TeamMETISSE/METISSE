@@ -57,9 +57,10 @@ module z_support
                         Lum_colname, Teff_colname, Radius_colname, &
                         he_core_mass, co_core_mass, he_core_radius, co_core_radius, &
                         log_Tc, c12_mass_frac, o16_mass_frac,he4_mass_frac, &
-                        mass_conv_envelope, radius_conv_envelope, moment_of_inertia, &
+                        mass_conv_envelope, radius_conv_envelope, &
                         ZAMS_HE_EEP, TAMS_HE_EEP, GB_HE_EEP, cCBurn_HE_EEP, TPAGB_HE_EEP, &
                         post_AGB_HE_EEP, Initial_EEP_HE, Final_EEP_HE
+                        !moment_of_inertia,
             
     contains
 
@@ -461,7 +462,6 @@ module z_support
         integer, intent(in) :: ncol
         logical, intent(in) :: is_he_track
         integer, intent(out) :: ierr
-
         logical :: essential
         
         essential = .true.
@@ -513,7 +513,7 @@ module z_support
             if (co_core_radius/= '') i_he_RCO = locate_column(cols, co_core_radius, ierr)
             if (mass_conv_envelope/= '') i_he_mcenv = locate_column(cols, mass_conv_envelope, ierr)
             if (radius_conv_envelope/= '') i_he_rcenv = locate_column(cols, radius_conv_envelope, ierr)
-            if (moment_of_inertia/= '') i_he_MoI = locate_column(cols, moment_of_inertia, ierr)
+!            if (moment_of_inertia/= '') i_he_MoI = locate_column(cols, moment_of_inertia, ierr)
             i_he_age = ncol+1
         else
             i_RHe_core = -1
@@ -524,9 +524,10 @@ module z_support
             if (mass_conv_envelope/= '') i_mcenv = locate_column(cols, mass_conv_envelope, ierr)
             i_Rcenv = -1
             if (radius_conv_envelope/= '') i_rcenv = locate_column(cols, radius_conv_envelope, ierr)
-            i_MoI = -1
-            if (moment_of_inertia/= '') i_MoI = locate_column(cols, moment_of_inertia, ierr)
+!            i_MoI = -1
+!            if (moment_of_inertia/= '') i_MoI = locate_column(cols, moment_of_inertia, ierr)
         endif
+        
         
         i_he4 = locate_column(cols, he4_mass_frac, ierr)
         i_c12 = locate_column(cols, c12_mass_frac, ierr)
@@ -622,14 +623,14 @@ module z_support
             if (i_he_RCO >0) call assign_sgl_col(temp, i_he_RCO, co_core_radius,n)
             if (i_he_mcenv>0) call assign_sgl_col(temp, i_he_mcenv, mass_conv_envelope,n)
             if (i_he_Rcenv>0) call assign_sgl_col(temp, i_he_Rcenv, radius_conv_envelope,n)
-            if (i_he_MoI>0) call assign_sgl_col(temp, i_he_MoI, moment_of_inertia,n)
+!            if (i_he_MoI>0) call assign_sgl_col(temp, i_he_MoI, moment_of_inertia,n)
          else
         
             if (i_RHe_core >0) call assign_sgl_col(temp, i_RHe_core, he_core_radius,n)
             if (i_RCO_core >0) call assign_sgl_col(temp, i_RCO_core, co_core_radius,n)
             if (i_mcenv>0) call assign_sgl_col(temp, i_mcenv, mass_conv_envelope,n)
             if (i_Rcenv>0) call assign_sgl_col(temp, i_Rcenv, radius_conv_envelope,n)
-            if (i_MoI>0) call assign_sgl_col(temp, i_MoI, moment_of_inertia,n)
+!            if (i_MoI>0) call assign_sgl_col(temp, i_MoI, moment_of_inertia,n)
                         
 !            if (i_Tc >0) call assign_sgl_col(temp, i_Tc, log_Tc,n)
 !            if (i_he4 >0) call assign_sgl_col(temp, i_he4, he4_mass_frac,n)
