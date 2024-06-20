@@ -63,11 +63,10 @@ subroutine dealloc_track()
     integer:: n,i
 
     n = size(tarr)
+    
 !    print*," deallocating", n
-!    n = 1
+
     do i = 1,n
-!        deallocate(tarr(i)% times_new)
-!        deallocate(tarr(i)% times)
         deallocate(tarr(i)% eep)
         deallocate(tarr(i)% tr)
         deallocate(tarr(i)% cols)

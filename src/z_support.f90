@@ -40,9 +40,9 @@ module z_support
                         WD_mass_scheme,use_initial_final_mass_relation, allow_electron_capture, &
                         BHNS_mass_scheme, max_NS_mass,pts_1, pts_2, pts_3, write_track_to_file
 
-    namelist /METISSE_input_controls/ metallicity_file_list, Z_accuracy_limit, &
+    namelist /METISSE_input_controls/ tracks_dir, Z_accuracy_limit, &
                         mass_accuracy_limit, construct_wd_track, verbose, &
-                        write_eep_file,write_error_to_file, metallicity_file_list_he
+                        write_eep_file,write_error_to_file, tracks_dir_he
             
     namelist /metallicity_controls/ INPUT_FILES_DIR, Z_files,format_file, extra_columns_file, &
                         read_all_columns, extra_columns,Mhook, Mhef, Mfgb, Mup, Mec, Mextra, Z_H, Z_He
@@ -74,48 +74,59 @@ module z_support
     end subroutine read_defaults
     
     
-    subroutine read_metisse_input(ierr)
-        integer :: io
-        integer, intent(out) :: ierr
-        character(len=strlen) :: infile
+    subroutine read_main_input(infile,ierr)
 
+        character(len=strlen), intent(in) :: infile
+        integer, intent(out) :: ierr
+        integer :: io
+        
         ierr = 0
         io = alloc_iounit(ierr)
-        !reading user input
         
-        infile = trim(METISSE_DIR)// '/evolve_metisse.in'
-        open(io,FILE=infile,action="read",iostat=ierr)
+        open(io,FILE=trim(infile),action="read",iostat=ierr)
             if (ierr /= 0) then
-               print*, 'Error: Failed to open', trim(infile)
+               print*, 'Error: Failed to open: ', trim(infile)
                call free_iounit(io)
                return
             end if
-            if (front_end == main) then
-                read(unit = io, nml = SSE_input_controls)
-                if (.not. defined(initial_Z ))then
-                    print*,"Error: initial_Z is not defined"
-                    ierr = 1
-                    return
-                endif
-            endif
+            read(unit = io, nml = SSE_input_controls)
+            
+        close(io)
+        call free_iounit(io)
+    end subroutine
+
+    subroutine read_metisse_input(infile,ierr)
+        character(len=strlen), intent(in) :: infile
+        integer, intent(out) :: ierr
+        integer :: io
+
+        ierr = 0
+        io = alloc_iounit(ierr)
+        
+        open(io,FILE=trim(infile),action="read",iostat=ierr)
+            if (ierr /= 0) then
+               print*, 'Error: Failed to open: ', trim(infile)
+               call free_iounit(io)
+               return
+            end if
             read(unit = io, nml = METISSE_input_controls)
         close(io)
         call free_iounit(io)
-        
     end subroutine read_metisse_input
     
     
-    subroutine get_metisse_input(path,file_list)
+    subroutine get_metallicity_file_list(path,file_list)
 
     character(LEN=strlen) :: path
     character(LEN=strlen), allocatable :: temp_list(:),file_list(:)
 
     integer :: ierr, n
 
+        if (allocated(file_list)) deallocate(file_list)
         ierr = 0
-        ! use inputs from COSMIC
+       
         call get_files_from_path(path,'_metallicity.in',temp_list,ierr)
-        
+
         if (.not. allocated(temp_list)) then
             print*, 'Could not find metallicity file(s) in ',trim(path)
             ierr = 1
@@ -128,10 +139,12 @@ module z_support
             print*, 'Only using first ',max_files
             n = max_files
         endif
-        file_list(1:n) = temp_list(1:n)
-        deallocate(temp_list)
         
-    end subroutine get_metisse_input
+        allocate(file_list(n), source= temp_list(1:n))
+        file_list = pack(file_list,mask=len_trim(file_list)>0)
+
+        deallocate(temp_list)
+    end subroutine
     
     subroutine get_metallcity_file_from_Z(Z_req,file_list,ierr)
         real(dp), intent(in) :: Z_req
@@ -1065,6 +1078,8 @@ module z_support
             if (y(k)% is_he_track)start = ZAMS_HE_EEP
             y(k)% tr(i_age2,:) = y(k)% tr(i_age2,:)- y(k)% tr(i_age2,start)
             
+            !TODO: check track completion and BGB phase?
+
         end do
         
         !sort the array based on intial mass if not sorted already
@@ -1118,6 +1133,8 @@ module z_support
         else
             x => sa
         endif
+        
+        if (allocated(Mmax)) deallocate(Mmax, Mmin)
         
         nmax = maxval(x% ntrack)
         allocate(Mmax(nmax), Mmin(nmax))

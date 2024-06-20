@@ -8,7 +8,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     integer, intent(out) :: ierr
     
     character(LEN=strlen), allocatable :: track_list(:)
-    character(LEN=strlen) :: USE_DIR, find_cmd,rnd
+    character(LEN=strlen) :: USE_DIR, find_cmd,rnd, infile
     integer :: i,j,nloop,jerr
     integer :: num_tracks
     
@@ -29,7 +29,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         print*, 'Fatal error: front_end is not initialized for METISSE'
         ierr = 1; return
     endif
-    
     
     if (debug) print*, 'in METISSE_zcsnts',z, trim(path_to_tracks),trim(path_to_he_tracks)
     
@@ -61,9 +60,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     endif
     
     if (debug) print*, 'Initializing METISSE_zcnsts'
-    
-    if (allocated(metallicity_file_list)) deallocate(metallicity_file_list,metallicity_file_list_he)
-
         
     ! use input file/path to locate list of *metallicity.in files
     ! these file contain information about eep tracks, their metallicity and format
@@ -71,27 +67,55 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     !read defaults option first
     call read_defaults()
 
-    !read user inputs from evolve_metisse.in or use inputs from code directly
-    if (front_end == main .or. front_end == bse) then
-        call read_metisse_input(ierr); if (ierr/=0) call stop_code
-    elseif (front_end == COSMIC) then
+    !read user inputs
+    
+    select case(front_end)
+    case(main)
+        infile = trim(METISSE_DIR)// '/main.input'
+        call read_main_input(infile,ierr)
+        if (.not. defined(initial_Z ))then
+            print*,"Error: initial_Z is not defined in ",trim(infile)
+            ierr = 1
+        endif
+        if (ierr/=0) call stop_code
+        
+        infile = trim(METISSE_DIR)// '/metisse.input'
+        call read_metisse_input(infile,ierr)
+        if (ierr/=0) call stop_code
+    case(bse)
+        infile = 'evolve_metisse.in'
+        call read_metisse_input(infile,ierr)
+        if (ierr/=0) call stop_code
+    case(COSMIC)
         TRACKS_DIR = path_to_tracks
         TRACKS_DIR_HE = path_to_he_tracks
-        call get_metisse_input(TRACKS_DIR,metallicity_file_list)
-        if (TRACKS_DIR_HE/='') call get_metisse_input(TRACKS_DIR_HE,metallicity_file_list_he)
-    else
+    case default
         print*, "Error: reading inputs; unrecognized front_end_name for METISSE"
         ierr = 1; return
+    end select
+    
+    call get_metallicity_file_list(TRACKS_DIR,metallicity_file_list)
+    if (TRACKS_DIR_HE/='') call get_metallicity_file_list(TRACKS_DIR_HE,metallicity_file_list_he)
+    
+!    metallicity_file_list = pack(metallicity_file_list,mask=len_trim(metallicity_file_list)>0)
+!    metallicity_file_list_he = pack(metallicity_file_list_he,mask=len_trim(metallicity_file_list_he)>0)
+    
+    if (size(metallicity_file_list)<1) then
+        print*, "Error: metallicity file(s) not found in", trim(tracks_dir)
+        print*, "check if tracks_dir is correct"
+        ierr = 1; return
+    else
+        if(debug) print*,'metallicity files: ',metallicity_file_list
     endif
     
-        nloop = 2
-    use_sse_NHe = .true.
-    
-    if (allocated(core_cols)) deallocate(core_cols)
-    if (allocated(core_cols_he)) deallocate(core_cols_he)
-    
-    if (allocated(Mmax_array)) deallocate(Mmax_array, Mmin_array)
-    
+    if (size(metallicity_file_list_he)<1) then
+        write(out_unit,*) "Error: metallicity file(s) not found in", trim(tracks_dir_he)
+        write(out_unit,*) "Switching to SSE formulae for helium stars "
+        nloop = 1
+    else
+         if(debug) print*,'metallicity files he : ', metallicity_file_list_he
+    endif
+        
     !Some unit numbers are reserved: 5 is standard input, 6 is standard output.
     if (verbose) then
         out_unit = 6   !will write to screen
@@ -106,25 +130,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         err_unit = 6      !will write to screen
     endif
     write(out_unit,'(a,f10.6)') ' Input Z is :', Z
-
     
-    metallicity_file_list = pack(metallicity_file_list,mask=len_trim(metallicity_file_list)>0)
-    
-    metallicity_file_list_he = pack(metallicity_file_list_he,mask=len_trim(metallicity_file_list_he)>0)
-    
-    if (size(metallicity_file_list)<1) then
-        print*, "Error: metallicity_file_list is empty"
-        ierr = 1; return
-    endif
-    
-    if (size(metallicity_file_list_he)<1) then
-        write(out_unit,*) "Error: metallicity_file_list_he is empty"
-        write(out_unit,*) "Switching to SSE formulae for helium stars "
-        nloop = 1
-    endif
-    
-    if(debug) print*,'metallicity files: ',metallicity_file_list
-    if(debug) print*,'metallicity files he : ', metallicity_file_list_he
     
     if (front_end /= main) initial_Z = z
 
@@ -136,6 +142,9 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     i_he_age = -1
 !    i_he_MoI = -1
         
+    nloop = 2
+    use_sse_NHe = .true.
+    
     do i = nloop,1, -1
         !read metallicity related variables
         
@@ -168,7 +177,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         ! check if the format file exists
         inquire(file=trim(format_file), exist=res)
         
-        if ((res .eqv. .False.) .and. (front_end == COSMIC)) then
+        if (res .eqv. .False.) then
             if (debug) print*, trim(format_file), 'not found; appending ',trim(USE_DIR)
             format_file = trim(USE_DIR)//'/'//trim(format_file)
         endif
@@ -183,16 +192,18 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             ierr = 1; return
         endif
         
-        if (front_end == COSMIC) then
-!            find_cmd = 'find '//trim(INPUT_FILES_DIR)//'/*'//trim(file_extension)//' -maxdepth 1 > .file_name.txt'
-!
-!            call execute_command_line(find_cmd,exitstat=ierr,cmdstat=jerr)
-!            if (ierr/=0) then
-!            write(out_unit,*) trim(INPUT_FILES_DIR), 'not found; appending ',trim(USE_DIR), ierr, jerr
-            INPUT_FILES_DIR = trim(USE_DIR)//'/'//trim(INPUT_FILES_DIR)
-!            ierr = 0
-!            endif
-        endif
+        ! first check if use_dir needs to be appended
+        find_cmd = 'find '//trim(USE_DIR)//'/'//trim(INPUT_FILES_DIR)//'/*'//trim(file_extension)//' -maxdepth 1 > .file_name.txt'
+
+        call execute_command_line(find_cmd,exitstat=ierr,cmdstat=jerr)
+        
+        if (ierr==0) INPUT_FILES_DIR = trim(USE_DIR)//'/'//trim(INPUT_FILES_DIR)
+        ! if not , ierr/=0, try using input_files_dir as it is
+        ! this is opposite to the check for format file as
+        ! find command gives confusing error message that cannot be suppressed
+        
+        ! reset ierr to 0 if not already
+        ierr = 0
         
         write(out_unit,*)"Reading input files from: ", trim(INPUT_FILES_DIR)
 
@@ -264,6 +275,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             call get_minmax(sa_he(1)% is_he_track,Mmax_he_array,Mmin_he_array)
 
             use_sse_NHe = .false.
+            if (allocated(core_cols_he)) deallocate(core_cols_he)
+
             allocate(core_cols_he(4))
             core_cols_he = -1
             core_cols_he(1) = i_he_age
@@ -277,6 +290,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             call copy_and_deallocatex(num_tracks,sa)
             
             call get_minmax(sa(1)% is_he_track,Mmax_array,Mmin_array)
+            if (allocated(core_cols)) deallocate(core_cols)
 
             allocate(core_cols(6))
             core_cols = -1
@@ -291,14 +305,9 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         endif
         deallocate(track_list)
     end do
-
-    !TODO: 1. check BGB phase
-    if (debug) print*,sa% initial_mass
     
+    ! for main, commons are assigned within the METISSE_main
     if (front_end /= main) call assign_commons()
-    ! for main, commons are assigned within the METISSE_main 
-
-        
         
 end subroutine METISSE_zcnsts
 
