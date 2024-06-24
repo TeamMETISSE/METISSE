@@ -66,13 +66,10 @@ module z_support
 
     subroutine read_defaults()
         
-        allocate(metallicity_file_list(max_files))
-        allocate(metallicity_file_list_he(max_files))
+        include 'defaults/main_defaults.inc'
+        include 'defaults/metisse_defaults.inc'
         
-        include 'defaults/evolve_metisse_defaults.inc'
-    
     end subroutine read_defaults
-    
     
     subroutine read_main_input(infile,ierr)
 
@@ -123,6 +120,7 @@ module z_support
     integer :: ierr, n
 
         if (allocated(file_list)) deallocate(file_list)
+        
         ierr = 0
        
         call get_files_from_path(path,'_metallicity.in',temp_list,ierr)
