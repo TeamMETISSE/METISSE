@@ -29,7 +29,7 @@
     t => tarr(idd)
     
     debug = .false.
-!    if ((id == 1).and. kw>=1 )debug = .true.
+!    if ((id == 1).and. kw<=10 )debug = .true.
 !if(id ==1 .and. t% is_he_track)debug = .true.
     if (debug) print*, '-----------HRDIAG-------------'
     if (debug) print*,"started hrdiag",mt,mc,aj,tn,kw,id,t% post_agb
@@ -75,15 +75,9 @@
             endif
             IF (check_ge(t% pars% age,t% times(11))) THEN
                 !check if have reached the end of the eep track
-                if (debug) print*,"end of file:aj,tn ",t% pars% age,t% times(11),t% times(kw)
-                if (kw<5 .and. (t% initial_mass.gt.very_low_mass_limit)) then
-                if (t% ierr==0 .and. (dt_hold.le.t% pars% dt)) then
-                    write(UNIT=err_unit,fmt=*) 'WARNING: Early end of file at phase, mass and id',&
-                    kw,t% initial_mass,id
-                    t% ierr = -1
-!                    call stop_code
-                endif
-                endif
+                if (debug)print*,"end of file:aj,tn ",t% pars% age,t% times(11),t% times(max(kw,1))
+                if (kw<5) call check_early_end(t,dt_hold,id)
+
                 end_of_file = .true.
                 
                 j_bagb = min(t% ntrack, TA_cHeB_EEP)
@@ -91,6 +85,7 @@
                 mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
 
                 if (check_remnant_phase(t% pars, mc_max)) has_become_remnant = .true.
+            
             
             ELSEIF (check_ge(t% pars% core_mass,t% pars% mass)) THEN
                 !check if envelope has been lost
@@ -125,9 +120,9 @@
                         endif
                         ! zams_mass is assigned in the star
                         call METISSE_star(t% pars% phase, mass,t% pars% mass,tm,tn,tscls,lums,GB,zpars,0.d0,id)
-                        t% pars% age_old = t% pars% age
+!                        t% pars% age_old = t% pars% age
 
-                        if (debug) print*, 'after env loss', t% pars% phase, t% pars% age,t% MS_time,t% nuc_time,id
+                        if (debug)print*, 'after env loss', t% pars% phase, t% pars% age,t% MS_time,t% nuc_time,id
                     endif
                 endif
             ELSE
@@ -176,7 +171,7 @@
             !interpolate in age
             call interpolate_age(t,t% pars% age)
             if(debug)print*,"mt difference",t% pars% mass,mt,mt-t% pars% mass,t% pars% phase
-            t% pars% mass = mt
+            if (front_end /=main) t% pars% mass = mt
             if (check_ge(t% pars% age,t% times(11)) .or. (t% pars% core_mass.ge.t% pars% mass)) then
                 !have reached the end of the eep track; self explanatory
                 if (debug) print*,"end of file:aj,tn ",t% pars% age,t% tr(i_he_age,t% ntrack),t% times(kw)
@@ -234,7 +229,7 @@
         rc = t% pars% radius
         menv = 1.0d-10
         renv = 1.0d-10
-        k2 = 0.21d0
+        k2 = 0.1d0
     ENDIF
     
     kw = t% pars% phase
@@ -255,7 +250,7 @@
     if(code_error) t% ierr = -1
     
     if(debug) print*,"finished hrdiag",mt,mc,aj,kw,id,tm,tn
-!    if (id==1)print*,"finished hrdiag",t% pars% mass, t% pars% core_mass,t% pars% age,t% pars% radius,id
+!    if (t% is_he_track)print*,"finished hrdiag",t% pars% mass, t% pars% core_mass,t% pars% age,t% pars% radius,id
 
     
     nullify(t)

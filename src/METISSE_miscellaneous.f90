@@ -52,6 +52,7 @@ subroutine allocate_track(n,mass)
     tarr% ierr = 0
     tarr% pars% dms = 0.d0
     tarr% pars% delta = 0.d0
+    tarr% reju = .false.
     
 end subroutine allocate_track
 
@@ -89,5 +90,6 @@ subroutine set_star_type(id)
 !        print*, 'setting star to reju',tarr(id)% pars% age,id
 
         tarr(id)% star_type = rejuvenated
+        tarr(id)% reju = .true.
 end subroutine set_star_type
 

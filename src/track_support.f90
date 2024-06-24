@@ -181,6 +181,7 @@ module track_support
     type track
         character(len=strlen) :: filename
         logical :: complete = .true., post_agb = .false.
+        logical :: reju !(can't use rejuvenated as it is already used for star_type)
         logical :: has_mass_loss = .false., is_he_track = .false.
 
         integer :: ncol, ntrack, neep,min_index,j_bgb,j_bgb0

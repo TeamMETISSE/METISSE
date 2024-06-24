@@ -72,6 +72,23 @@
         end function check_remnant_phase
         
         
+        subroutine check_early_end(t,dt_hold,id)
+            real(dp) :: dt_hold
+            type(track), pointer :: t
+            integer :: id
+
+            if (t% ierr/=0) return
+
+            if ((t% initial_mass.gt.very_low_mass_limit).and. (dt_hold.le.t% pars% dt).and.(t% reju.eqv. .false.)) then
+                write(UNIT=err_unit,fmt=*) 'WARNING: Early end of file at phase, mass and id',&
+                t% pars% phase,t% initial_mass,id,t% reju
+                t% ierr = -1
+!                    call stop_code
+            endif
+                
+        end subroutine check_early_end
+                
+        
         subroutine assign_remnant_METISSE(pars, mcbagb)
             implicit none
             type(star_parameters) :: pars
