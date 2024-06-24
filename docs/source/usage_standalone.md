@@ -139,7 +139,7 @@ are supplied using the fortran namelist `SSE_input_controls`. It is read only in
 
 Both are Fortran namelists, so comments (!) and blank lines can be used freely. Characters are **case-insensitive**. Although make sure to leave a blank line at the end of the file (after the `/` symbol)
 
-Refer to `main_defaults.inc` and `main_defaults.inc` in the  *src/defaults/* folder for the most up to date variable names and their default values. **Do not modify any file inside the defaults folder**.
+Refer to `main_defaults.inc` and `metisse_defaults.inc` in the  *src/defaults/* folder for the most up to date variable names and their default values. **Do not modify any file inside the defaults folder**.
 
 ## Running METISSE 
 
