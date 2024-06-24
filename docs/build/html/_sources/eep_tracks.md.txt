@@ -92,7 +92,7 @@ In addition to the metallicity files, user also needs to specify the format of i
     ! Set read_eep_files to true only for MIST-like files
     ! generated from A Dotter's ISO code (Dotter 2016).
     ! If true; then extra_char, total_cols
-    ! and other information are pre-specified.
+    ! and other information are can be read directly from files.
     ! Set it to false other type of files
 
     read_eep_files = .false.
@@ -118,109 +118,43 @@ In addition to the metallicity files, user also needs to specify the format of i
     
     total_cols = -1
 
-    !-------EEP DETAILS-------------
-    PreMS_EEP = -1
-    ZAMS_EEP = -1
-    IAMS_EEP = -1
-    TAMS_EEP = -1
-    BGB_EEP = -1
-    cHeIgnition_EEP = -1
-    cHeBurn_EEP = -1
-    TA_cHeB_EEP = -1
-
-    TPAGB_EEP = -1
-    cCBurn_EEP = -1
-    post_AGB_EEP = -1
-    WD_EEP = -1
-
-    !files will be read from this EEP/line number
-    !if <0, then ZAMS_EEP is used
-    Initial_EEP = -1
-    !to this EEP/line
-    ! if <0 then maximum of the above listed EEPs is used
-    Final_EEP = -1
-    
-    Extra_EEP1 = -1
-    Extra_EEP2= -1
-    Extra_EEP3 = -1
-
-    ! Usually two to four tracks neighboring are used for interpolation.
-    ! However, if any of them is incomplete,
-    ! then the interpolated track is also rendered incomplete.
-    ! If fix_track is true, METISSE relaxes the criteria for finding
-    ! the neighboring tracks in above cases and tries to get a complete track.
-    
-    fix_track = .true.
-
-    ! if fix_track is true, then
-    ! the completeness of tracks is determined by the following two:
-    
-    ! for stars with M< Mec
-    low_mass_final_eep = -1
-    ! for stars with M>= Mec
-    high_mass_final_eep = -1
-
-    ! When fixing an incomplete track
-    ! Search for the new neighboring tracks for interpolation 
-    ! within the mass range of initial_mass - (initial_mass*lookup_index) 
-    ! and initial_mass + (initial_mass*lookup_index)]
- 
-    lookup_index = 1.0
-
-
     !-------COLUMN NAMES---------------------------------
     ! Since columns can be named in different ways
-    ! Use this section to names of some important columns
-    ! Make sure units are correct
+    ! Use this section to names of some of the important columns
+    ! Kindly ensure that the units are correct
     
     ! ESSENTIAL columns-----------------------------------
-    ! Code will stop if it cannot determine these columns 
+    ! Code will stop if it cannot locate these columns
 
-    !age in units of yrs
+    !age in years
     age_colname = ''
     
     !mass of the star in solar units
     mass_colname = ''
-
-    ! luminosity in solar units
-    ! If not supplied then log_L_colname is used
+    
+    ! log10 of luminosity (in solar units)
+    log_L_colname = ''
+    
+    ! Stellar luminosity in solar units (alternative to log_L_colname)
+    ! Used only if log_L_colname is not supplied
+    ! Either log_L_colname or Lum_colname should be provided
     Lum_colname = ''
     
-    ! log of luminosity (alternative to Lum_colname)
-    ! used if Lum_colname is an empty string('')
-    log_L_colname = ''
- 
-    ! Radius in solar units
-    ! If not supplied then log_R_colname is used
-    Radius_colname = ''
     
-    ! log of radius (alternative to Radius_colname)
-    ! used if Radius_colname is an empty string('')
+    ! log10 of radius (in solar units)
     log_R_colname = ''
-    
-    ! Effective/surface temperature in K OR
-    ! If not supplied  then log_T_colname is used
-    Teff_colname = ''
-    
-    ! log of surface temperature (alternative to Teff_colname)
-    ! used if Teff_colname is an empty string('')
-    log_T_colname = ''
-    
-    
-    ! d(star_mass)/dt in msolar per year
-    ! If not supplied then log_mdot_colname is used
-    mdot_colname = ''
-    
-    
-    ! log10(abs(star_mdot)) (alternative to mdot_colname)
-    ! used if mdot_colname is an empty string('')
-    log_mdot_colname = ''
+     
+     
+    ! Stellar radius in solar units (alternative to log_R_colname)
+    ! Used only if log_R_colname is not supplied
+    ! Either log_R_colname or Radius_colname should be provided
+    Radius_colname = ''
    
     ! mass of He enriched/H depleted core in solar units
     he_core_mass = ''
     
     ! mass of C enriched/He depleted core in solar units
-    c_core_mass = ''
+    co_core_mass = ''
 
     !
     ! (OPTIONAL) additional columns----------------------
@@ -249,12 +183,18 @@ In addition to the metallicity files, user also needs to specify the format of i
     
     radius_conv_envelope = ''
     
-    !moment of inertia (for tidal/spin calculations)
-    moment_of_inertia = ''
-    
-    ! These are required for determining Mup and Mhook
-    ! If they are not supplied, then user-defined values for Mup and Mhook are used
-    ! If Mup and Mhook are not supplied either, then SSE's formulae are used
+    ! The following are required for determining various zparameters
+    ! If these are not supplied, then user-defined values for zparameters are used
+    ! If zparameters are not supplied either (in metallicity file), then SSE's formulae are used
+
+
+    ! log10 of surface temperature (in K)
+    log_T_colname = ''
+     
+     
+    ! Surface temperature in K (alternative to log_T_colname)
+    ! Used only if log_T_colname is not supplied
+    Teff_colname = ''
 
     ! central temperature in log units
     log_Tc = ''
@@ -267,13 +207,71 @@ In addition to the metallicity files, user also needs to specify the format of i
     
     ! oxygen-16 mass fraction at centre
     o16_mass_frac = ''
+
+
+    !-------EEP DETAILS for Hydrogen stars-------------
     
-    ! NOT FUNCTIONAL- do not use
-    ! list of columns related to the evolution of core
-    ! these are interpolated based on the original age of the star before mass loss
-    !number_of_core_columns = 0
-    !core_columns = 'age,log_L,Mc_He,Mc_CO'
+    PreMS_EEP = -1
+    ZAMS_EEP = -1
+    IAMS_EEP = -1
+    TAMS_EEP = -1
+    BGB_EEP = -1
+    cHeIgnition_EEP = -1
+    cHeBurn_EEP = -1
+    TA_cHeB_EEP = -1
+
+    TPAGB_EEP = -1
+    cCBurn_EEP = -1
+    post_AGB_EEP = -1
+
+    !files will be read from this EEP/line number
+    !if <0, then ZAMS_EEP is used
+    Initial_EEP = -1
+    !to this EEP/line
+    ! if <0 then maximum of the above listed EEPs is used
+    Final_EEP = -1
+    
+    Extra_EEP1 = -1
+    Extra_EEP2= -1
+    Extra_EEP3 = -1
+    
+    
+    !--- HOW TO DEAL WITH INCOMPLETE TRACKS--------
+
+    ! Usually two to four tracks neighboring are used for interpolation.
+    ! However, if any of them is incomplete,
+    ! then the interpolated track is also rendered incomplete.
+    ! If fix_track is true, METISSE relaxes the criteria for finding
+    ! the neighboring tracks in above cases and tries to get a complete track.
+    
+    fix_track = .true.
+
+    ! if fix_track is true, then
+    ! the completeness of tracks is determined by the following two:
+    
+    ! for stars with M< Mec
+    low_mass_final_eep = -1
+    ! for stars with M>= Mec
+    high_mass_final_eep = -1
+
+    ! When fixing an incomplete track
+    ! Search for the new neighboring tracks for interpolation
+    ! within the mass range of initial_mass - (initial_mass*lookup_index)
+    ! and initial_mass + (initial_mass*lookup_index)]
+ 
+    lookup_index = 1.0
+
+    !----------- EEP DETAILS for He stars----------
+    ! Use the following syntax to provide he stars eeps in your format file
+    ! keep the below commented out unless providing details of the helium stars
+
+    !ZAMS_HE_EEP = -1
+    !TAMS_HE_EEP = -1
+    !GB_HE_EEP = -1
+    !cCBurn_HE_EEP = -1
+    !post_AGB_HE_EEP = -1
 /
+    
 
 ```
 

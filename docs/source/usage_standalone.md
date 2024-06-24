@@ -2,8 +2,11 @@
 
 ## Supplying input 
 
-In the standalone mode values of mass, metallicity and other input parameters
-are supplied using `SSE_input_controls` namelist contained in *evolve_metisse.in* file. 
+
+In the standalone mode, `SSE_input_controls` contained in the *main.input* file and `METISSE_input_controls` contained in the *metisse.input* file are used to supply inputs. 
+
+The values of mass, metallicity and other input parameters
+are supplied using the fortran namelist `SSE_input_controls`. It is read only in the standalone mode of METISSE. When METISSE is used in conjucntion with other codes, input parameters provided by the overlying code are used.  
 
 ```
 &SSE_input_controls
@@ -69,10 +72,7 @@ are supplied using `SSE_input_controls` namelist contained in *evolve_metisse.in
 
 ```
 
-`SSE_input_controls` is only used in standalone mode, it is ignored otherwise and input parameters provided by the overlying code are used.  
-
-*evolve_metisse.in* also contains another Fortran namelist `METISSE_input_controls`. This namelist contains input parameters specific to METISSE, including `metallicity_file_list`.
-
+`METISSE_input_controls` contains input parameters specific to METISSE and looks like this:
 
 ```
 &METISSE_input_controls
@@ -80,25 +80,27 @@ are supplied using `SSE_input_controls` namelist contained in *evolve_metisse.in
     ! A metallicity file contains details about 
     ! the set of input tracks for a given metallicity,
     ! such as the path to the folder, their metallicity value
-    ! and other information/metadata (see metallicity_defaults.in)
+    ! and other information/metadata.
 
-    ! The option 'metallicity_file_list' is used for providing 
-    ! path/location of that metallicity file.
-    ! In the case of a grid of stellar tracks,
-    ! with folders containing tracks of various metallicities,
-    ! location of the metallicity file for each folder/metallicity
-    ! can be provided as a list of comma-separated strings 
-    ! for up to 20 metallicities.
-    ! For example: metallicity_file_list = 'path1',
-    !                                      'path2',
-    !                                       ...
-    !                                      'path20'
+    ! METISSE looks for files(s) ending with *metallicity.in* 
+    ! in the paths provided through 'tracks_dir' and 'tracks_dir_he' 
+    ! where 'tracks_dir' is for providing the location of the metallicity file(s)
+    ! for hydrogen star and  'tracks_dir_he' is for providing the location 
+    ! of the metallicity file(s) for the naked helium/stripped stars.
 
+    ! It checks for the following condition to find a match in metallicity 
+    !`(abs(Z_input-Z_required)/MIN(Z_input,Z_required)) > Z_accuracy_limit`, 
+    ! where Z_input is the metallicity value of the tracks (contained in the metallicity file) and Z_required is the value we want to use.
+
+    ! For a grid of stellar tracks, containing sets of stellar tracks with different metallicities, 
+    ! the above paths can contain a list of metallicity files, 
+    ! and METISSE will select the one that is closest to the input metallicity
+    ! according to the aforementioned condition. 
     
-    metallicity_file_list = ''
+    tracks_dir = ''
 
-
-    ! if (abs(Z_input-Z_required)/MIN(Z_input,Z_required)) > Z_accuracy_limit
+    tracks_dir_he = ''
+    
     Z_accuracy_limit = 1d-2
 
     ! INTERPOLATION CONTROLS
@@ -137,7 +139,7 @@ are supplied using `SSE_input_controls` namelist contained in *evolve_metisse.in
 
 Both are Fortran namelists, so comments (!) and blank lines can be used freely. Characters are **case-insensitive**. Although make sure to leave a blank line at the end of the file (after the `/` symbol)
 
-Refer to `src/defaults/evolve_metisse_defaults.inc` for variable names and their default values. **Do not modify any file inside the defaults folder**.
+Refer to `main_defaults.inc` and `main_defaults.inc` in the  *src/defaults/* folder for the most up to date variable names and their default values. **Do not modify any file inside the defaults folder**.
 
 ## Running METISSE 
 
@@ -185,6 +187,6 @@ This output file only contains data from ZAMS to the end of nuclear-burning phas
 It is controlled by `write_eep_file` in METISSE_input_controls.
 
 
-## Examples
+<!--### Examples-->
 
 

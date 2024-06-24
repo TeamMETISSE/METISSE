@@ -53,7 +53,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#output">Output</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#examples">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE with other codes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="eep_tracks.html">Using custom input tracks</a></li>
 </ul>
@@ -86,8 +85,9 @@
 <h1>Using METISSE as a standalone code<a class="headerlink" href="#using-metisse-as-a-standalone-code" title="Link to this heading"></a></h1>
 <section id="supplying-input">
 <h2>Supplying input<a class="headerlink" href="#supplying-input" title="Link to this heading"></a></h2>
-<p>In the standalone mode values of mass, metallicity and other input parameters
-are supplied using <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> namelist contained in <em>evolve_metisse.in</em> file.</p>
+<p>In the standalone mode, <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> contained in the <em>main.input</em> file and <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> contained in the <em>metisse.input</em> file are used to supply inputs.</p>
+<p>The values of mass, metallicity and other input parameters
+are supplied using the fortran namelist <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>. It is read only in the standalone mode of METISSE. When METISSE is used in conjucntion with other codes, input parameters provided by the overlying code are used.</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">SSE_input_controls</span>
 
 <span class="w">  </span><span class="c">! EVOLUTION CONTROLS</span>
@@ -140,7 +140,7 @@ are supplied using <code class="docutils literal notranslate"><span class="pre">
 
 <span class="w">  </span><span class="c">!OUTPUT CONTROLS</span>
 
-<span class="w">    </span><span class="c">! &#39;write_track_to_file&#39; generates a SSE-style output file </span>
+<span class="w">    </span><span class="c">! &#39;write_track_to_file&#39; generates an SSE-style output file </span>
 <span class="w">    </span><span class="c">! only at the END of the evolution</span>
 
 <span class="w">    </span><span class="n">write_track_to_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
@@ -150,32 +150,33 @@ are supplied using <code class="docutils literal notranslate"><span class="pre">
 <span class="o">/</span><span class="w"> </span><span class="c">! end of SSE_controls inlist</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> is only used in standalone mode, it is ignored otherwise and input parameters provided by the overlying code are used.</p>
-<p><em>evolve_metisse.in</em> also contains another Fortran namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>. This namelist contains input parameters specific to METISSE, including <code class="docutils literal notranslate"><span class="pre">metallicity_file_list</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> contains input parameters specific to METISSE and looks like this:</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
 <span class="w">    </span><span class="c">! A metallicity file contains details about </span>
 <span class="w">    </span><span class="c">! the set of input tracks for a given metallicity,</span>
 <span class="w">    </span><span class="c">! such as the path to the folder, their metallicity value</span>
-<span class="w">    </span><span class="c">! and other information/metadata (see metallicity_defaults.in)</span>
+<span class="w">    </span><span class="c">! and other information/metadata.</span>
 
-<span class="w">    </span><span class="c">! The option &#39;metallicity_file_list&#39; is used for providing </span>
-<span class="w">    </span><span class="c">! path/location of that metallicity file.</span>
-<span class="w">    </span><span class="c">! In the case of a grid of stellar tracks,</span>
-<span class="w">    </span><span class="c">! with folders containing tracks of various metallicities,</span>
-<span class="w">    </span><span class="c">! location of the metallicity file for each folder/metallicity</span>
-<span class="w">    </span><span class="c">! can be provided as a list of comma-separated strings </span>
-<span class="w">    </span><span class="c">! for up to 20 metallicities.</span>
-<span class="w">    </span><span class="c">! For example: metallicity_file_list = &#39;path1&#39;,</span>
-<span class="w">    </span><span class="c">!                                      &#39;path2&#39;,</span>
-<span class="w">    </span><span class="c">!                                       ...</span>
-<span class="w">    </span><span class="c">!                                      &#39;path20&#39;</span>
+<span class="w">    </span><span class="c">! METISSE looks for files(s) ending with *metallicity.in* </span>
+<span class="w">    </span><span class="c">! in the paths provided through &#39;tracks_dir&#39; and &#39;tracks_dir_he&#39; </span>
+<span class="w">    </span><span class="c">! where &#39;tracks_dir&#39; is for providing the location of the metallicity file(s)</span>
+<span class="w">    </span><span class="c">! for hydrogen star and  &#39;tracks_dir_he&#39; is for providing the location </span>
+<span class="w">    </span><span class="c">! of the metallicity file(s) for the naked helium/stripped stars.</span>
 
+<span class="w">    </span><span class="c">! It checks for the following condition to find a match in metallicity </span>
+<span class="w">    </span><span class="c">!`(abs(Z_input-Z_required)/MIN(Z_input,Z_required)) &gt; Z_accuracy_limit`, </span>
+<span class="w">    </span><span class="c">! where Z_input is the metallicity value of the tracks (contained in the metallicity file) and Z_required is the value we want to use.</span>
+
+<span class="w">    </span><span class="c">! For a grid of stellar tracks, containing sets of stellar tracks with different metallicities, </span>
+<span class="w">    </span><span class="c">! the above paths can contain a list of metallicity files, </span>
+<span class="w">    </span><span class="c">! and METISSE will select the one that is closest to the input metallicity</span>
+<span class="w">    </span><span class="c">! according to the aforementioned condition. </span>
 <span class="w">    </span>
-<span class="w">    </span><span class="n">metallicity_file_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span><span class="n">tracks_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
 
-
-<span class="w">    </span><span class="c">! if (abs(Z_input-Z_required)/MIN(Z_input,Z_required)) &gt; Z_accuracy_limit</span>
+<span class="w">    </span><span class="n">tracks_dir_he</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="w">    </span>
 <span class="w">    </span><span class="n">Z_accuracy_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="n">d</span><span class="o">-</span><span class="mi">2</span>
 
 <span class="w">    </span><span class="c">! INTERPOLATION CONTROLS</span>
@@ -212,7 +213,7 @@ are supplied using <code class="docutils literal notranslate"><span class="pre">
 </pre></div>
 </div>
 <p>Both are Fortran namelists, so comments (!) and blank lines can be used freely. Characters are <strong>case-insensitive</strong>. Although make sure to leave a blank line at the end of the file (after the <code class="docutils literal notranslate"><span class="pre">/</span></code> symbol)</p>
-<p>Refer to <code class="docutils literal notranslate"><span class="pre">src/defaults/evolve_metisse_defaults.inc</span></code> for variable names and their default values. <strong>Do not modify any file inside the defaults folder</strong>.</p>
+<p>Refer to <code class="docutils literal notranslate"><span class="pre">main_defaults.inc</span></code> and <code class="docutils literal notranslate"><span class="pre">main_defaults.inc</span></code> in the  <em>src/defaults/</em> folder for the most up to date variable names and their default values. <strong>Do not modify any file inside the defaults folder</strong>.</p>
 </section>
 <section id="running-metisse">
 <h2>Running METISSE<a class="headerlink" href="#running-metisse" title="Link to this heading"></a></h2>
@@ -272,13 +273,11 @@ These contain the following stellar parameters until max_age. Time and age at hy
 </tbody>
 </table>
 <p><strong>2. files ending with .eep :</strong></p>
-<p>For debugging purposes, METISSE can write mass-interpolated track to output file with the same columns as input files (plus phase column) and a MIST-style file structure.
-This output file only contains data from ZAMS to the end of nuclear burning phases, i.e., it does not contain information about remnant phase.
+<p>For debugging purposes, METISSE can write a mass-interpolated track to an output file with the same columns as input files (plus a phase column) and a MIST-style file structure.
+This output file only contains data from ZAMS to the end of nuclear-burning phases, i.e., it does not contain information about the remnant phase.
 It is controlled by <code class="docutils literal notranslate"><span class="pre">write_eep_file</span></code> in METISSE_input_controls.</p>
+<!--### Examples-->
 </section>
-</section>
-<section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
 </section>
 
 
