@@ -82,7 +82,7 @@ module z_support
         
         open(io,FILE=trim(infile),action="read",iostat=ierr)
             if (ierr /= 0) then
-               print*, 'Error: Failed to open: ', trim(infile)
+               print*, 'METISSE error: Failed to open: ', trim(infile)
                call free_iounit(io)
                return
             end if
@@ -102,7 +102,7 @@ module z_support
         
         open(io,FILE=trim(infile),action="read",iostat=ierr)
             if (ierr /= 0) then
-               print*, 'Error: Failed to open: ', trim(infile)
+               print*, 'METISSE error: Failed to open: ', trim(infile)
                call free_iounit(io)
                return
             end if
@@ -176,7 +176,7 @@ module z_support
             endif
         end do
         if ((found_z .eqv. .false.) .and. (ierr==0)) then
-            print*, 'Error: metallicity value =', Z_req, 'not found amongst given Z_files'
+            print*, 'METISSE error: metallicity value =', Z_req, 'not found amongst given Z_files'
             print*, 'Check metallicity_file_list and value of Z_files for each file'
             print*, 'If needed, Z_accuracy_limit can be relaxed (set to a greater value).'
             ierr = 1
@@ -199,7 +199,7 @@ module z_support
         io = alloc_iounit(ierr)
         open(io, file=filename, action='read', iostat=ierr)
             if (ierr /= 0) then
-               print*, 'Error: failed to open metallicity_file: "'//trim(filename)//'"'
+               print*, 'METISSE error: failed to open metallicity_file: "'//trim(filename)//'"'
                call free_iounit(io)
                return
             end if

@@ -26,7 +26,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     code_error = .false.
     
     if (front_end <0) then
-        print*, 'Fatal error: front_end is not initialized for METISSE'
+        print*, 'METISSE error: front_end is not initialized'
         ierr = 1; return
     endif
     
@@ -74,7 +74,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         infile = trim(METISSE_DIR)// '/main.input'
         call read_main_input(infile,ierr)
         if (.not. defined(initial_Z ))then
-            print*,"Error: initial_Z is not defined in ",trim(infile)
+            print*,"METISSE error: initial_Z is not defined in ",trim(infile)
             ierr = 1
         endif
         if (ierr/=0) call stop_code
@@ -90,7 +90,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         TRACKS_DIR = path_to_tracks
         TRACKS_DIR_HE = path_to_he_tracks
     case default
-        print*, "Error: reading inputs; unrecognized front_end_name for METISSE"
+        print*, "METISSE error: reading inputs; unrecognized front_end_name"
         ierr = 1; return
     end select
     
@@ -101,7 +101,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
 !    metallicity_file_list_he = pack(metallicity_file_list_he,mask=len_trim(metallicity_file_list_he)>0)
     
     if (size(metallicity_file_list)<1) then
-        print*, "Error: metallicity file(s) not found in", trim(tracks_dir)
+        print*, "METISSE error: metallicity file(s) not found in", trim(tracks_dir)
         print*, "check if tracks_dir is correct"
         ierr = 1; return
     else
@@ -109,7 +109,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     endif
     
     if (size(metallicity_file_list_he)<1) then
-        write(out_unit,*) "Error: metallicity file(s) not found in", trim(tracks_dir_he)
+        write(out_unit,*) "METISSE error: metallicity file(s) not found in", trim(tracks_dir_he)
         write(out_unit,*) "Switching to SSE formulae for helium stars "
         nloop = 1
     else
@@ -188,7 +188,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         !get filenames from input_files_dir
         
         if (trim(INPUT_FILES_DIR) == '' )then
-            print*,"Error: INPUT_FILES_DIR is not defined for Z= ", initial_Z
+            print*,"METISSE error: INPUT_FILES_DIR is not defined for Z= ", initial_Z
             ierr = 1; return
         endif
         
@@ -210,7 +210,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         call get_files_from_path(INPUT_FILES_DIR,file_extension,track_list,ierr)
         
         if (ierr/=0) then
-            print*,'Error: failed to read input files.'
+            print*,'METISSE error: failed to read input files.'
             print*,'Check if INPUT_FILES_DIR is correct.'
             return
         endif

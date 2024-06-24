@@ -99,7 +99,7 @@
 !            if (id ==1)print*,'timestep',dt,dtr,t% pars% dt,t% times(4),age, t% pars% phase,id
 
             if (t% pars% dt<=0.0 .and. t% ierr==0) then
-                write(UNIT=err_unit,fmt=*)"Fatal error: invalid timestep", t% pars% dt ,"for phase and id", t% pars% phase,id
+                write(UNIT=err_unit,fmt=*)"METISSE error: invalid timestep", t% pars% dt ,"for phase and id", t% pars% phase,id
                 write(UNIT=err_unit,fmt=*)"zams_mass, pars% mass, nuc_time, age, dt,dtr"
                 write(UNIT=err_unit,fmt=*)t% zams_mass, t% pars% mass,t% nuc_time, age, dt,dtr
                 t% ierr = -1

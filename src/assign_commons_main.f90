@@ -13,7 +13,7 @@ subroutine assign_commons_main()
         elseif (WD_mass_scheme == 'Modified_mestel') then
             wd_flag = Modified_mestel
         else
-            print*,"Error: Invalid Option for WD_mass_scheme."
+            print*,"METISSE error: Invalid Option for WD_mass_scheme."
             print*,"Choose from 'Mestel' and 'Modified_mestel'. "
             call stop_code
         endif
@@ -27,7 +27,7 @@ subroutine assign_commons_main()
         elseif (BHNS_mass_scheme == 'Eldridge_Tout2004') then
             ns_flag = Eldridge_Tout2004
         else
-            print*,"Error: Invalid Option for BHNS_mass_scheme."
+            print*,"METISSE error: Invalid Option for BHNS_mass_scheme."
             print*,"Choose from 'original_SSE','Belczynski2002','Belczynski2008','Eldridge_Tout2004'. "
             call stop_code
         endif
@@ -43,7 +43,7 @@ subroutine assign_commons_main()
         pts3 = pts_3
         
     else
-        print*,'Error: Front end mismtach in assign_commons_main'
+        print*,'METISSE error: Front end mismtach in assign_commons_main'
         print*,'expected 0 (main); got ', front_end
     endif
 
