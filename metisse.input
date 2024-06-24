@@ -1,0 +1,12 @@
+&METISSE_input_controls
+
+
+tracks_dir = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Hydrogen/'
+            
+tracks_dir_he = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Helium/'
+
+verbose = .true.
+
+/
+
+

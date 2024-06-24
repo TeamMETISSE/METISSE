@@ -58,7 +58,7 @@ program metisse_main
 !    call allocate_track(number_of_tracks,mass_array)
 
     !evolve stars
-    do i=1,number_of_tracks
+    do i = 1,number_of_tracks
         mass = mass_array(i)
         if (mass > Mcrit(9)% mass .or. mass< Mcrit(1)% mass) then
             t_notfound(i) = mass

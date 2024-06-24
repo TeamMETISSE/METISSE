@@ -72,6 +72,23 @@
         end function check_remnant_phase
         
         
+        subroutine check_early_end(t,dt_hold,id)
+            real(dp) :: dt_hold
+            type(track), pointer :: t
+            integer :: id
+
+            if (t% ierr/=0) return
+
+            if ((t% initial_mass.gt.very_low_mass_limit).and. (dt_hold.le.t% pars% dt).and.(t% reju.eqv. .false.)) then
+                write(UNIT=err_unit,fmt=*) 'WARNING: Early end of file at phase, mass and id',&
+                t% pars% phase,t% initial_mass,id,t% reju
+                t% ierr = -1
+!                    call stop_code
+            endif
+                
+        end subroutine check_early_end
+                
+        
         subroutine assign_remnant_METISSE(pars, mcbagb)
             implicit none
             type(star_parameters) :: pars
@@ -715,20 +732,21 @@
         type(track),pointer, intent(in) :: t
         real(dp), intent (in) :: lums(10)
         real(dp), intent(out) :: menv,renv,k2
-        integer :: rcenv_col, mcenv_col, moi_col
+        integer :: rcenv_col, mcenv_col!, moi_col
         real(dp) :: rc, rg,rzams,rtms
     
+
         if (t% is_he_track) then
             mcenv_col = i_he_mcenv
             rcenv_col = i_he_rcenv
-            moi_col = i_he_MoI
+!            moi_col = i_he_MoI
 
             rzams = 10.d0**t% tr(i_logR, ZAMS_HE_EEP)
             rtms = 10.d0**t% tr(i_logR, TAMS_HE_EEP)
         else
             mcenv_col = i_mcenv
             rcenv_col = i_rcenv
-            moi_col = i_MoI
+!            moi_col = i_MoI
             rzams = 10.d0**t% tr(i_logR, ZAMS_EEP)
             rtms = 10.d0**t% tr(i_logR, TAMS_EEP)
         endif
@@ -739,11 +757,15 @@
         
         rc = t% pars% core_radius  ! it's calculated in hrdiag
         
-        if ((.not. identified(mcenv_col)) .or. (.not. identified(rcenv_col)) .or. (.not. identified(moi_col)) .or. t% post_agb) then
+        if (t% post_agb .or. (mcenv_col<1) .or. (rcenv_col<1)) then
+            ! .or. (moi_col<1)
+            !inertia calculations involving moi column have issues
+            
             CALL calculate_rg(t,rg)
             CALL mrenv(t% pars% phase,t% zams_mass,t% pars% mass,t% pars% core_mass, &
             t% pars% luminosity,t% pars% radius,rc,t% pars% age,t% MS_time,lums(2),lums(3),&
             lums(4),rzams,rtms,rg,menv,renv,k2)
+            
         endif
         
         if (mcenv_col>0) then
@@ -766,7 +788,10 @@
         renv = MAX(renv,1.0d-10)
         ! radius of gyration, k2 given by sqrt(I/M*R*R)
 !        if (moi_col>0) k2 = sqrt((t% pars% moi)/(t% pars% mass*t% pars% radius*t% pars% radius))
-!        k2 = 0.21d0
+!        moi is for whole star, k2 is only for core
+!        setting k2 to 0.1 following equation 35 of hurley et al. 2002
+        
+        k2 = 0.1d0
     
     end subroutine
 

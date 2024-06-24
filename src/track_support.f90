@@ -121,11 +121,11 @@ module track_support
                                 log_Tc,c12_mass_frac,o16_mass_frac, he4_mass_frac, &
                                 Lum_colname,Teff_colname,Radius_colname, &
                                 he_core_radius, co_core_radius, mass_conv_envelope, &
-                                radius_conv_envelope, moment_of_inertia
+                                radius_conv_envelope!, moment_of_inertia
 
     integer :: i_age, i_age2, i_mass, i_logTe, i_logL, i_logR, i_he_core, i_co_core
-    integer :: i_RHe_core,i_RCO_core,i_mcenv, i_Rcenv,i_MoI
-    integer :: i_he_RCO,i_he_mcenv, i_he_Rcenv,i_he_MoI,i_he_age
+    integer :: i_RHe_core,i_RCO_core,i_mcenv, i_Rcenv!,i_MoI
+    integer :: i_he_RCO,i_he_mcenv, i_he_Rcenv,i_he_age!,i_he_MoI
 
     integer :: i_Tc, i_he4, i_c12,i_o16
     integer :: i_Xc, i_Yc, i_Cc,i_Rhoc, i_gamma, i_surfH
@@ -160,7 +160,7 @@ module track_support
         real(dp) :: luminosity,Teff,radius
         real(dp) :: log_L,log_Teff,log_R                !log values
         real(dp) :: epoch, age, age_old,age2
-        real(dp) :: delta, dt, dms, mcenv, rcenv,moi,bhspin
+        real(dp) :: delta, dt, dms, mcenv, rcenv,bhspin!,moi
     end type star_parameters
     
 
@@ -181,6 +181,7 @@ module track_support
     type track
         character(len=strlen) :: filename
         logical :: complete = .true., post_agb = .false.
+        logical :: reju !(can't use rejuvenated as it is already used for star_type)
         logical :: has_mass_loss = .false., is_he_track = .false.
 
         integer :: ncol, ntrack, neep,min_index,j_bgb,j_bgb0

@@ -40,9 +40,9 @@ module z_support
                         WD_mass_scheme,use_initial_final_mass_relation, allow_electron_capture, &
                         BHNS_mass_scheme, max_NS_mass,pts_1, pts_2, pts_3, write_track_to_file
 
-    namelist /METISSE_input_controls/ metallicity_file_list, Z_accuracy_limit, &
+    namelist /METISSE_input_controls/ tracks_dir, Z_accuracy_limit, &
                         mass_accuracy_limit, construct_wd_track, verbose, &
-                        write_eep_file,write_error_to_file, metallicity_file_list_he
+                        write_eep_file,write_error_to_file, tracks_dir_he
             
     namelist /metallicity_controls/ INPUT_FILES_DIR, Z_files,format_file, extra_columns_file, &
                         read_all_columns, extra_columns,Mhook, Mhef, Mfgb, Mup, Mec, Mextra, Z_H, Z_He
@@ -57,9 +57,10 @@ module z_support
                         Lum_colname, Teff_colname, Radius_colname, &
                         he_core_mass, co_core_mass, he_core_radius, co_core_radius, &
                         log_Tc, c12_mass_frac, o16_mass_frac,he4_mass_frac, &
-                        mass_conv_envelope, radius_conv_envelope, moment_of_inertia, &
+                        mass_conv_envelope, radius_conv_envelope, &
                         ZAMS_HE_EEP, TAMS_HE_EEP, GB_HE_EEP, cCBurn_HE_EEP, TPAGB_HE_EEP, &
                         post_AGB_HE_EEP, Initial_EEP_HE, Final_EEP_HE
+                        !moment_of_inertia,
             
     contains
 
@@ -73,48 +74,59 @@ module z_support
     end subroutine read_defaults
     
     
-    subroutine read_metisse_input(ierr)
-        integer :: io
-        integer, intent(out) :: ierr
-        character(len=strlen) :: infile
+    subroutine read_main_input(infile,ierr)
 
+        character(len=strlen), intent(in) :: infile
+        integer, intent(out) :: ierr
+        integer :: io
+        
         ierr = 0
         io = alloc_iounit(ierr)
-        !reading user input
         
-        infile = trim(METISSE_DIR)// '/evolve_metisse.in'
-        open(io,FILE=infile,action="read",iostat=ierr)
+        open(io,FILE=trim(infile),action="read",iostat=ierr)
             if (ierr /= 0) then
-               print*, 'Error: Failed to open', trim(infile)
+               print*, 'Error: Failed to open: ', trim(infile)
                call free_iounit(io)
                return
             end if
-            if (front_end == main) then
-                read(unit = io, nml = SSE_input_controls)
-                if (.not. defined(initial_Z ))then
-                    print*,"Error: initial_Z is not defined"
-                    ierr = 1
-                    return
-                endif
-            endif
+            read(unit = io, nml = SSE_input_controls)
+            
+        close(io)
+        call free_iounit(io)
+    end subroutine
+
+    subroutine read_metisse_input(infile,ierr)
+        character(len=strlen), intent(in) :: infile
+        integer, intent(out) :: ierr
+        integer :: io
+
+        ierr = 0
+        io = alloc_iounit(ierr)
+        
+        open(io,FILE=trim(infile),action="read",iostat=ierr)
+            if (ierr /= 0) then
+               print*, 'Error: Failed to open: ', trim(infile)
+               call free_iounit(io)
+               return
+            end if
             read(unit = io, nml = METISSE_input_controls)
         close(io)
         call free_iounit(io)
-        
     end subroutine read_metisse_input
     
     
-    subroutine get_metisse_input(path,file_list)
+    subroutine get_metallicity_file_list(path,file_list)
 
     character(LEN=strlen) :: path
     character(LEN=strlen), allocatable :: temp_list(:),file_list(:)
 
     integer :: ierr, n
 
+        if (allocated(file_list)) deallocate(file_list)
         ierr = 0
-        ! use inputs from COSMIC
+       
         call get_files_from_path(path,'_metallicity.in',temp_list,ierr)
-        
+
         if (.not. allocated(temp_list)) then
             print*, 'Could not find metallicity file(s) in ',trim(path)
             ierr = 1
@@ -127,10 +139,12 @@ module z_support
             print*, 'Only using first ',max_files
             n = max_files
         endif
-        file_list(1:n) = temp_list(1:n)
-        deallocate(temp_list)
         
-    end subroutine get_metisse_input
+        allocate(file_list(n), source= temp_list(1:n))
+        file_list = pack(file_list,mask=len_trim(file_list)>0)
+
+        deallocate(temp_list)
+    end subroutine
     
     subroutine get_metallcity_file_from_Z(Z_req,file_list,ierr)
         real(dp), intent(in) :: Z_req
@@ -461,7 +475,6 @@ module z_support
         integer, intent(in) :: ncol
         logical, intent(in) :: is_he_track
         integer, intent(out) :: ierr
-
         logical :: essential
         
         essential = .true.
@@ -513,7 +526,7 @@ module z_support
             if (co_core_radius/= '') i_he_RCO = locate_column(cols, co_core_radius, ierr)
             if (mass_conv_envelope/= '') i_he_mcenv = locate_column(cols, mass_conv_envelope, ierr)
             if (radius_conv_envelope/= '') i_he_rcenv = locate_column(cols, radius_conv_envelope, ierr)
-            if (moment_of_inertia/= '') i_he_MoI = locate_column(cols, moment_of_inertia, ierr)
+!            if (moment_of_inertia/= '') i_he_MoI = locate_column(cols, moment_of_inertia, ierr)
             i_he_age = ncol+1
         else
             i_RHe_core = -1
@@ -524,9 +537,10 @@ module z_support
             if (mass_conv_envelope/= '') i_mcenv = locate_column(cols, mass_conv_envelope, ierr)
             i_Rcenv = -1
             if (radius_conv_envelope/= '') i_rcenv = locate_column(cols, radius_conv_envelope, ierr)
-            i_MoI = -1
-            if (moment_of_inertia/= '') i_MoI = locate_column(cols, moment_of_inertia, ierr)
+!            i_MoI = -1
+!            if (moment_of_inertia/= '') i_MoI = locate_column(cols, moment_of_inertia, ierr)
         endif
+        
         
         i_he4 = locate_column(cols, he4_mass_frac, ierr)
         i_c12 = locate_column(cols, c12_mass_frac, ierr)
@@ -622,14 +636,14 @@ module z_support
             if (i_he_RCO >0) call assign_sgl_col(temp, i_he_RCO, co_core_radius,n)
             if (i_he_mcenv>0) call assign_sgl_col(temp, i_he_mcenv, mass_conv_envelope,n)
             if (i_he_Rcenv>0) call assign_sgl_col(temp, i_he_Rcenv, radius_conv_envelope,n)
-            if (i_he_MoI>0) call assign_sgl_col(temp, i_he_MoI, moment_of_inertia,n)
+!            if (i_he_MoI>0) call assign_sgl_col(temp, i_he_MoI, moment_of_inertia,n)
          else
         
             if (i_RHe_core >0) call assign_sgl_col(temp, i_RHe_core, he_core_radius,n)
             if (i_RCO_core >0) call assign_sgl_col(temp, i_RCO_core, co_core_radius,n)
             if (i_mcenv>0) call assign_sgl_col(temp, i_mcenv, mass_conv_envelope,n)
             if (i_Rcenv>0) call assign_sgl_col(temp, i_Rcenv, radius_conv_envelope,n)
-            if (i_MoI>0) call assign_sgl_col(temp, i_MoI, moment_of_inertia,n)
+!            if (i_MoI>0) call assign_sgl_col(temp, i_MoI, moment_of_inertia,n)
                         
 !            if (i_Tc >0) call assign_sgl_col(temp, i_Tc, log_Tc,n)
 !            if (i_he4 >0) call assign_sgl_col(temp, i_he4, he4_mass_frac,n)
@@ -1064,6 +1078,8 @@ module z_support
             if (y(k)% is_he_track)start = ZAMS_HE_EEP
             y(k)% tr(i_age2,:) = y(k)% tr(i_age2,:)- y(k)% tr(i_age2,start)
             
+            !TODO: check track completion and BGB phase?
+
         end do
         
         !sort the array based on intial mass if not sorted already
@@ -1117,6 +1133,8 @@ module z_support
         else
             x => sa
         endif
+        
+        if (allocated(Mmax)) deallocate(Mmax, Mmin)
         
         nmax = maxval(x% ntrack)
         allocate(Mmax(nmax), Mmin(nmax))
@@ -1176,8 +1194,9 @@ module z_support
         write(out_unit,'(a,f7.1)') ' Minimum initial mass', Mcrit(1)% mass
         write(out_unit,'(a,f7.1)') ' Maximum initial mass', Mcrit(9)% mass
 
-        allocate(mass_list(num_tracks))
-        mass_list = pack(xa% initial_mass,mask = xa% complete)
+!        allocate(mass_list(size(xa)))
+        mass_list = xa% initial_mass
+        mass_list = pack(mass_list,mask = xa% complete.eqv..true.)
         
         old_co_frac = 0.d0
 
@@ -1369,15 +1388,20 @@ module z_support
     end subroutine set_zparameters
 
     subroutine set_zparameters_he(num_tracks)
+            integer, intent(in) :: num_tracks
+
         real(dp) :: smass,frac_mcenv
         integer :: len_track, i, min_index, start
         real(dp), allocatable :: mass_list(:)
-        integer, intent(in) :: num_tracks
 
         logical:: debug
 
         debug = .false.
 
+        ! this way avoids Fortran runtime warning: An array temporary was created
+        allocate(mass_list(size(xa)),source=xa% initial_mass)
+        mass_list = pack(mass_list,mask = xa% complete.eqv..true.)
+        
         Mcrit_he% mass= -1.d0
         Mcrit_he% loc = 0
 
@@ -1399,9 +1423,6 @@ module z_support
 
         write(out_unit,'(a,f7.1)') ' Minimum initial mass', Mcrit_he(1)% mass
         write(out_unit,'(a,f7.1)') ' Maximum initial mass', Mcrit_he(9)% mass
-
-        allocate(mass_list(num_tracks))
-        mass_list = pack(xa% initial_mass,mask = xa% complete)
         
         !if already defined, do index search here otherwise search below
         do i = 2, size(Mcrit_he)-1
@@ -1409,7 +1430,6 @@ module z_support
             call index_search (num_tracks, mass_list, Mcrit_he(i)% mass, min_index)
             Mcrit_he(i)% mass = xa(min_index)% initial_mass
             Mcrit_he(i)% loc = min_index
-!            if (debug) print*, i, Mcrit_he(i)% mass
         end do
 
         start = max(Mcrit_he(1)% loc, Mcrit_he(2)% loc)
@@ -1442,17 +1462,6 @@ module z_support
                         Mcrit_he(5)% loc = i
                         if (debug) print*,"Mfgb2",smass,i
                     endif
-!                elseif (len_track>= Final_EEP_HE)) then
-!                    jstart = TAMS_HE_EEP
-!                    jend = Final_EEP_HE
-!                    do j = jstart,jend
-!                        if (xa(i)% tr(i_mcenv,j)/xa(i)% tr(i_mass,j).ge.0.12d0) then
-!                            Mcrit_he(5)% mass = smass
-!                            Mcrit_he(5)% loc = i
-!                            if (debug) print*,"Mfgb",smass,i
-!                            exit
-!                        endif
-!                    enddo
                 endif
             ENDIF
 
@@ -1486,7 +1495,7 @@ module z_support
         call sort_mcutoff(m_cutoff_he)
         if (debug) print*, "m_cutoffs he : ", m_cutoff_he
 
-        deallocate(mass_list)
+!        deallocate(mass_list)
     end subroutine set_zparameters_he
     
     subroutine sort_mcutoff(m_cutoff)
