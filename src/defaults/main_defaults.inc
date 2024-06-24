@@ -7,9 +7,6 @@
 ! NOTE: SSE_input_controls in evolve_metisse.in are read 
 ! only when METISSE is called directly through its main unit/ standalone mode.
 ! Otherwise, values provided by the overlying code are used.
-
-    !path is relative to the executable
-    METISSE_DIR = '.'
     
 !SSE_input_controls
 
@@ -58,8 +55,6 @@
     ! Only for White Dwarfs
     Use_initial_final_mass_relation = .false.       
 
-
-
     
     ! The type and mass of the NS/BH can  be  calculated  from  one  of  the  following  prescriptions:
 
@@ -103,68 +98,3 @@
     ! only at the END of the evolution
 
     write_track_to_file = .true.
-
-!METISSE_input_controls
-    
-    ! A metallicity file contains details about 
-    ! the set of input tracks for a given metallicity,
-    ! such as the path to the folder, their metallicity value
-    ! and other information/metadata (see metallicity_defaults.in)
-
-    ! The option 'metallicity_file_list' is used for providing 
-    ! path/location of that metallicity file.
-    ! In the case of a grid of stellar tracks,
-    ! with folders containing tracks of various metallicities,
-    ! location of the metallicity file for each folder/metallicity
-    ! can be provided as a list of comma-separated strings 
-    ! for up to 20 metallicities.
-    ! For example: metallicity_file_list = 'path1',
-    !					                             'path2',
-    !                                       ...
-    !					                             'path20'
-
-    
-    metallicity_file_list = ''
-
-    metallicity_file_list_he = ''
-    
-    ! if (abs(Z_input-Z_required)/MIN(Z_input,Z_required)) > Z_accuracy_limit
-    
-    Z_accuracy_limit = 1d-2
-
-    ! INTERPOLATION CONTROLS
-
-    ! Skip interpolation in mass if there is already
-    ! an input track with initial_mass within the 'mass_accuracy_limit'
-
-    mass_accuracy_limit = 1d-4
-
-    ! OTHER REMNANT CONTROLS
-    ! If true, 'construct_wd_track' is used (for low-mass stars) to construct the track between 
-    ! Thermally-Pulsating AGB phase or tip of the AGB to the white dwarf cooling track
-    ! It is useful if input tracks do not contain this phase
-    ! but can be used otherwise too.
-
-    construct_wd_track = .true.
-
-    
-    ! OUTPUT CONTROLS
-
-    ! if true, 'verbose' prints useful details when reading the files
-
-    verbose = .false. 
-
-    ! 'write_eep_file' generates MIST style output file 
-    ! at EVERY step of mass interpolation
-    ! useful for debugging and single star evolution calculations with implicit mass loss
-
-    write_eep_file = .false.		
-
-    ! If true error messages are written to a file (usually fort.99)
-    ! otherwise they are printed on screen
-    ! does NOT apply to errors during reading input files
-    write_error_to_file = .true.
-
-
-
-

@@ -266,7 +266,7 @@ module track_support
             endif
         endif
         
-        if (size(list)<1) write(err_unit,*)'error in list size',size(list),size_list
+        if (size(list)<1) write(err_unit,*)'METISSE error: list size in index_search<1',size(list),size_list
         if (value < list(1)) then             !from num_binary_search.inc
             min_index = 1; return
         elseif (check_equal(value, list(size_list)))then
@@ -371,7 +371,7 @@ module track_support
     
     subroutine stop_code(i)
         integer, optional:: i
-        print*, 'Fatal error: terminating METISSE'
+        print*, 'METISSE error: terminating code'
         if (present(i)) then
             if (i==5) print*, 'See terminal for details'
             if (i==99) print*, 'See error file (fort.99)for details'
@@ -398,7 +398,7 @@ module track_support
         str = int(mt*100)
         write(eep_filename,"(a,a,i5.5,a)") trim(METISSE_DIR),"/output_eep/",str,"M.track.eep"
     else
-        print*, 'ERROR: NO EEP FILE WRITTEN, either provide FILENAME or mass of the star'
+        print*, 'METISSE error: NO EEP FILE WRITTEN, either provide FILENAME or mass of the star'
         return
     ENDIF
     
@@ -765,7 +765,7 @@ module track_support
         x = 0.0
 
         if (D< 0.0) then
-            write(UNIT=err_unit,fmt=*)"fatal error: Non-real roots"
+            write(UNIT=err_unit,fmt=*)"METISSE error: Non-real roots"
             call stop_code
         else if (D > 0.0) then
             sqrtD = sqrt(D)

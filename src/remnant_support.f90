@@ -49,7 +49,7 @@
         endif
 
         if (mc_max<=0.d0 .or. mc_threshold<=0.d0) then
-            write(UNIT=err_unit,fmt=*)"Fatal error: non-positive core mass",mc_max, mc_threshold
+            write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",mc_max, mc_threshold
             code_error = .true.
             !assigning an ad-hoc non-zero core mass so the code doesn't break
             !TODO: fix very low-mass stars that form hewd and may get caught in this
@@ -627,8 +627,6 @@
               tau = (aj - tscls(2))/tscls(3)     !tau = (aj - t_HeI)/t_He
               rx = radius_He_ZAMS(mc)
               !Following is akin to rzhef of SSE
-              !TODO: following two lines may cause dt error
-              ! might need interpolation
               am = MAX(0.d0,0.4d0-0.22d0*LOG10(mc))
               rc = rx*(1.d0+am*(tau-tau**6))
          case(EAGB)
@@ -695,10 +693,6 @@
                 rg = 10**rg
                 
                 rg = max(rg, t% pars% radius )
-!                if (rg .lt. t% pars% radius) then
-!                    write(UNIT=err_unit,fmt=*)'Error in calculate_rg: Rg, R',rg,t% pars% radius,Rbgb, Rbagb
-!                    write(UNIT=err_unit,fmt=*) t% pars% age, alfa, L, Lbgb, Lbagb
-!                endif
                     
             case(EAGB:TPAGB)
                 rg = t% pars% radius

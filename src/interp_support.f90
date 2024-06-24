@@ -32,7 +32,7 @@ module interp_support
         mass = t% initial_mass
         
         if (mass/=mass .or. mass<=0.d0) then
-            write(UNIT=err_unit,fmt=*)"Fatal Error: Invalid mass",mass,t% pars% phase
+            write(UNIT=err_unit,fmt=*)"METISSE error: Encountered invalid mass value",mass,t% pars% phase
             t% ierr = -1
 !            call stop_code(err_unit)
             return
@@ -521,7 +521,7 @@ module interp_support
 !                print*,y(n)- y(start),y(start),y(n)
                 start = start-1
                 if (start <1)  then
-                    write(UNIT=err_unit,fmt=*)"Error in mod_PAV, start<1",i,n
+                    write(UNIT=err_unit,fmt=*)"METISSE error: start<1 in mod_PAV",i,n
 !                    call stop_code(err_unit)
                 endif
             end do
@@ -697,7 +697,7 @@ module interp_support
                 dx = new_line(age_col,1) - x(2)
 
                 if (age< x(2) .or. age> x(3)) then
-                   write(UNIT=err_unit,fmt=*)"Error in cubic interpolation in interp_support"
+                   write(UNIT=err_unit,fmt=*)"METISSE error: age not in the middle for cubic interpolation in interp_support"
 !                   call stop_code(err_unit)
                 endif
 
@@ -724,7 +724,7 @@ module interp_support
         deallocate(new_line)
 
         if (t% pars% mass <0.0) then
-            write(UNIT=err_unit,fmt=*)"Fatal Error: mass <0 in interpolate age",input_age,t% pars% phase
+            write(UNIT=err_unit,fmt=*)"METISSE error: mass <0 in interpolate age",input_age,t% pars% phase
 !            call stop_code(err_unit)
         endif
         if (debug) print*, 'exiting interpolate_age'
@@ -841,7 +841,7 @@ module interp_support
         end do
     
         if(.not.allocated(min_eeps)) then
-            write(UNIT=err_unit,fmt=*)'Error finding nearest eeps for age:',age,age_col
+            write(UNIT=err_unit,fmt=*)'METISSE error: Cannot find nearest eeps for age:',age,age_col
         endif
         
     end subroutine find_nearest_eeps
@@ -1245,7 +1245,7 @@ module interp_support
         endif
             
         if(Mlow < 0 .or. Mupp <0) then
-            if (debug) print*,"Error: beyond the bounds for interpolation"
+            if (debug) print*,"METISSE error: beyond the bounds for interpolation"
             if (debug) print*, "Mlow,Mupp,num_list,mnew,eep_n", &
                     Mlow,Mupp,num_list,mnew,eep_n
         else

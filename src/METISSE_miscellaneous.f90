@@ -26,7 +26,7 @@ subroutine initialize_front_end(front_end_name)
         front_end = COSMIC
         
     else
-        print*, "Error: Unrecongnized front_end_name for METISSE"
+        print*, "METISSE error: Unrecongnized front_end_name for METISSE"
         print*, "Choose from 'MAIN', 'SSE', 'BSE', 'COSMIC' "
     endif
     
@@ -72,7 +72,7 @@ subroutine dealloc_track()
         deallocate(tarr(i)% tr)
         deallocate(tarr(i)% cols)
         deallocate(tarr(i)% bounds)
-        if((tarr(i)% ierr/=0).and.verbose) write(UNIT=err_unit,fmt=*)'Error in evolving the system',i
+        if((tarr(i)% ierr/=0).and.verbose) write(UNIT=err_unit,fmt=*)'METISSE: error in evolving the system',i
 
     code_error = .false.
 
