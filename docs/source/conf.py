@@ -32,9 +32,9 @@ release = '0.1'
 # ones.
 
 extensions = ['myst_parser',
-			  'sphinx.ext.autosectionlabel',
-			  'sphinx.ext.imgmath',
-			  'sphinx.ext.mathjax',]
+		'sphinx.ext.autosectionlabel',
+		'sphinx.ext.imgmath',
+		'sphinx.ext.mathjax',]
 
 # -- MyST settings ---------------------------------------------------
 
@@ -48,7 +48,6 @@ myst_enable_extensions = [
     "fieldlist",
     "html_admonition",
     "html_image",
-    "linkify",
     "replacements",
     "smartquotes",
     "strikethrough",
