@@ -859,7 +859,9 @@ module interp_support
         type(star_parameters) :: pars
         real(dp),intent (in) :: new_line(:,:)
         real(dp) :: lim_R
-        
+        real(dp) :: env_mass
+        real(dp) :: sgn
+
         pars% mass = new_line(i_mass,1)
         pars% McHe = new_line(i_he_core,1)
         pars% McCO = new_line(i_co_core,1)
@@ -895,6 +897,17 @@ module interp_support
             if (i_he_mcenv>0) pars% mcenv = new_line(i_he_mcenv,1)
             if (i_he_rcenv>0) pars% rcenv = new_line(i_he_rcenv,1)
 !            if (i_he_MoI>0) pars% moi = new_line(i_he_MoI,1)
+        endif
+
+        if (i_binding_energy > 0) then 
+            env_mass = (pars% mass) - (pars% core_mass)
+            if (env_mass >= 1d-5) then  ! catch if env_mass = 0
+                pars% binding_energy = new_line(i_binding_energy, 1)
+                sgn = sign(1d0, pars% binding_energy)
+                pars% binding_energy =  sgn * 10 ** ( abs(pars% binding_energy * env_mass) )
+            else 
+                pars% binding_energy = 0.00
+            endif
         endif
             
     end subroutine

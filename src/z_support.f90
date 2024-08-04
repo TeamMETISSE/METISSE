@@ -57,7 +57,7 @@ module z_support
                         Lum_colname, Teff_colname, Radius_colname, &
                         he_core_mass, co_core_mass, he_core_radius, co_core_radius, &
                         log_Tc, c12_mass_frac, o16_mass_frac,he4_mass_frac, &
-                        mass_conv_envelope, radius_conv_envelope, &
+                        mass_conv_envelope, radius_conv_envelope, binding_energy_colname, &
                         ZAMS_HE_EEP, TAMS_HE_EEP, GB_HE_EEP, cCBurn_HE_EEP, TPAGB_HE_EEP, &
                         post_AGB_HE_EEP, Initial_EEP_HE, Final_EEP_HE
                         !moment_of_inertia,
@@ -504,6 +504,12 @@ module z_support
         if (code_error) return
         
         !optional columns
+        i_binding_energy = -1
+        if (binding_energy_colname /= '') then
+            i_binding_energy = locate_column(cols, binding_energy_colname)
+            ! find the binding energy column, convert it to unit log BE later
+        endif
+
         if (is_he_track) then
             if (co_core_radius/= '') i_he_RCO = locate_column(cols, co_core_radius)
             if (mass_conv_envelope/= '') i_he_mcenv = locate_column(cols, mass_conv_envelope)
@@ -596,6 +602,7 @@ module z_support
         call assign_sgl_col(temp, i_co_core, co_core_mass,n)
         if (i_logTe>0) call assign_sgl_col(temp, i_logTe, log_T_colname,n)
 
+        if (i_binding_energy > 0) call assign_sgl_col(temp, i_binding_energy, binding_energy_colname, n)
         if(is_he_track) then
             if (i_he_RCO >0) call assign_sgl_col(temp, i_he_RCO, co_core_radius,n)
             if (i_he_mcenv>0) call assign_sgl_col(temp, i_he_mcenv, mass_conv_envelope,n)
@@ -941,6 +948,10 @@ module z_support
         real(dp) :: co_core, he_core, min_val
         logical :: debug
         integer, intent(out):: num_tracks
+        real(dp), allocatable, dimension(:) :: core_mass
+        real(dp), allocatable, dimension(:) :: sgn
+
+        ! integer :: critical_eep
         
         ! checks for the completeness of the tracks
         ! and whether their core masses are correct or not
@@ -976,6 +987,36 @@ module z_support
             if (log_R_colname == '') call make_logcolumn(xa(n), i_logR)
             if (log_T_colname == '') call make_logcolumn(xa(n), i_logTe)
             
+            ! store core mass for processing binding energy
+            allocate(core_mass(xa(n)% ntrack))
+            allocate(sgn(xa(n)% ntrack))
+            sgn = 1d0
+            if ( xa(n)% is_he_track ) then
+                core_mass(:) = xa(n)% tr(i_co_core, :)
+            else if ( xa(n)% star_type == star_high_mass ) then
+                if (cCBurn_EEP > xa(n)% ntrack) then
+                    core_mass(:) = xa(n)% tr(i_he_core, :)
+                else
+                    core_mass(: cCBurn_EEP-1) = xa(n)% tr(i_he_core, : cCBurn_EEP-1)
+                    core_mass(cCBurn_EEP :) = xa(n)% tr(i_co_core, cCBurn_EEP :)
+                endif
+            else
+                if (TPAGB_EEP > xa(n)% ntrack) then
+                    core_mass(:) = xa(n)% tr(i_he_core, :)
+                else
+                    core_mass(: TPAGB_EEP-1) = xa(n)% tr(i_he_core, : TPAGB_EEP-1)
+                    core_mass(TPAGB_EEP :) = xa(n)% tr(i_co_core, TPAGB_EEP :)
+                endif
+            end if
+            
+            ! store log(binding energy) per envelope mass
+            if (i_binding_energy > 0) then
+                sgn = sign(sgn, xa(n)% tr(i_binding_energy, :))
+                xa(n)% tr(i_binding_energy, :) = sgn * log10( abs(xa(n)% tr(i_binding_energy, :)) )
+                xa(n)% tr(i_binding_energy, :) = xa(n)% tr(i_binding_energy, :) / ( xa(n)% tr(i_mass, :) - core_mass(:) )
+            endif
+            deallocate(sgn)
+            deallocate(core_mass)
         end do
         
         num_tracks = count(xa% complete)
