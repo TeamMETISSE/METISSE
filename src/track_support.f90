@@ -121,10 +121,10 @@ module track_support
                                 log_Tc,c12_mass_frac,o16_mass_frac, he4_mass_frac, &
                                 Lum_colname,Teff_colname,Radius_colname, &
                                 he_core_radius, co_core_radius, mass_conv_envelope, &
-                                radius_conv_envelope!, moment_of_inertia
+                                radius_conv_envelope, binding_energy_colname !, moment_of_inertia
 
     integer :: i_age, i_age2, i_mass, i_logTe, i_logL, i_logR, i_he_core, i_co_core
-    integer :: i_RHe_core,i_RCO_core,i_mcenv, i_Rcenv!,i_MoI
+    integer :: i_RHe_core,i_RCO_core,i_mcenv, i_Rcenv, i_binding_energy !,i_MoI
     integer :: i_he_RCO,i_he_mcenv, i_he_Rcenv,i_he_age!,i_he_MoI
 
     integer :: i_Tc, i_he4, i_c12,i_o16
@@ -161,6 +161,7 @@ module track_support
         real(dp) :: log_L,log_Teff,log_R                !log values
         real(dp) :: epoch, age, age_old,age2
         real(dp) :: delta, dt, dms, mcenv, rcenv,bhspin!,moi
+        real(dp) :: binding_energy
     end type star_parameters
     
 

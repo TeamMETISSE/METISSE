@@ -191,9 +191,9 @@ o16_mass_frac = ''
 ```
 ### EEP details for hydrogen stars
 
-From a set of input models, METISSE needs to know the certain line numbers or locations of key EEPs in order to assign stellar phases to the interpolated tracks. These phases are identical to those used by the SSE code (See Table 1. of [Agrawal et al. 2020](https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract)) and are important for certain decision-making processes in the code, particularly for binary evolution.
+From a set of input models, METISSE needs to know the locations of key EEPs in order to assign stellar phases to the interpolated tracks. These phases are identical to those used by the SSE code (See Table 1. of [Agrawal et al. 2020](https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract)) and are important for certain decision-making processes in the code, particularly for binary evolution.
 
-| EEP/line number         | Corresponding evolutionary point     |
+| EEP    			      | Corresponding evolutionary point     |
 |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
 | PreMS_EEP               | Pre-Main Sequence.   			 |
 | ZAMS_EEP                | Zero-Age Main Sequence.                                                                                                                  |
@@ -209,7 +209,7 @@ From a set of input models, METISSE needs to know the certain line numbers or lo
 | Extra_EEP1              | Additional EEP *(optional)*.                                                                                                                        |
 | Extra_EEP2              | Additional EEP *(optional)*.                                                                                                                        |
 | Extra_EEP3              | Additional EEP *(optional)*.                                                                                                                          |
-| Initial_EEP             | Line number to start reading files from. <br> If < 0, ZAMS_EEP is used.                                                                                                                                                                      |
+| Initial_EEP             | Line number to start reading files from. <br> If < 0, ZAMS_EEP is used.                                                                |
 | Final_EEP               | Line number to stop reading files at. <br> If < 0, maximum of the listed EEPs is used.                                                                                                                     
 
 
@@ -238,10 +238,10 @@ Final_EEP = -1
 
 ### EEP details for stripped/ naked helium stars
 
-Line numbers or locations of key EEPs for stars that have lost their hydrogen-rich envelopes, also known as naked helium or stripped stars. Similar to primary EEPs of hydrogen stars, these are used to assign stellar phases to the interpolated tracks for naked helium star phases.
+Locations of key EEPs for stars that have lost their hydrogen-rich envelopes, also known as naked helium or stripped stars. Similar to primary EEPs of hydrogen stars, these are used to assign stellar phases to the interpolated tracks for naked helium star phases.
 
 
-| EEP/line number         | Corresponding evolutionary point     |
+| EEP     				  | Corresponding evolutionary point     |
 |-------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
 | ZAMS_HE_EEP             | Zero Age Main Sequence of Helium stars.                                                                                               |
 | TAMS_HE_EEP             | Terminal Age Main Sequence of Helium stars.                                                                                             |
@@ -269,10 +269,10 @@ If any of the neighbouring tracks is incomplete, the interpolated track is also 
 
 | Parameter               | Description     |
 |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| low_mass_final_eep      | Final EEP/line number for stars with M < Mec when figuring out and fixing incomplete tracks.                                                                    |
-| high_mass_final_eep     | Final EEP/line number for stars with M >= Mec when figuring out and fixing incomplete tracks.                                                                      |
-| fix_track               | If `.true.`, METISSE relaxes criteria for finding neighboring tracks to fix incomplete tracks.                                                                     |
-| lookup_index            | Determines the mass range for searching neighboring tracks when fixing incomplete tracks. <br> The range is $M-(M\times lookup_index)$ and $M+(M\times lookup_index)$, where M is the initial mass of the star. |
+| low_mass_final_eep      | Final EEP for stars with M < Mec .                                                                    |
+| high_mass_final_eep     | Final EEP for stars with M >= Mec .                                                                      |
+| fix_track               | If `.true.`, METISSE relaxes criteria for finding neighboring tracks to fix <br> incomplete tracks.                                                                     |
+| lookup_index            | Determines the mass range for searching neighboring tracks when fixing <br>incomplete tracks. The range is M-(M$\times$`lookup_index`) and M+(M$\times$`lookup_index`), <br>where M is the initial mass of the star. |
 
 
 ```    

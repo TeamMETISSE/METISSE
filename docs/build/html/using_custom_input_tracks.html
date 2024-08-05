@@ -353,10 +353,10 @@ Make sure that the units are correct.
 </section>
 <section id="eep-details-for-hydrogen-stars">
 <h3>2.3.&nbsp;&nbsp;EEP details for hydrogen stars<a class="headerlink" href="#eep-details-for-hydrogen-stars" title="Link to this heading"></a></h3>
-<p>From a set of input models, METISSE needs to know the certain line numbers or locations of key EEPs in order to assign stellar phases to the interpolated tracks. These phases are identical to those used by the SSE code (See Table 1. of <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract">Agrawal et al. 2020</a>) and are important for certain decision-making processes in the code, particularly for binary evolution.</p>
+<p>From a set of input models, METISSE needs to know the locations of key EEPs in order to assign stellar phases to the interpolated tracks. These phases are identical to those used by the SSE code (See Table 1. of <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract">Agrawal et al. 2020</a>) and are important for certain decision-making processes in the code, particularly for binary evolution.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>EEP/line number</p></th>
+<tr class="row-odd"><th class="head"><p>EEP</p></th>
 <th class="head"><p>Corresponding evolutionary point</p></th>
 </tr>
 </thead>
@@ -434,10 +434,10 @@ Make sure that the units are correct.
 </section>
 <section id="eep-details-for-stripped-naked-helium-stars">
 <h3>2.4.&nbsp;&nbsp;EEP details for stripped/ naked helium stars<a class="headerlink" href="#eep-details-for-stripped-naked-helium-stars" title="Link to this heading"></a></h3>
-<p>Line numbers or locations of key EEPs for stars that have lost their hydrogen-rich envelopes, also known as naked helium or stripped stars. Similar to primary EEPs of hydrogen stars, these are used to assign stellar phases to the interpolated tracks for naked helium star phases.</p>
+<p>Locations of key EEPs for stars that have lost their hydrogen-rich envelopes, also known as naked helium or stripped stars. Similar to primary EEPs of hydrogen stars, these are used to assign stellar phases to the interpolated tracks for naked helium star phases.</p>
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>EEP/line number</p></th>
+<tr class="row-odd"><th class="head"><p>EEP</p></th>
 <th class="head"><p>Corresponding evolutionary point</p></th>
 </tr>
 </thead>
@@ -484,16 +484,16 @@ If any of the neighbouring tracks is incomplete, the interpolated track is also 
 </thead>
 <tbody>
 <tr class="row-even"><td><p>low_mass_final_eep</p></td>
-<td><p>Final EEP/line number for stars with M &lt; Mec when figuring out and fixing incomplete tracks.</p></td>
+<td><p>Final EEP for stars with M &lt; Mec .</p></td>
 </tr>
 <tr class="row-odd"><td><p>high_mass_final_eep</p></td>
-<td><p>Final EEP/line number for stars with M &gt;= Mec when figuring out and fixing incomplete tracks.</p></td>
+<td><p>Final EEP for stars with M &gt;= Mec .</p></td>
 </tr>
 <tr class="row-even"><td><p>fix_track</p></td>
-<td><p>If <code class="docutils literal notranslate"><span class="pre">.true.</span></code>, METISSE relaxes criteria for finding neighboring tracks to fix incomplete tracks.</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">.true.</span></code>, METISSE relaxes criteria for finding neighboring tracks to fix <br> incomplete tracks.</p></td>
 </tr>
 <tr class="row-odd"><td><p>lookup_index</p></td>
-<td><p>Determines the mass range for searching neighboring tracks when fixing incomplete tracks. <br> The range is <img class="math" src="_images/math/c7cd51f61d1e2a187f5b60fa33deaa8a364f54bc.png" alt="M-(M\times lookup_index)"/> and <img class="math" src="_images/math/83b871bf8470336dd0047a362af0092f943c2f6e.png" alt="M+(M\times lookup_index)"/>, where M is the initial mass of the star.</p></td>
+<td><p>Determines the mass range for searching neighboring tracks when fixing <br>incomplete tracks. The range is M-(M<img class="math" src="_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/><code class="docutils literal notranslate"><span class="pre">lookup_index</span></code>) and M+(M<img class="math" src="_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/><code class="docutils literal notranslate"><span class="pre">lookup_index</span></code>), <br>where M is the initial mass of the star.</p></td>
 </tr>
 </tbody>
 </table>

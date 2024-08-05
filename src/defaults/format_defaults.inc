@@ -82,6 +82,9 @@
     ! 
     ! The code will not stop if these column names are not provided
     ! However, it will revert to using SSE formulae for these quantities
+
+    ! binding_energy of the envelope
+    binding_energy_colname = ''
     
     
     ! radius of He enriched/H depleted core
