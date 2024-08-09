@@ -93,6 +93,23 @@ pts_3 = 0.02
 write_output_to_file = .false.
 ```
 
+By default, METISSE only uses the essential columns and the additional columns specified in `format_file` for interpolation. However, when using METISSE in its standalone mode, there exists an option for interpolating in all the columns or certain extra columns of the input tracks. The interpolated quantities are printed in a [MIST-style](acronyms_definitions.md#mist-style-file) file if `write_eep_file = .true.` in `METISSE_controls`.
+
+
+| Parameter            | Description     |
+|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| read_all_columns     | If `.true.`, interpolate in all columns of input files. Default is `.false.`                                                                        |
+| extra_columns        | Extra columns to be used for interpolation. Up to 100 column names can be listed <br> as strings, separated by commas. <br> *Only read if `read_all_columns` is `.false.`*                    |
+| extra_columns_file   | Alternative way for listing extra column names. List one column name per line <br>in the `extra_columns_file` and provide path of the file here. <br> *Only read if `read_all_columns` is `.false.`*.                                                             |
+
+
+```
+read_all_columns = .false.
+extra_columns = ''
+extra_columns_file = ''
+
+```
+
 
 ## METISSE input controls
 
@@ -106,16 +123,16 @@ For the most up-to-date variable names and their default values refer to [metiss
 
 | Variable name   | Description  |
 |-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| tracks_dir     		| Absolute path to the folder containing the [metallicity files](acronyms_definitions.md#metallicity-file) for the hydrogen stars. <br> **METISSE will stop if `tracks_dir` is an empty string.**                                                                                                                                      |
-| tracks_dir_he  		| Absolute path to the folder containing the [metallicity files](acronyms_definitions.md#metallicity-file) for the naked helium stars. <br>If `tracks_dir_he` is an empty string, SSE fitting formulae for naked helium stars <br> are used.                                                                                                                                      |
+| METALLICITY_DIR     		| Absolute path to the folder containing the [metallicity files](acronyms_definitions.md#metallicity-file) for the hydrogen stars. <br> **METISSE will stop if `METALLICITY_DIR` is an empty string.**                                                                                                                                      |
+| METALLICITY_DIR_HE  		| Absolute path to the folder containing the [metallicity files](acronyms_definitions.md#metallicity-file) for the naked helium stars. <br>If `METALLICITY_DIR_HE` is an empty string, SSE fitting formulae for naked helium stars <br> are used.                                                                                                                                      |
 | Z_accuracy_limit		| METISSE checks for a match in metallicity based on the condition: <br> $ \frac{abs(Z\_input - Z\_required)}{min(Z\_input, Z\_required)} >$ `Z_accuracy_limit`, <br> where $Z\_input$ is the metallicity value of the tracks (from the metallicity file)<br>   and $Z\_required$ is the desired value. Default is 10<sup>-2</sup>                                                                                                       |
 | mass_accuracy_limit  	| METISSE skips mass-interpolation and uses a neighboring mass track if <br> the absoulte difference between the initial mass of that track <br>and the input mass is less than the `mass_accuracy_limit`. Default is 10<sup>-4</sup>|
 
 
 ```
 ! TRACK CONTROLS
-tracks_dir = ''
-tracks_dir_he = ''
+METALLICITY_DIR = ''
+METALLICITY_DIR_HE = ''
 Z_accuracy_limit = 1d-2
 mass_accuracy_limit = 1d-4
 

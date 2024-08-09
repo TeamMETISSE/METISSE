@@ -50,16 +50,16 @@ We also need to provide the details of the input tracks to METISSE through the n
 In the standalone mode of METISSE, `METISSE_input_controls` is contained in the file called `metisse.input`. 
 
 
-We use the variable `tracks_dir` to supply paths to the folder containing [metallicity files](acronyms_definitions.md#metallicity-file) for normal hydrogen stars and the variable `tracks_dir_he` for naked helium or stripped stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the `hydrogen` and `helium` folders respectively.
+We use the variable `METALLICITY_DIR` to supply paths to the folder containing [metallicity files](acronyms_definitions.md#metallicity-file) for normal hydrogen stars and the variable `METALLICITY_DIR_HE` for naked helium or stripped stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the `hydrogen` and `helium` folders respectively.
 
 
 ```
 &METISSE_input_controls
 
 
-tracks_dir = '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen'
+METALLICITY_DIR = '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen'
             
-tracks_dir_he = '/Users/poojan/stellar_tracks/MESA/big_z/helium'
+METALLICITY_DIR_HE = '/Users/poojan/stellar_tracks/MESA/big_z/helium'
 
 verbose = .true.
 
@@ -69,7 +69,7 @@ verbose = .true.
 
 :::{Important}
 
-The paths provided above are just examples. Users should input `tracks_dir` and `tracks_dir_he` based on the actual location of these folders on their machine after downloading the grid.
+The paths provided above are just examples. Users should input `METALLICITY_DIR` and `METALLICITY_DIR_HE` based on the actual location of these folders on their machine after downloading the grid.
 :::
 
 

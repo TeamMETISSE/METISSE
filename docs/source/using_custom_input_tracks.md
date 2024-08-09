@@ -5,13 +5,6 @@ METISSE can use any set of stellar tracks computed with different stellar evolut
 Stellar tracks can be easily converted to EEP format using code packages such as [ISO](https://github.com/aarondotter/iso). Important details about these tracks, such as the their metallicity value, file structure, names of certain major columns should also be provided through the inlists `metallicity_controls` and `format_controls`.
 
 
-<!-- :::{Important}
-
-While different sets of EEP tracks can share the same format file, they **must** have separate metallicity files.
-::: 
- -->
-
-
 ## Metallicity controls 
 
 Details pertaining to the metallicity value of the EEP tracks and location of the files are provided through the `metallicity_controls` inlist, found in the relevant `metallicity file`. 
@@ -34,44 +27,25 @@ and raise an error if either of these is not provided.**
 
 | Parameter            | Description     |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| INPUT_FILES_DIR      | Location of the folder containing the EEP tracks relative to the metallicity file.                                                                             |
+| eep_tracks_dir     | Location of the folder containing the EEP tracks relative to the metallicity file.                                                                             |
 | Z_files              | Metallicity value of the EEP tracks. This is cross-matched against the input metallicity value.                               |
 | format_file          | Location of the format file relative to the metallicity file. |
 
 
 ```
 
-INPUT_FILES_DIR = ''
+eep_tracks_dir = ''
 Z_files = -1.0
 format_file = ''
 ```
 
-
-By default, METISSE only uses the essential columns and the additional columns specified in `format_file` for interpolation. However, when using METISSE in its standalone mode, there exists an option for interpolating in all the columns or certain extra columns of the input tracks. The interpolated quantities are printed in a [MIST-style](acronyms_definitions.md#mist-style-file) file if `write_eep_file = .true.` in `METISSE_controls`.
-
-
 | Parameter            | Description     |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| read_all_columns     | If `.true.`, interpolate in all columns of input files. Default is `.false.`                                                                        |
-| extra_columns        | Extra columns to be used for interpolation. Up to 100 column names can be listed <br> as strings, separated by commas. <br> *Only read if `read_all_columns` is `.false.`*                    |
-| extra_columns_file   | Alternative way for listing extra column names. List one column name per line <br>in the `extra_columns_file` and provide path of the file here. <br> *Only read if `read_all_columns` is `.false.`*.                                                             |
-
-
-```
-read_all_columns = .false.
-extra_columns = ''
-extra_columns_file = ''
+| Y_files              | Helium abundance. Default is SSE formulae. <br>If < 0, calculated from Z as $0.24+2\times Z$. |
 
 ```
 
-| Parameter            | Description     |
-|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Z_H                  | Hydrogen abundance. Default is SSE formulae. <br> If < 0, calculated from Z as $0.76-3\times Z$.                                                                                |
-| Z_He                 | Helium abundance. Default is SSE formulae. <br>If < 0, calculated from Z as $0.24+2\times Z$. |
-
-```
-Z_H = -1.0
-Z_He = -1.0
+Y_files = -1.0
 
 ```
 
@@ -103,8 +77,7 @@ Apart from the metallicity files, users are also required to specify the structu
 | Parameter               | Description     |
 |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | read_eep_files          | Set to `.true.` only for [MIST-style](https://waps.cfa.harvard.edu/MIST/model_grids.html) files; set to `.false.` for other types of files. <br> If `.true.`, other options in this section do not need to be provided. The required details are read directly from the input files <br> .                                                                                                                                         |
-| file_extension          | File extension of the input files (e.g., '.eep', '.dat'). METISSE will look for files ending with `file_extension` in the `INPUT_FILES_DIR`.                                                                                          |
-
+| file_extension          | File extension of the input files (e.g., '.eep', '.dat'). METISSE will look for files ending with `file_extension` in the `eep_tracks_dir`.                                                                                          |
 | header_location         | Line number corresponding to the column names in the input files for EEP-tracks. <br> If the input files do not contain column names; specify `column_name_file` for such cases.                    																	 |
 | extra_char              | Any extra character present at the beginning of the header line.                                                                                                         |
 | column_name_file        | File containing column names (one per line) if `header_location` <= 0 <br> and column names cannot be determined from the input files.                                                                                             |

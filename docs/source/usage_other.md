@@ -118,15 +118,15 @@ $ ./mk
 
 ```
 
-4. When using BSE, METISSE specific inputs are read through the `METISSE_input_controls` inlist in the *evolve_metisse.in* file. We supply the location of the folders containing [metallicity files](acronyms_definitions.md#metallicity-file) for hydrogen and helium stars through `tracks_dir` and `tracks_dir_he`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
+4. When using BSE, METISSE specific inputs are read through the `METISSE_input_controls` inlist in the *evolve_metisse.in* file. We supply the location of the folders containing [metallicity files](acronyms_definitions.md#metallicity-file) for hydrogen and helium stars through `METALLICITY_DIR` and `METALLICITY_DIR_HE`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
 
 ```
 &METISSE_input_controls
 
 
-tracks_dir = '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen'
+METALLICITY_DIR = '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen'
             
-tracks_dir_he = '/Users/poojan/stellar_tracks/MESA/big_z/helium'
+METALLICITY_DIR_HE = '/Users/poojan/stellar_tracks/MESA/big_z/helium'
 
 /
 
