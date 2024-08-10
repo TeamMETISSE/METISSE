@@ -1,12 +1,12 @@
 &METISSE_input_controls
 
 
-tracks_dir = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Hydrogen/'
+METALLICITY_DIR = '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen'
             
-tracks_dir_he = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Helium/'
+METALLICITY_DIR_HE = '/Users/poojan/stellar_tracks/MESA/big_z/helium'
 
 verbose = .true.
-
+Z_accuracy_limit = 8d-2
 /
 
 

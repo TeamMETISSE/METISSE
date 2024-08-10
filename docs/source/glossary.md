@@ -10,9 +10,9 @@
 | cHeB  | Core Helium Burning                             |
 | AGB   | Asymptotic Giant Branch                         |
 | TPAGB | Thermally Pulsing Asymptotic Giant Branch       |
-| He-MS | Helium Main Sequence (stripped stars only)      |
-| He-HG | Helium Hertzsprung Gap (stripped stars only)    |
-| He-GB | Helium Giant Branch (stripped stars only)       |
+| He-MS | Helium Main Sequence (naked helium stars only)      |
+| He-HG | Helium Hertzsprung Gap (naked helium stars only)    |
+| He-GB | Helium Giant Branch (naked helium stars only)       |
 
 
 ## Output Files
@@ -26,7 +26,7 @@ METISSE can produce two types of output files:
 SSE-style output files are text files ending with .dat and are controlled by the `write_output_to_file` function in SSE_input_controls. These files have a file structure similar to the popular [SSE](https://astronomy.swin.edu.au/~jhurley/bsedload.html) code. They contain the below listed stellar parameters up to the maximum age. Time and age at hydrogen ZAMS are assumed to be zero at the beginning of the code. 
 
 ::: {Important}
-These files can only be created in standalone mode of METISSE.
+These files can only be created in the standalone mode of METISSE.
 :::
 
 | Column Header | Description |
@@ -45,7 +45,7 @@ These files can only be created in standalone mode of METISSE.
 ### MIST-style file
 
 
-MIST-style files, which end with .eep, are produced for debugging purposes. The file structure follows the same format used in the files from the [MIST](https://waps.cfa.harvard.edu/MIST/model_grids.html) project. METISSE can write a mass-interpolated track to an output file with the same columns as input files, including a stellar phase column. This output file only contains data from ZAMS to the end of nuclear-burning phases and does not include information about the remnant phase. It is controlled by the `write_eep_file` function in METISSE_input_controls.
+MIST-style files, which end with .eep, are produced for debugging purposes. The file structure follows the same format used in the files from the [MIST](https://waps.cfa.harvard.edu/MIST/model_grids.html) project. METISSE can write a mass-interpolated track to an output file with the same columns as input files, including a stellar phase column. This output file only contains data from ZAMS to the end of the nuclear-burning phases and does not include information about the remnant phase. It is controlled by the `write_eep_file` function in METISSE_input_controls.
 
 
 
@@ -68,7 +68,7 @@ Namelists offer a convenient method for inputting data into Fortran programs. Ea
 name = value ! comment
 ```
 
-Values are provided using typical Fortran syntax. `SSE_input_controls` , `METISSE_input_controls`, `metallicity_controls` and `format_controls` are Fortran namelists, so comments (anything after the exclamation mark symbol!) and whitespaces can be used freely. Characters are also case-insensitive. It is important to ensure that there is a blank line at the end of the file following the `/` symbol.
+Values are provided using typical Fortran syntax. `SSE_input_controls`, `METISSE_input_controls`, `metallicity_controls` and `format_controls` are Fortran namelists, so comments (anything after the exclamation mark symbol!) and whitespaces can be used freely. Characters are also case-insensitive. It is important to ensure that there is a blank line at the end of the file following the `/` symbol.
 
 :::{Note}
 
@@ -78,7 +78,7 @@ Never modify any file directly inside the `defaults` folder.
 
 ## Stellar tracks and stellar models
 
-A stellar model represents the physical parameters of a star at a specific point in time. By calculating a series of stellar models from the star's formation to the end of its nuclear-burning phase, we can determine the evolutionary history of the star, also known as its stellar track. In this documentation, we use "stellar track" to refer to a time-sequence of stellar models. In contrast "set of stellar models" or "set of stellar tracks" refers to the evolutionary tracks of stars with different initial masses but the same metallicity.
+A stellar model represents the physical parameters of a star at a specific point in time. By calculating a series of stellar models from the star's formation to the end of its nuclear-burning phase, we can determine the evolutionary history of the star, also known as its stellar track. In this documentation, we use "stellar track" to refer to a time sequence of stellar models. In contrast "set of stellar models" or "set of stellar tracks" refers to the evolutionary tracks of stars with different initial masses but the same metallicity.
 
 
 

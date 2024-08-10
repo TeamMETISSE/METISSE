@@ -65,7 +65,7 @@ $ pip install .
 
 3. METISSE is now ready to use with COSMIC. 
 
-The usual input namelist `METISSE_input_controls` is not read when using COSMIC. Instead a Python dictionary, `SSEDict` is used to set the `stellar_engine` and provide the location of the folders containing [metallicity files](acronyms_definitions.md#metallicity-file) for hydrogen and helium stars through variables `path_to_tracks` and `path_to_he_tracks`.
+The usual input namelist `METISSE_input_controls` is not read when using COSMIC. Instead a Python dictionary, `SSEDict` is used to set the `stellar_engine` and provide the location of the folders containing [metallicity files](glossary.md#metallicity-file) for hydrogen and helium stars through variables `path_to_tracks` and `path_to_he_tracks`.
 
 ``` ipython
 SSEDict = {'stellar_engine': 'metisse', 
@@ -81,7 +81,7 @@ The paths provided above are just examples. Users should provide `path_to_tracks
 
 
 
-4. Pass `SSEDict` along with other arguments to the evolve function of COSMIC and you are all set. For instance, if you are calculating the evolution of a single binary, the evolve function should look like this: 
+4. Pass `SSEDict` along with other arguments to the `evolve` function of COSMIC and you are all set. For instance, if you are calculating the evolution of a single binary, the evolve function should look like this: 
 
 ```ipython 
 bpp, bcm, initC, kick_info = Evolve.evolve(initialbinarytable=single_binary,
@@ -118,7 +118,7 @@ $ ./mk
 
 ```
 
-4. When using BSE, METISSE specific inputs are read through the `METISSE_input_controls` inlist in the *evolve_metisse.in* file. We supply the location of the folders containing [metallicity files](acronyms_definitions.md#metallicity-file) for hydrogen and helium stars through `METALLICITY_DIR` and `METALLICITY_DIR_HE`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
+4. When using BSE, METISSE-specific inputs are read through the `METISSE_input_controls` inlist in the *evolve_metisse.in* file. We supply the location of the folders containing [metallicity files](glossary.md#metallicity-file) for hydrogen and helium stars through `METALLICITY_DIR` and `METALLICITY_DIR_HE`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
 
 ```
 &METISSE_input_controls

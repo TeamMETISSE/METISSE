@@ -59,7 +59,7 @@ One of these sets of files is used depending on how METISSE is being used.
 | File Name           | Description                                                                                             |
 |---------------------|---------------------------------------------------------------------------------------------------------|
 | assign_commons_xyz.f90  | To assign common variables when METISSE is used with other code say 'xyz'.                               |
-| comenv_lambda.f90   | Get appropriate ZAMS radius and calculate common envelope lambda.                                       |
+| comenv_lambda.f90   | Get the appropriate ZAMS radius and calculate common envelope lambda.                                       |
 
 ## Workflow
 

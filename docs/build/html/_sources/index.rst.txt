@@ -20,6 +20,6 @@ Check out the following sections for more information about METISSE and how to u
    usage_other
    input_files
    using_custom_input_tracks
-   contents
+   structure
    citing_metisse
-   acronyms_definitions
+   glossary

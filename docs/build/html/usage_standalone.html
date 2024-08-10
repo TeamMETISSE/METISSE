@@ -56,9 +56,9 @@
 <li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contents.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Citing METISSE</a></li>
-<li class="toctree-l1"><a class="reference internal" href="acronyms_definitions.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
         </div>
@@ -100,9 +100,9 @@
 <section id="evolving-one-star">
 <h2>1.&nbsp;&nbsp;Evolving one star<a class="headerlink" href="#evolving-one-star" title="Link to this heading"></a></h2>
 <p>Let us compute the evolution of a star with initial mass 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star, metallicity <code class="docutils literal notranslate"><span class="pre">Z</span> <span class="pre">=</span> <span class="pre">0.02</span></code> up to the age of 12 Gyr.
-Input to METISSE in the standalone mode is provided through two <a class="reference internal" href="acronyms_definitions.html#fortran-namelists"><span class="std std-ref">Fortran namelists</span></a>: <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
+Input to METISSE in the standalone mode is provided through two <a class="reference internal" href="glossary.html#fortran-namelists"><span class="std std-ref">Fortran namelists</span></a>: <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 See sections <a class="reference internal" href="input_files.html#sse-input-controls"><span class="std std-ref">SSE input controls</span></a> and <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options.</p>
-<p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> is contained in the file called <code class="docutils literal notranslate"><span class="pre">main.input</span></code> and
+<p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> is contained in the file called <em>main.input</em> and
 is used to provide evolution details of the star.</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">SSE_input_controls</span>
 
@@ -118,14 +118,14 @@ is used to provide evolution details of the star.</p>
 </pre></div>
 </div>
 <p>We also need to provide the details of the input tracks to METISSE through the namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
-In the standalone mode of METISSE, <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is contained in the file called <code class="docutils literal notranslate"><span class="pre">metisse.input</span></code>.</p>
-<p>We use the variable <code class="docutils literal notranslate"><span class="pre">tracks_dir</span></code> to supply paths to the folder containing <a class="reference internal" href="acronyms_definitions.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for normal hydrogen stars and the variable <code class="docutils literal notranslate"><span class="pre">tracks_dir_he</span></code> for naked helium or stripped stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> and <code class="docutils literal notranslate"><span class="pre">helium</span></code> folders respectively.</p>
+In the standalone mode of METISSE, <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is contained in the file called <em>metisse.input</em>.</p>
+<p>We use the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> to supply paths to the folder containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for normal hydrogen stars and the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> and <code class="docutils literal notranslate"><span class="pre">helium</span></code> folders respectively.</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
 
-<span class="n">tracks_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/hydrogen&#39;</span>
+<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/hydrogen&#39;</span>
 <span class="w">            </span>
-<span class="n">tracks_dir_he</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/helium&#39;</span>
+<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/helium&#39;</span>
 
 <span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
 
@@ -134,21 +134,21 @@ In the standalone mode of METISSE, <code class="docutils literal notranslate"><s
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>The paths provided above are just examples. Users should input <code class="docutils literal notranslate"><span class="pre">tracks_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">tracks_dir_he</span></code> based on the actual location of these folders on their machine after downloading the grid.</p>
+<p>The paths provided above are just examples. Users should input <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> based on the actual location of these folders on their machine after downloading the grid.</p>
 </div>
 <p>Note that we have also set <code class="docutils literal notranslate"><span class="pre">verbose</span></code> to true so that we can see details of the input tracks on the screen.
 If verbose is False, then these details are saved in the <code class="docutils literal notranslate"><span class="pre">tracks_log.txt</span></code> file in the METISSE directory.</p>
 <p>To run METISSE simply type <code class="docutils literal notranslate"><span class="pre">./metisse</span></code> on the command line and hit enter. METISSE will produce the following output on the screen:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"> $ </span>./metisse
-<span class="go"> Input Z is :  0.020000</span>
+<span class="go"> Input Z is :  2.00000E-02</span>
 <span class="go"> Reading naked helium star tracks</span>
-<span class="go"> Reading input files from: /Users/poojan/stellar_tracks/MESA/big_z/helium/./folder_Z0020000/eeps</span>
-<span class="go"> Found:           34  tracks</span>
+<span class="go"> Found matching Z_files   2.00000E-02</span>
+<span class="go"> Found           33  tracks.</span>
 <span class="go"> Minimum initial mass    0.4</span>
 <span class="go"> Maximum initial mass  148.8</span>
 <span class="go"> Reading main (hydrogen star) tracks</span>
-<span class="go"> Reading input files from: /Users/poojan/stellar_tracks/MESA/big_z/hydrogen/./folder_Z0020000/eeps</span>
-<span class="go"> Found:           85  tracks</span>
+<span class="go"> Found matching Z_files   2.00000E-02</span>
+<span class="go"> Found           85  tracks.</span>
 <span class="go"> Minimum initial mass    0.1</span>
 <span class="go"> Maximum initial mass  299.3</span>
 <span class="go"> count        1  input mass =   1.000</span>
@@ -157,10 +157,10 @@ If verbose is False, then these details are saved in the <code class="docutils l
 <span class="go">     Time    11251.0    Phase        FGB     Mass   0.999</span>
 <span class="go">     Time    12000.0    Phase        FGB     Mass   0.999</span>
 <span class="go"> -------------------------------------------------------------------------</span>
-<span class="go"> Reached end of the program</span>
+<span class="go"> Reached the end of the program</span>
 </pre></div>
 </div>
-<p>Since we had set, <code class="docutils literal notranslate"><span class="pre">write_output_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>, a <a class="reference internal" href="acronyms_definitions.html#sse-style-file"><span class="std std-ref">SSE-style</span></a> output file named ‘evolve_00100M.dat’ will also be generated in the <em>output</em> directory, containing a more detailed evolutionary history of the star.</p>
+<p>Since we had set, <code class="docutils literal notranslate"><span class="pre">write_output_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>, a <a class="reference internal" href="glossary.html#sse-style-file"><span class="std std-ref">SSE-style</span></a> output file named ‘evolve_00100M.dat’ will also be generated in the <em>output</em> directory, containing a more detailed evolutionary history of the star.</p>
 </section>
 <section id="evolving-a-stellar-population">
 <h2>2.&nbsp;&nbsp;Evolving a stellar population<a class="headerlink" href="#evolving-a-stellar-population" title="Link to this heading"></a></h2>
@@ -180,8 +180,8 @@ If verbose is False, then these details are saved in the <code class="docutils l
 <span class="o">/</span>
 </pre></div>
 </div>
-<p>We also set <code class="docutils literal notranslate"><span class="pre">verbose</span> <span class="pre">=</span> <span class="pre">.false.</span></code> in  <code class="docutils literal notranslate"><span class="pre">metisse.input</span></code> to avoid flooding our screen with evolution details of 10,000 stars.</p>
-<p>Running METISSE does not produces any on-screen output this time.</p>
+<p>We also set <code class="docutils literal notranslate"><span class="pre">verbose</span> <span class="pre">=</span> <span class="pre">.false.</span></code> in metisse.input to avoid flooding our screen with evolution details of 10,000 stars.</p>
+<p>Running METISSE does not produce any on-screen output this time.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./metisse
 </pre></div>
 </div>
@@ -212,47 +212,46 @@ If the masses are listed in a file called <code class="docutils literal notransl
 <p>Let’s say in the above example of a single star, we set <code class="docutils literal notranslate"><span class="pre">initial_Z</span> <span class="pre">=</span> <span class="pre">0.016</span></code>.
 Running METISSE now gives an error, as the metallicity value is not present in the grid of input tracks.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./metisse<span class="w"> </span>
-<span class="go"> Input Z is :  0.016000</span>
+<span class="go"> Input Z is :  1.60000E-02</span>
 <span class="go"> Reading naked helium star tracks</span>
-<span class="go"> METISSE error: metallicity value =   1.6000000000000000E-002 not found amongst given Z_files</span>
-<span class="go"> Check metallicity_file_list and value of Z_files for each file</span>
-<span class="go"> If needed, Z_accuracy_limit can be relaxed (set to a greater value).</span>
+<span class="go"> No matching Z_files found with Z_accuracy_limit =  1.00000E-02</span>
 <span class="go"> Switching to SSE formulae for helium stars </span>
 <span class="go"> Reading main (hydrogen star) tracks</span>
-<span class="go"> METISSE error: metallicity value =   1.6000000000000000E-002 not found amongst given Z_files</span>
-<span class="go"> Check metallicity_file_list and value of Z_files for each file</span>
-<span class="go"> If needed, Z_accuracy_limit can be relaxed (set to a greater value).</span>
+<span class="go"> No matching Z_files found with Z_accuracy_limit =  1.00000E-02</span>
+<span class="go"> If needed, Z_accuracy_limit can be increased to match one of the available Z_files </span>
+<span class="go">  1.00000E-05  1.40000E-05  1.90000E-05  2.00000E-05  2.60000E-05  3.60000E-05  4.90000E-05  6.70000E-05  9.20000E-05  1.00000E-04  1.27000E-04  1.40000E-04  1.74000E-04  2.00000E-04  2.40000E-04  3.29000E-04  4.52000E-04  6.21000E-04  8.53000E-04  1.00000E-03  1.17200E-03  1.40000E-03  1.61000E-03  2.00000E-03  2.21200E-03  3.03900E-03  4.17500E-03  5.73600E-03  7.88000E-03  1.00000E-02  1.08260E-02  1.40000E-02  1.48740E-02  2.00000E-02  2.04340E-02  2.80720E-02  3.85660E-02  5.29830E-02  7.27900E-02</span>
 <span class="go">STOP Fatal error: terminating METISSE</span>
 </pre></div>
 </div>
-<p>METISSE does not interpolate in metallicity. So ideally, we should compute input tracks with Z = 0.016 and supply them to METISSE.</p>
+<p>METISSE does not interpolate in metallicity. So ideally, we should compute input tracks with Z = 0.016 and provide them to METISSE.</p>
 <p>Another option is that we can ask METISSE to use nearby metallicity values.
-This is achieved by the variable <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>. Be default it is set to <code class="docutils literal notranslate"><span class="pre">1d-2</span></code>. We increase it to <code class="docutils literal notranslate"><span class="pre">8d-2</span></code>.</p>
+This is achieved by increasing <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
+METISSE lists available metallicity values in the grid, whenever it cannot find the input value in the grid. We can increase <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> to <code class="docutils literal notranslate"><span class="pre">8d-2</span></code> so that METISSE can run using the closest metallicity in the list, which is <code class="docutils literal notranslate"><span class="pre">0.0148</span></code>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./metisse
-<span class="go"> Input Z is :  0.016000</span>
+<span class="go"> Input Z is :  1.60000E-02</span>
 <span class="go"> Reading naked helium star tracks</span>
-<span class="go"> Reading input files from: /Users/poojan/stellar_tracks/MESA/big_z/helium/./folder_Z0010000/eeps</span>
-<span class="go"> Found:           37  tracks</span>
+<span class="go"> Found matching Z_files   1.48740E-02</span>
+<span class="go"> Found           35  tracks.</span>
 <span class="go"> Minimum initial mass    0.4</span>
-<span class="go"> Maximum initial mass  126.7</span>
+<span class="go"> Maximum initial mass  148.7</span>
 <span class="go"> Reading main (hydrogen star) tracks</span>
-<span class="go"> Reading input files from: /Users/poojan/stellar_tracks/MESA/big_z/hydrogen/./folder_Z0010000/eeps</span>
-<span class="go"> Found:           84  tracks</span>
+<span class="go"> Found matching Z_files   1.48740E-02</span>
+<span class="go"> Found           85  tracks.</span>
 <span class="go"> Minimum initial mass    0.1</span>
-<span class="go"> Maximum initial mass  299.7</span>
+<span class="go"> Maximum initial mass  299.4</span>
 <span class="go"> count        1  input mass =   1.000</span>
 <span class="go">     Time        0.0    Phase         MS     Mass   1.000</span>
-<span class="go">     Time     6442.1    Phase         HG     Mass   1.000</span>
-<span class="go">     Time     7754.5    Phase        FGB     Mass   0.999</span>
-<span class="go">     Time     8393.0    Phase       CHeB     Mass   0.961</span>
-<span class="go">     Time     8513.5    Phase       EAGB     Mass   0.958</span>
-<span class="go">     Time     8521.9    Phase      CO_WD     Mass   0.432</span>
-<span class="go">     Time    12000.0    Phase      CO_WD     Mass   0.432</span>
+<span class="go">     Time     8024.2    Phase         HG     Mass   1.000</span>
+<span class="go">     Time     9563.4    Phase        FGB     Mass   0.999</span>
+<span class="go">     Time    10340.5    Phase       CHeB     Mass   0.958</span>
+<span class="go">     Time    10461.4    Phase       EAGB     Mass   0.955</span>
+<span class="go">     Time    10471.1    Phase      CO_WD     Mass   0.421</span>
+<span class="go">     Time    12000.0    Phase      CO_WD     Mass   0.421</span>
 <span class="go"> -------------------------------------------------------------------------</span>
-<span class="go"> Reached end of the program</span>
+<span class="go"> Reached the end of the program</span>
 </pre></div>
 </div>
-<p>METISSE now runs using the closest metallicity value it can find. In this case, it is <code class="docutils literal notranslate"><span class="pre">0.01</span></code>.</p>
+<p>METISSE now runs but for metallicity <code class="docutils literal notranslate"><span class="pre">0.0148</span></code>.</p>
 </section>
 </section>
 

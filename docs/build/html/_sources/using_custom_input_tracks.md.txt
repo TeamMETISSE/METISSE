@@ -1,26 +1,19 @@
 # Using custom input tracks
 
 
-METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirement is that these tracks should converted to the equivalent evolutionary point (EEP) format before use in METISSE. In EEP-format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal age main sequence (TAMS) occur at the same line number across each file. 
-Stellar tracks can be easily converted to EEP format using code packages such as [ISO](https://github.com/aarondotter/iso). Important details about these tracks, such as the their metallicity value, file structure, names of certain major columns should also be provided through the inlists `metallicity_controls` and `format_controls`.
-
-
-<!-- :::{Important}
-
-While different sets of EEP tracks can share the same format file, they **must** have separate metallicity files.
-::: 
- -->
+METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirement is that these tracks should converted to the equivalent evolutionary point (EEP) format before use in METISSE. In EEP format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal-age main sequence (TAMS) occur at the same line number across each file. 
+Stellar tracks can be easily converted to EEP format using code packages such as [ISO](https://github.com/aarondotter/iso). Important details about these tracks, such as their metallicity value, file structure, and names of certain major columns should also be provided through the inlists `metallicity_controls` and `format_controls`.
 
 
 ## Metallicity controls 
 
-Details pertaining to the metallicity value of the EEP tracks and location of the files are provided through the `metallicity_controls` inlist, found in the relevant `metallicity file`. 
+Details pertaining to the metallicity value of the EEP tracks and location of the files are provided through the `metallicity_controls` inlist, found in the relevant *metallicity file*. 
 
 :::{Note}
 
-1. Different sets of EEP tracks **must** have separate metallicity files.
+1. Different sets of tracks **must have different metallicity files**, even if the format file referenced by each metallicity file is the same.
 
-2. The name of a `metallicity file` can be arbitary but must end with `_metallicity.in` (for example, filename_metallicity.in).
+2. The name of a `metallicity file` can be arbitrary but must end with `_metallicity.in` (for example, filename_metallicity.in).
 
 ::: 
 
@@ -28,62 +21,45 @@ For the most up-to-date variable names and their default values refer to [metall
 
 
 The following three parameters are essential for any given set of input tracks. 
-**METISSE will stop 
-and raise an error if either of these is not provided.**   
+**METISSE will stop and raise an error if either of these is not provided.**   
 
 
 | Parameter            | Description     |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| INPUT_FILES_DIR      | Location of the folder containing the EEP tracks relative to the metallicity file.                                                                             |
+| eep_tracks_dir     | Location of the folder containing the EEP tracks relative to the metallicity file.                                                                             |
 | Z_files              | Metallicity value of the EEP tracks. This is cross-matched against the input metallicity value.                               |
 | format_file          | Location of the format file relative to the metallicity file. |
 
 
 ```
 
-INPUT_FILES_DIR = ''
+eep_tracks_dir = ''
 Z_files = -1.0
 format_file = ''
 ```
 
-
-By default, METISSE only uses the essential columns and the additional columns specified in `format_file` for interpolation. However, when using METISSE in its standalone mode, there exists an option for interpolating in all the columns or certain extra columns of the input tracks. The interpolated quantities are printed in a [MIST-style](acronyms_definitions.md#mist-style-file) file if `write_eep_file = .true.` in `METISSE_controls`.
-
-
 | Parameter            | Description     |
 |----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| read_all_columns     | If `.true.`, interpolate in all columns of input files. Default is `.false.`                                                                        |
-| extra_columns        | Extra columns to be used for interpolation. Up to 100 column names can be listed <br> as strings, separated by commas. <br> *Only read if `read_all_columns` is `.false.`*                    |
-| extra_columns_file   | Alternative way for listing extra column names. List one column name per line <br>in the `extra_columns_file` and provide path of the file here. <br> *Only read if `read_all_columns` is `.false.`*.                                                             |
-
-
-```
-read_all_columns = .false.
-extra_columns = ''
-extra_columns_file = ''
+| Y_files              | Helium abundance. Default is SSE formulae. <br>If < 0, calculated from Z as $0.24+2\times Z$. |
 
 ```
 
-| Parameter            | Description     |
-|----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Z_H                  | Hydrogen abundance. Default is SSE formulae. <br> If < 0, calculated from Z as $0.76-3\times Z$.                                                                                |
-| Z_He                 | Helium abundance. Default is SSE formulae. <br>If < 0, calculated from Z as $0.24+2\times Z$. |
-
-```
-Z_H = -1.0
-Z_He = -1.0
+Y_files = -1.0
 
 ```
 
- `metallicity_controls` also contains the option to provide user-defined values of mass cutoff parameters or zparameters (See [Agrawal et al. 2020](https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract) for details). If negative, these values are calculated by the code. 
 
-| Parameter            | Description     |
+METISSE identifies specific critical masses, referred to as Z-parameters or mass cutoffs. These critical masses mark the point where certain physical properties begin to manifest in stellar tracks (refer to appendix A of [Agrawal et al. 2020](https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract) for more details).
+Z-parameters are fixed for a given metallicity and can be determined through input stellar tracks using the essential columns and the additional columns supplied in the format file. 
+However, if certain columns are missing from the input tracks or if the Z-parameters are not being located correctly, the user can input predetermined values for the Z-parameters.
+
+| Parameter            | Corresponding initial mass of the star    |
 |----------------------|----------------------------------------------------------|
-| Mhook                | Mass below which hook does not appear on the MS.			|
-| Mhef                 | Mass above which helium ignition occurs non-degenerately.              |
-| Mfgb                 | Mass above which helium ignition occurs on the HG.                     |
-| Mup                  | Mass below which carbon ignition does not occur.                    |
-| Mec                  | Mass above which carbon ignites in the centre. |                 
+| Mhook                | Above which hook feature starts to appear on the MS.			|
+| Mhef                 | Above which helium ignition occurs non-degenerately in the core.              |
+| Mfgb                 | Above which helium ignition occurs on the HG.                     |
+| Mup                  | Above which off-centre C/O ignition can occur non-degenerately in the core.                    |
+| Mec                  | Above which a star avoids electron captures on neon and proceeds to form an iron core. |                 
 | Mextra               | Extra mass cutoff (if any).  |
 
 ```
@@ -98,22 +74,29 @@ Mextra = -1.0
 
 ## Format controls
 
-Apart from the metallicity files, users are also required to specify the structure/format of the files conatining input EEP tracks through the `&format_controls` inlist. For the most up-to-date variable names and their default values refer to [format_defaults](https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/format_defaults.inc). 
+Apart from the metallicity files, users should also specify the format of the files containing input EEP tracks through the `&format_controls` inlist contained in what we call a *format file*. 
+While different sets of EEP tracks can share the same format file, users should provide at least two format files: one for usual hydrogen stars and the other for helium star tracks.
+
+For the most up-to-date variable names and their default values refer to [format_defaults](https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/format_defaults.inc). 
+
+
+
+
+### File details
 
 | Parameter               | Description     |
 |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| read_eep_files          | Set to `.true.` only for [MIST-style](https://waps.cfa.harvard.edu/MIST/model_grids.html) files; set to `.false.` for other types of files. <br> If `.true.`, other options in this section do not need to be provided. The required details are read directly from the input files <br> .                                                                                                                                         |
-| file_extension          | File extension of the input files (e.g., '.eep', '.dat'). METISSE will look for files ending with `file_extension` in the `INPUT_FILES_DIR`.                                                                                          |
-
-| header_location         | Line number corresponding to the column names in the input files for EEP-tracks. <br> If the input files do not contain column names; specify `column_name_file` for such cases.                    																	 |
+| read_eep_files          | Set to `.true.` only for [MIST-style](https://waps.cfa.harvard.edu/MIST/model_grids.html) files; set to `.false.` for other types of files. <br> If `.true.`, other options in this section (until `total_cols`) do not need to be provided. <br> The required details are read directly from the input files.                                                                                                                                         |
+| file_extension          | File extension of the input files (e.g., '.eep', '.dat'). <br> METISSE will look for files ending with `file_extension` in the `eep_tracks_dir`.                                                                                          |
+| header_location         | Line number corresponding to the column names in the input files for EEP tracks. <br> If the input files do not contain column names; specify `column_name_file` for such cases.                    																	 |
 | extra_char              | Any extra character present at the beginning of the header line.                                                                                                         |
 | column_name_file        | File containing column names (one per line) if `header_location` <= 0 <br> and column names cannot be determined from the input files.                                                                                             |
 | total_cols              | Total number of columns in the input files.                            |
 
 ```
 
-file_extension = ''
 read_eep_files = .false.
+file_extension = ''
 header_location = -1
 extra_char = ''
 column_name_file = ''
@@ -125,24 +108,22 @@ total_cols = -1
     
 ### Essential columns
 
-
-Use this section to specify essential column names. In the case of the luminosity and the radius columns, at least one of the absolute or log column names should be provided. 
+As columns can be named differently by different stellar codes, METISSE needs to know certain important column names. In the case of the luminosity and the radius columns, at least one of the absolute or log column names should be provided. 
 Make sure that the units are correct.
 **METISSE will stop and raise an error if these columns can not be located.**
 
 
 
-| Parameter               | Description     |
+| Parameter               | Corresponding column name  |
 |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| age_colname             | Column name for age in years.                                                                       |
-| mass_colname            | Column name for star's total mass in solar units.                                                                                                                               |
-| log_L_colname           | Column name for log10 of luminosity in solar units.                                                                                    |
-| Lum_colname             | Column name for stellar luminosity in solar units. <br>*Used only if `log_L_colname` is not provided.*                                                                  |
-| log_R_colname           | Column name for log10 of radius in solar units.                                                           |
-| Radius_colname          | Column name for stellar radius in solar units. <br> *Used only if `log_R_colname` is not provided.*                                                                   |
-| he_core_mass            | Column name for mass of He enriched/H depleted core in solar units.                                                                                                            |
-| co_core_mass            | Column name for mass of C enriched/He depleted core in solar units.                               |
-
+| age_colname             | Age of the star in years.                                                                       |
+| mass_colname            | Total mass of the star in solar units.                                                                                                                               |
+| log_L_colname           | Log10 of stellar luminosity in solar units.                                                                                    |
+| Lum_colname             | Stellar luminosity in solar units. <br>*Used only if `log_L_colname` is not provided.*                                                                  |
+| log_R_colname           | Log10 of stellar radius in solar units.                                                           |
+| Radius_colname          | Stellar radius in solar units. <br> *Used only if `log_R_colname` is not provided.*                                                                   |
+| he_core_mass            | Mass of the helium enriched/hydrogen depleted core in solar units.                                                                                                            |
+| co_core_mass            | Mass of the carbon enriched/helium depleted core in solar units.                               |
 
 
 ```
@@ -159,22 +140,18 @@ co_core_mass = ''
 
 ### Additional columns 
 
-METISSE will raise error but not stop if these column names are not provided. However, it will revert to using SSE formulae where needed. 
+The following columns are useful in binary evolution calculations. 
+METISSE will raise an error but not stop if these column names are not provided. However, it will revert to using SSE formulae where needed. 
 
 
 
-| Parameter               | Description     |
+| Parameter               | Corresponding column name    |
 |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| he_core_radius          | Column name for radius of helium enriched/hydrogen depleted core <br>in solar units (cannot use log).                                                                                                                                                                      |
-| co_core_radius          | Column name for radius of carbon enriched/helium depleted core <br>in solar units (cannot use log).                                                                         |
-| mass_conv_envelope      | Column name for mass of the convective envelope in solar units.                                                                                               |
-| radius_conv_envelope    | Column name for radius of the convective envelope in solar units.                                                                                              |
-| log_T_colname           | Column name for log10 of surface temperature in K.                                                                    |
-| Teff_colname            | Column name for surface temperature in K. <br> *Used only if `log_T_colname` is not provided.*                                                                      |
-| log_Tc                  | Column name for central temperature in log units.                                                                                                            |
-| he4_mass_frac           | Column name for helium-4 mass fraction at centre.                                                                                                            |
-| c12_mass_frac           | Column name for carbon-12 mass fraction at centre.                                                                                                           |
-| o16_mass_frac           | Column name for oxygen-16 mass fraction at centre.     |
+| he_core_radius          | Radius of the helium enriched/hydrogen depleted core <br>in solar units (cannot use log).                                                                                                                                                                      |
+| co_core_radius          | Radius of the carbon enriched/helium depleted core <br>in solar units (cannot use log).                                                                         |
+| mass_conv_envelope      | Mass of the convective envelope in solar units.                                                                                               |
+| radius_conv_envelope    | Radius of the convective envelope in solar units.                                                                                              |
+|binding_energy_colname	  | Binding energy of the envelope in ergs (cannot use log)		|
 
 
 ```
@@ -182,6 +159,26 @@ he_core_radius = ''
 co_core_radius = ''
 mass_conv_envelope = ''
 radius_conv_envelope = ''
+binding_energy_colname = ''
+
+```
+
+The following columns are used in determining various Z-parameters.
+If these are not provided, then user-defined values for Z-parameters (through the `metallicity_controls`) are used. If those are not provided either, then Z-parameters are determined using SSE formulae.
+
+
+| Parameter               | Corresponding column name    |
+|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| log_T_colname           | Log10 of surface temperature in K.                                                                    |
+| Teff_colname            | Surface temperature in K. <br> *Used only if `log_T_colname` is not provided.*                                                                      |
+| log_Tc                  | Central temperature in log units.                                                                                                            |
+| he4_mass_frac           | Helium-4 mass fraction at centre.                                                                                                            |
+| c12_mass_frac           | Carbon-12 mass fraction at centre.                                                                                                           |
+| o16_mass_frac           | Oxygen-16 mass fraction at centre.     |
+
+
+```
+
 log_T_colname = ''
 Teff_colname = ''
 log_Tc = ''
@@ -189,8 +186,8 @@ he4_mass_frac = ''
 c12_mass_frac = ''
 o16_mass_frac = ''
 ```
-### EEP details for hydrogen stars
-
+### EEP details 
+the 
 From a set of input models, METISSE needs to know the locations of key EEPs in order to assign stellar phases to the interpolated tracks. These phases are identical to those used by the SSE code (See Table 1. of [Agrawal et al. 2020](https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract)) and are important for certain decision-making processes in the code, particularly for binary evolution.
 
 | EEP    			      | Corresponding evolutionary point     |
@@ -209,8 +206,8 @@ From a set of input models, METISSE needs to know the locations of key EEPs in o
 | Extra_EEP1              | Additional EEP *(optional)*.                                                                                                                        |
 | Extra_EEP2              | Additional EEP *(optional)*.                                                                                                                        |
 | Extra_EEP3              | Additional EEP *(optional)*.                                                                                                                          |
-| Initial_EEP             | Line number to start reading files from. <br> If < 0, ZAMS_EEP is used.                                                                                                                                                                      |
-| Final_EEP               | Line number to stop reading files at. <br> If < 0, maximum of the listed EEPs is used.                                                                                                                     
+| Initial_EEP             | EEP to start reading files from. <br> If < 0, ZAMS_EEP is used.                                                                |
+| Final_EEP               | EEP to stop reading files at. <br> If < 0, the maximum of the listed EEPs is used.    |                                                                                                                 
 
 
 ```
@@ -236,41 +233,37 @@ Final_EEP = -1
 ```
 
 
-### EEP details for stripped/ naked helium stars
-
-Locations of key EEPs for stars that have lost their hydrogen-rich envelopes, also known as naked helium or stripped stars. Similar to primary EEPs of hydrogen stars, these are used to assign stellar phases to the interpolated tracks for naked helium star phases.
+When working with naked helium star tracks, all the above-mentioned format file options can be used to specify the file and the column details. However, only the following EEPs are used to assign naked helium star phases to the interpolated tracks: 
 
 
-| EEP     				  | Corresponding evolutionary point     |
+| EEP     				  | Corresponding evolutionary point for naked helium stars    |
 |-------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| ZAMS_HE_EEP             | Zero Age Main Sequence of Helium stars.                                                                                               |
-| TAMS_HE_EEP             | Terminal Age Main Sequence of Helium stars.                                                                                             |
-| GB_HE_EEP               | Base of the Giant Branch of Helium stars.                                                                                                   |
-| cCBurn_HE_EEP           | end of core Carbon Burning of Helium stars .                                                                                                 |
-| post_AGB_HE_EEP         | Post-Asymptotic Giant Branch of Helium stars.                                                                                            |
-
-```
-ZAMS_HE_EEP = -1
-TAMS_HE_EEP = -1
-GB_HE_EEP = -1
-cCBurn_HE_EEP = -1
-post_AGB_HE_EEP = -1 
-```
+| cHeBurn_EEP             | Zero Age Helium Main Sequence                                                                                               |
+| TA_cHeB_EEP             | Terminal Age Helium Main Sequence |                                                                                           |
+| BGB_EEP                 | Base of the Giant Branch                                                                                                   |
+| cCBurn_EEP           	  | End of core Carbon Burning                                       
+| TPAGB_EEP               | End of AGB |                                                           |
+| post_AGB_EEP         	  | Post-AGB (end of AGB to WD cooling track) |
+| Initial_EEP             | EEP to start reading files from. <br> If < 0, cHeBurn_EEP is used.                                                                |
+| Final_EEP               | EEP to stop reading files at. <br> If < 0, the maximum of the listed EEPs is used.    |                                                                                                                 
 
 
-### How to deal with the incomplete tracks
+Once read, these EEPs get stored with the appropriate (helium files specific) variable name inside METISSE. Other EEPs (such as ZAMS_EEP and TAMS_EEP) are ignored as they don't have an equivalent in helium star evolution.
+
+
+### How to deal with incomplete tracks
 
 :::
 > *"In an ideal world, we wouldn't need this section, but unfortunately, the world is not ideal, and incomplete or incorrect data is more common in datasets than we'd like to believe."*
 :::
 
 For a given initial mass, METISSE calculates an evolutionary track by interpolating between the corresponding EEPs of neighbouring mass tracks. 
-If any of the neighbouring tracks is incomplete, the interpolated track is also rendered incomplete. This section explains how METIISE identifies incomplete tracks and attempts to fill in the missing data. 
+If any of the neighbouring tracks is incomplete, the interpolated track is also rendered incomplete. This section explains how METISSE identifies incomplete tracks and attempts to fill in the missing data. 
 
 | Parameter               | Description     |
 |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| low_mass_final_eep      | Final EEP for stars with M < Mec .                                                                    |
-| high_mass_final_eep     | Final EEP for stars with M >= Mec .                                                                      |
+| low_mass_final_eep      | Length of track for stars with initial mass < Mec is compared <br> against `low_mass_final_eep` to determine completeness.                                                                    |
+| high_mass_final_eep     | Length of track for stars with initial mass >= Mec is compared <br> against `high_mass_final_eep` to determine completeness.                                                                      |
 | fix_track               | If `.true.`, METISSE relaxes criteria for finding neighboring tracks to fix <br> incomplete tracks.                                                                     |
 | lookup_index            | Determines the mass range for searching neighboring tracks when fixing <br>incomplete tracks. The range is M-(M$\times$`lookup_index`) and M+(M$\times$`lookup_index`), <br>where M is the initial mass of the star. |
 
@@ -283,3 +276,7 @@ fix_track = .true.
 lookup_index = 1.0
 
 ```
+
+When evaluating the completeness of input tracks for naked helium stars, only the parameters `low_mass_final_eep` and `high_mass_final_eep` are considered and saved internally under helium-specific names. 
+The options `fix_track` and `lookup_index` are not used in the format files of helium stars. Instead, the values provided in the format file for hydrogen stars are applied to both hydrogen and helium star tracks.
+
