@@ -3,7 +3,7 @@
 
 &SSE_input_controls
 
-initial_Z = 0.02
+initial_Z = 0.016
 
 max_age = 1.2d4   !max age in Myrs
 
