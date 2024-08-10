@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using METISSE to evolve binaries &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Input files" href="input_files.html" />
+    <link rel="prev" title="Using METISSE to evolve single stars" href="usage_standalone.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            METISSE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using METISSE to evolve binaries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cosmic">COSMIC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bse">BSE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Citing METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METISSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Using METISSE to evolve binaries</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage_other.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="using-metisse-to-evolve-binaries">
+<h1>Using METISSE to evolve binaries<a class="headerlink" href="#using-metisse-to-evolve-binaries" title="Link to this heading"></a></h1>
+<p>METISSE, by itself, is not capable of evolving stars in binary systems. However, it has been specifically designed to be integrated with binary evolution codes that can do so, enabling them to make use of modern stellar data for binary evolution computations.</p>
+<p>It can be seamlessly integrated with codes that currently use SSE fitting formulae <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> for single star evolution computations.
+It has already been added to the binary evolution codes BSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2002MNRAS.329..897H/abstract">(Hurley et al. 2002)</a> and COSMIC <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020ApJ...898...71B/abstract">(Breivik et al. 2020)</a>.</p>
+<section id="cosmic">
+<h2>1.&nbsp;&nbsp;COSMIC<a class="headerlink" href="#cosmic" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>To use METISSE with COSMIC one needs the GitHub repository for the latest version of COSMIC.</p></li>
+</ol>
+<p>If you don’t have COSMIC installed already you can fork it from the <a class="reference external" href="https://github.com/COSMIC-PopSynth/COSMIC/tree/develop">GitHub repository</a> and clone it on your machine.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/COSMIC-PopSynth/COSMIC
+</pre></div>
+</div>
+<p>Follow the COSMIC’s documentation to <a class="reference external" href="https://cosmic-popsynth.github.io/COSMIC/install/index.html#">load the cosmic environment</a></p>
+<p>Next, cd into the COSMIC’s directory and compile the library:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Try evolving an example binary following the instructions on <a class="reference external" href="https://cosmic-popsynth.github.io/COSMIC/examples/index.html#">this page</a>.</p>
+<ol class="arabic simple" start="2">
+<li><p>Next checkout the METISSE-Integrate branch of COSMIC. In the COSMIC’s directory, do:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>checkout<span class="w"> </span>METISSE-integrate
+</pre></div>
+</div>
+<p>Get the METISSE submodule.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+</pre></div>
+</div>
+<p>Re-compile the library</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>METISSE is now ready to use with COSMIC.</p></li>
+</ol>
+<p>The usual input namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is not read when using COSMIC. Instead a Python dictionary, <code class="docutils literal notranslate"><span class="pre">SSEDict</span></code> is used to set the <code class="docutils literal notranslate"><span class="pre">stellar_engine</span></code> and provide the location of the folders containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for hydrogen and helium stars through variables <code class="docutils literal notranslate"><span class="pre">path_to_tracks</span></code> and <code class="docutils literal notranslate"><span class="pre">path_to_he_tracks</span></code>.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">SSEDict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;stellar_engine&#39;</span><span class="p">:</span> <span class="s1">&#39;metisse&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;path_to_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/hydrogen&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;path_to_he_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/helium&#39;</span> 
+               <span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The paths provided above are just examples. Users should provide <code class="docutils literal notranslate"><span class="pre">path_to_tracks</span></code> and <code class="docutils literal notranslate"><span class="pre">path_to_he_tracks</span></code> based on the location of these folders on their machine.</p>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Pass <code class="docutils literal notranslate"><span class="pre">SSEDict</span></code> along with other arguments to the <code class="docutils literal notranslate"><span class="pre">evolve</span></code> function of COSMIC and you are all set. For instance, if you are calculating the evolution of a single binary, the evolve function should look like this:</p></li>
+</ol>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">bpp</span><span class="p">,</span> <span class="n">bcm</span><span class="p">,</span> <span class="n">initC</span><span class="p">,</span> <span class="n">kick_info</span> <span class="o">=</span> <span class="n">Evolve</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">initialbinarytable</span><span class="o">=</span><span class="n">single_binary</span><span class="p">,</span>
+                                          <span class="n">BSEDict</span><span class="o">=</span><span class="n">BSEDict</span><span class="p">,</span> 
+                                          <span class="n">SSEDict</span><span class="o">=</span><span class="n">SSEDict</span>
+                                          <span class="p">)</span> 
+</pre></div>
+</div>
+<p>COSMIC will then evolve the system using the provided stellar tracks and store the output in its usual <code class="docutils literal notranslate"><span class="pre">bpp</span></code> and <code class="docutils literal notranslate"><span class="pre">bcm</span></code> arrays.</p>
+</section>
+<section id="bse">
+<h2>2.&nbsp;&nbsp;BSE<a class="headerlink" href="#bse" title="Link to this heading"></a></h2>
+<p>To run METISSE with BSE and compute the evolution of a single binary, say a 2.5 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star with a 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr.</p>
+<ol class="arabic simple">
+<li><p>Get the METISSE-enabled version of BSE through its <a class="reference external" href="https://github.com/poojanagrawal/BSE-METISSE">GitHub repository</a>.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/poojanagrawal/BSE-METISSE
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Make sure use_SSE is false in <code class="docutils literal notranslate"><span class="pre">bse.f</span></code> in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder.</p></li>
+<li><p>Next, compile the code:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./mk
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>When using BSE, METISSE-specific inputs are read through the <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> inlist in the <em>evolve_metisse.in</em> file. We supply the location of the folders containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for hydrogen and helium stars through <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code>. (Make sure to provide relevant paths based on the location of these folders <strong>on your machine</strong> ).</p></li>
+</ol>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
+
+
+<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/hydrogen&#39;</span>
+<span class="w">            </span>
+<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/helium&#39;</span>
+
+<span class="o">/</span>
+</pre></div>
+</div>
+<p>All other inputs including the binary parameters as well as the values of mass and metallicity are read through the BSE input file <code class="docutils literal notranslate"><span class="pre">binary.in</span></code>.</p>
+<ol class="arabic simple" start="5">
+<li><p>Finally, run BSE using:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./bse_metisse
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>BSE will produce the following terminal output.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">      TIME      M1       M2   K1 K2        SEP    ECC  R1/ROL1 R2/ROL2  TYPE</span>
+<span class="go">     0.0000    2.500    1.000  1  1      137.607  0.00   0.028   0.022  INITIAL </span>
+<span class="go">   567.8636    2.499    1.000  2  1      137.649  0.00   0.063   0.022  KW CHNGE</span>
+<span class="go">   574.5686    2.499    1.000  3  1      137.652  0.00   0.120   0.022  KW CHNGE</span>
+<span class="go">   581.1684    2.499    1.000  4  1      136.123  0.00   0.525   0.022  KW CHNGE</span>
+<span class="go">   768.8467    2.496    1.000  5  1      136.210  0.00   0.293   0.022  KW CHNGE</span>
+<span class="go">   780.5401    2.495    1.000  5  1      125.450  0.00   1.001   0.024  BEG RCHE</span>
+<span class="go">   780.5401    0.523    1.000  8  1       11.851  0.00   1.001   0.024  COMENV  </span>
+<span class="go">   780.5401    0.523    1.000  8  1       11.851  0.00   0.018   0.177  END RCHE</span>
+<span class="go">   781.1571    0.468    1.000 11  1       11.883  0.00   0.004   0.172  KW CHNGE</span>
+<span class="go">  9470.1367    0.468    1.000 11  2       14.083  0.00   0.003   0.208  KW CHNGE</span>
+<span class="go"> 11192.3223    0.468    0.999 11  3       14.024  0.00   0.003   0.279  KW CHNGE</span>
+<span class="go"> 11950.0928    0.468    0.999 11  3       11.966  0.00   0.004   1.000  BEG RCHE</span>
+<span class="go"> 11950.0928    0.468    0.200 11 10        1.199  0.00   0.004   1.000  COMENV  </span>
+<span class="go"> 11950.0928    0.468    0.200 11 10        1.199  0.00   0.027   0.058  END RCHE</span>
+<span class="go"> 13700.0000    0.468    0.200 11 10        1.076  0.00   0.030   0.065  MAX TIME</span>
+</pre></div>
+</div>
+<p>For more detailed output, check the output file in the <code class="docutils literal notranslate"><span class="pre">output_binary</span></code> folder.</p>
+ <!-- `popbin.f`.  -->
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage_standalone.html" class="btn btn-neutral float-left" title="Using METISSE to evolve single stars" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="input_files.html" class="btn btn-neutral float-right" title="Input files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

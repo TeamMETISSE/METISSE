@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using custom input tracks &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Code structure" href="structure.html" />
+    <link rel="prev" title="Input files" href="input_files.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            METISSE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using custom input tracks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#metallicity-controls">Metallicity controls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#format-controls">Format controls</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#file-details">File details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#essential-columns">Essential columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-columns">Additional columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eep-details">EEP details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-deal-with-incomplete-tracks">How to deal with incomplete tracks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Citing METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METISSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Using custom input tracks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/using_custom_input_tracks.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="using-custom-input-tracks">
+<h1>Using custom input tracks<a class="headerlink" href="#using-custom-input-tracks" title="Link to this heading"></a></h1>
+<p>METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirement is that these tracks should converted to the equivalent evolutionary point (EEP) format before use in METISSE. In EEP format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal-age main sequence (TAMS) occur at the same line number across each file.
+Stellar tracks can be easily converted to EEP format using code packages such as <a class="reference external" href="https://github.com/aarondotter/iso">ISO</a>. Important details about these tracks, such as their metallicity value, file structure, and names of certain major columns should also be provided through the inlists <code class="docutils literal notranslate"><span class="pre">metallicity_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">format_controls</span></code>.</p>
+<section id="metallicity-controls">
+<h2>1.&nbsp;&nbsp;Metallicity controls<a class="headerlink" href="#metallicity-controls" title="Link to this heading"></a></h2>
+<p>Details pertaining to the metallicity value of the EEP tracks and location of the files are provided through the <code class="docutils literal notranslate"><span class="pre">metallicity_controls</span></code> inlist, found in the relevant <em>metallicity file</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>Different sets of tracks <strong>must have different metallicity files</strong>, even if the format file referenced by each metallicity file is the same.</p></li>
+<li><p>The name of a <code class="docutils literal notranslate"><span class="pre">metallicity</span> <span class="pre">file</span></code> can be arbitrary but must end with <code class="docutils literal notranslate"><span class="pre">_metallicity.in</span></code> (for example, filename_metallicity.in).</p></li>
+</ol>
+</div>
+<p>For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/metallicity_defaults.inc">metallicity_defaults</a>.</p>
+<p>The following three parameters are essential for any given set of input tracks.
+<strong>METISSE will stop and raise an error if either of these is not provided.</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>eep_tracks_dir</p></td>
+<td><p>Location of the folder containing the EEP tracks relative to the metallicity file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Z_files</p></td>
+<td><p>Metallicity value of the EEP tracks. This is cross-matched against the input metallicity value.</p></td>
+</tr>
+<tr class="row-even"><td><p>format_file</p></td>
+<td><p>Location of the format file relative to the metallicity file.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">eep_tracks_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">Z_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">format_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Y_files</p></td>
+<td><p>Helium abundance. Default is SSE formulae. <br>If &lt; 0, calculated from Z as <img class="math" src="_images/math/5d3bee837773e89ca9ee4fdc6f8ea7f301631371.png" alt="0.24+2\times Z"/>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">Y_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>METISSE identifies specific critical masses, referred to as Z-parameters or mass cutoffs. These critical masses mark the point where certain physical properties begin to manifest in stellar tracks (refer to appendix A of <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract">Agrawal et al. 2020</a> for more details).
+Z-parameters are fixed for a given metallicity and can be determined through input stellar tracks using the essential columns and the additional columns supplied in the format file.
+However, if certain columns are missing from the input tracks or if the Z-parameters are not being located correctly, the user can input predetermined values for the Z-parameters.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Corresponding initial mass of the star</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Mhook</p></td>
+<td><p>Above which hook feature starts to appear on the MS.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mhef</p></td>
+<td><p>Above which helium ignition occurs non-degenerately in the core.</p></td>
+</tr>
+<tr class="row-even"><td><p>Mfgb</p></td>
+<td><p>Above which helium ignition occurs on the HG.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mup</p></td>
+<td><p>Above which off-centre C/O ignition can occur non-degenerately in the core.</p></td>
+</tr>
+<tr class="row-even"><td><p>Mec</p></td>
+<td><p>Above which a star avoids electron captures on neon and proceeds to form an iron core.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mextra</p></td>
+<td><p>Extra mass cutoff (if any).</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">Mhook</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">Mhef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">Mfgb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">Mup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">Mec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">Mextra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span><span class="w">   </span>
+</pre></div>
+</div>
+</section>
+<section id="format-controls">
+<h2>2.&nbsp;&nbsp;Format controls<a class="headerlink" href="#format-controls" title="Link to this heading"></a></h2>
+<p>Apart from the metallicity files, users should also specify the format of the files containing input EEP tracks through the <code class="docutils literal notranslate"><span class="pre">&amp;format_controls</span></code> inlist contained in what we call a <em>format file</em>.
+While different sets of EEP tracks can share the same format file, users should provide at least two format files: one for usual hydrogen stars and the other for helium star tracks.</p>
+<p>For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/format_defaults.inc">format_defaults</a>.</p>
+<section id="file-details">
+<h3>2.1.&nbsp;&nbsp;File details<a class="headerlink" href="#file-details" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>read_eep_files</p></td>
+<td><p>Set to <code class="docutils literal notranslate"><span class="pre">.true.</span></code> only for <a class="reference external" href="https://waps.cfa.harvard.edu/MIST/model_grids.html">MIST-style</a> files; set to <code class="docutils literal notranslate"><span class="pre">.false.</span></code> for other types of files. <br> If <code class="docutils literal notranslate"><span class="pre">.true.</span></code>, other options in this section (until <code class="docutils literal notranslate"><span class="pre">total_cols</span></code>) do not need to be provided. <br> The required details are read directly from the input files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>file_extension</p></td>
+<td><p>File extension of the input files (e.g., ‘.eep’, ‘.dat’). <br> METISSE will look for files ending with <code class="docutils literal notranslate"><span class="pre">file_extension</span></code> in the <code class="docutils literal notranslate"><span class="pre">eep_tracks_dir</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>header_location</p></td>
+<td><p>Line number corresponding to the column names in the input files for EEP tracks. <br> If the input files do not contain column names; specify <code class="docutils literal notranslate"><span class="pre">column_name_file</span></code> for such cases.</p></td>
+</tr>
+<tr class="row-odd"><td><p>extra_char</p></td>
+<td><p>Any extra character present at the beginning of the header line.</p></td>
+</tr>
+<tr class="row-even"><td><p>column_name_file</p></td>
+<td><p>File containing column names (one per line) if <code class="docutils literal notranslate"><span class="pre">header_location</span></code> &lt;= 0 <br> and column names cannot be determined from the input files.</p></td>
+</tr>
+<tr class="row-odd"><td><p>total_cols</p></td>
+<td><p>Total number of columns in the input files.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">read_eep_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="n">file_extension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">header_location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">extra_char</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">column_name_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">total_cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+<section id="essential-columns">
+<h3>2.2.&nbsp;&nbsp;Essential columns<a class="headerlink" href="#essential-columns" title="Link to this heading"></a></h3>
+<p>As columns can be named differently by different stellar codes, METISSE needs to know certain important column names. In the case of the luminosity and the radius columns, at least one of the absolute or log column names should be provided.
+Make sure that the units are correct.
+<strong>METISSE will stop and raise an error if these columns can not be located.</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Corresponding column name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>age_colname</p></td>
+<td><p>Age of the star in years.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mass_colname</p></td>
+<td><p>Total mass of the star in solar units.</p></td>
+</tr>
+<tr class="row-even"><td><p>log_L_colname</p></td>
+<td><p>Log10 of stellar luminosity in solar units.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lum_colname</p></td>
+<td><p>Stellar luminosity in solar units. <br><em>Used only if <code class="docutils literal notranslate"><span class="pre">log_L_colname</span></code> is not provided.</em></p></td>
+</tr>
+<tr class="row-even"><td><p>log_R_colname</p></td>
+<td><p>Log10 of stellar radius in solar units.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Radius_colname</p></td>
+<td><p>Stellar radius in solar units. <br> <em>Used only if <code class="docutils literal notranslate"><span class="pre">log_R_colname</span></code> is not provided.</em></p></td>
+</tr>
+<tr class="row-even"><td><p>he_core_mass</p></td>
+<td><p>Mass of the helium enriched/hydrogen depleted core in solar units.</p></td>
+</tr>
+<tr class="row-odd"><td><p>co_core_mass</p></td>
+<td><p>Mass of the carbon enriched/helium depleted core in solar units.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">age_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">mass_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">log_L_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">Lum_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">log_R_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">Radius_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">he_core_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">co_core_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="additional-columns">
+<h3>2.3.&nbsp;&nbsp;Additional columns<a class="headerlink" href="#additional-columns" title="Link to this heading"></a></h3>
+<p>The following columns are useful in binary evolution calculations.
+METISSE will raise an error but not stop if these column names are not provided. However, it will revert to using SSE formulae where needed.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Corresponding column name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>he_core_radius</p></td>
+<td><p>Radius of the helium enriched/hydrogen depleted core <br>in solar units (cannot use log).</p></td>
+</tr>
+<tr class="row-odd"><td><p>co_core_radius</p></td>
+<td><p>Radius of the carbon enriched/helium depleted core <br>in solar units (cannot use log).</p></td>
+</tr>
+<tr class="row-even"><td><p>mass_conv_envelope</p></td>
+<td><p>Mass of the convective envelope in solar units.</p></td>
+</tr>
+<tr class="row-odd"><td><p>radius_conv_envelope</p></td>
+<td><p>Radius of the convective envelope in solar units.</p></td>
+</tr>
+<tr class="row-even"><td><p>binding_energy_colname</p></td>
+<td><p>Binding energy of the envelope in ergs (cannot use log)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">he_core_radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">    </span>
+<span class="n">co_core_radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">mass_conv_envelope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">radius_conv_envelope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">binding_energy_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>The following columns are used in determining various Z-parameters.
+If these are not provided, then user-defined values for Z-parameters (through the <code class="docutils literal notranslate"><span class="pre">metallicity_controls</span></code>) are used. If those are not provided either, then Z-parameters are determined using SSE formulae.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Corresponding column name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>log_T_colname</p></td>
+<td><p>Log10 of surface temperature in K.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Teff_colname</p></td>
+<td><p>Surface temperature in K. <br> <em>Used only if <code class="docutils literal notranslate"><span class="pre">log_T_colname</span></code> is not provided.</em></p></td>
+</tr>
+<tr class="row-even"><td><p>log_Tc</p></td>
+<td><p>Central temperature in log units.</p></td>
+</tr>
+<tr class="row-odd"><td><p>he4_mass_frac</p></td>
+<td><p>Helium-4 mass fraction at centre.</p></td>
+</tr>
+<tr class="row-even"><td><p>c12_mass_frac</p></td>
+<td><p>Carbon-12 mass fraction at centre.</p></td>
+</tr>
+<tr class="row-odd"><td><p>o16_mass_frac</p></td>
+<td><p>Oxygen-16 mass fraction at centre.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">log_T_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">Teff_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">log_Tc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">he4_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">c12_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">o16_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="eep-details">
+<h3>2.4.&nbsp;&nbsp;EEP details<a class="headerlink" href="#eep-details" title="Link to this heading"></a></h3>
+<p>the
+From a set of input models, METISSE needs to know the locations of key EEPs in order to assign stellar phases to the interpolated tracks. These phases are identical to those used by the SSE code (See Table 1. of <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract">Agrawal et al. 2020</a>) and are important for certain decision-making processes in the code, particularly for binary evolution.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>EEP</p></th>
+<th class="head"><p>Corresponding evolutionary point</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PreMS_EEP</p></td>
+<td><p>Pre-Main Sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZAMS_EEP</p></td>
+<td><p>Zero-Age Main Sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p>IAMS_EEP</p></td>
+<td><p>Intermediate-Age Main Sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TAMS_EEP</p></td>
+<td><p>End of the Main Sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p>BGB_EEP</p></td>
+<td><p>Base of the Giant Branch.</p></td>
+</tr>
+<tr class="row-odd"><td><p>cHeIgnition_EEP</p></td>
+<td><p>Helium Ignition in the core.</p></td>
+</tr>
+<tr class="row-even"><td><p>cHeBurn_EEP</p></td>
+<td><p>Core Helium Burning.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TA_cHeB_EEP</p></td>
+<td><p>End of core Helium Burning.</p></td>
+</tr>
+<tr class="row-even"><td><p>TPAGB_EEP</p></td>
+<td><p>Thermally Pulsing Asymptotic Giant Branch.</p></td>
+</tr>
+<tr class="row-odd"><td><p>cCBurn_EEP</p></td>
+<td><p>End of core Carbon Burning.</p></td>
+</tr>
+<tr class="row-even"><td><p>post_AGB_EEP</p></td>
+<td><p>Post-Asymptotic Giant Branch.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Extra_EEP1</p></td>
+<td><p>Additional EEP <em>(optional)</em>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Extra_EEP2</p></td>
+<td><p>Additional EEP <em>(optional)</em>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Extra_EEP3</p></td>
+<td><p>Additional EEP <em>(optional)</em>.</p></td>
+</tr>
+<tr class="row-even"><td><p>Initial_EEP</p></td>
+<td><p>EEP to start reading files from. <br> If &lt; 0, ZAMS_EEP is used.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Final_EEP</p></td>
+<td><p>EEP to stop reading files at. <br> If &lt; 0, the maximum of the listed EEPs is used.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">PreMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">ZAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">IAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">TAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">BGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">cHeIgnition_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">cHeBurn_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">TA_cHeB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">TPAGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">cCBurn_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">post_AGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+
+<span class="n">Extra_EEP1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">Extra_EEP2</span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">Extra_EEP3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+
+<span class="n">Initial_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">Final_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>When working with naked helium star tracks, all the above-mentioned format file options can be used to specify the file and the column details. However, only the following EEPs are used to assign naked helium star phases to the interpolated tracks:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>EEP</p></th>
+<th class="head"><p>Corresponding evolutionary point for naked helium stars</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>cHeBurn_EEP</p></td>
+<td><p>Zero Age Helium Main Sequence</p></td>
+</tr>
+<tr class="row-odd"><td><p>TA_cHeB_EEP</p></td>
+<td><p>Terminal Age Helium Main Sequence</p></td>
+</tr>
+<tr class="row-even"><td><p>BGB_EEP</p></td>
+<td><p>Base of the Giant Branch</p></td>
+</tr>
+<tr class="row-odd"><td><p>cCBurn_EEP</p></td>
+<td><p>End of core Carbon Burning</p></td>
+</tr>
+<tr class="row-even"><td><p>TPAGB_EEP</p></td>
+<td><p>End of AGB</p></td>
+</tr>
+<tr class="row-odd"><td><p>post_AGB_EEP</p></td>
+<td><p>Post-AGB (end of AGB to WD cooling track)</p></td>
+</tr>
+<tr class="row-even"><td><p>Initial_EEP</p></td>
+<td><p>EEP to start reading files from. <br> If &lt; 0, cHeBurn_EEP is used.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Final_EEP</p></td>
+<td><p>EEP to stop reading files at. <br> If &lt; 0, the maximum of the listed EEPs is used.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Once read, these EEPs get stored with the appropriate (helium files specific) variable name inside METISSE. Other EEPs (such as ZAMS_EEP and TAMS_EEP) are ignored as they don’t have an equivalent in helium star evolution.</p>
+</section>
+<section id="how-to-deal-with-incomplete-tracks">
+<h3>2.5.&nbsp;&nbsp;How to deal with incomplete tracks<a class="headerlink" href="#how-to-deal-with-incomplete-tracks" title="Link to this heading"></a></h3>
+<div class="docutils">
+<blockquote>
+<div><p><em>“In an ideal world, we wouldn’t need this section, but unfortunately, the world is not ideal, and incomplete or incorrect data is more common in datasets than we’d like to believe.”</em></p>
+</div></blockquote>
+</div>
+<p>For a given initial mass, METISSE calculates an evolutionary track by interpolating between the corresponding EEPs of neighbouring mass tracks.
+If any of the neighbouring tracks is incomplete, the interpolated track is also rendered incomplete. This section explains how METISSE identifies incomplete tracks and attempts to fill in the missing data.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>low_mass_final_eep</p></td>
+<td><p>Length of track for stars with initial mass &lt; Mec is compared <br> against <code class="docutils literal notranslate"><span class="pre">low_mass_final_eep</span></code> to determine completeness.</p></td>
+</tr>
+<tr class="row-odd"><td><p>high_mass_final_eep</p></td>
+<td><p>Length of track for stars with initial mass &gt;= Mec is compared <br> against <code class="docutils literal notranslate"><span class="pre">high_mass_final_eep</span></code> to determine completeness.</p></td>
+</tr>
+<tr class="row-even"><td><p>fix_track</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">.true.</span></code>, METISSE relaxes criteria for finding neighboring tracks to fix <br> incomplete tracks.</p></td>
+</tr>
+<tr class="row-odd"><td><p>lookup_index</p></td>
+<td><p>Determines the mass range for searching neighboring tracks when fixing <br>incomplete tracks. The range is M-(M<img class="math" src="_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/><code class="docutils literal notranslate"><span class="pre">lookup_index</span></code>) and M+(M<img class="math" src="_images/math/8ef1f282527041d7d5c4a46dd2c60a02a7a7c00b.png" alt="\times"/><code class="docutils literal notranslate"><span class="pre">lookup_index</span></code>), <br>where M is the initial mass of the star.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">low_mass_final_eep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">high_mass_final_eep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="n">fix_track</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="n">lookup_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>When evaluating the completeness of input tracks for naked helium stars, only the parameters <code class="docutils literal notranslate"><span class="pre">low_mass_final_eep</span></code> and <code class="docutils literal notranslate"><span class="pre">high_mass_final_eep</span></code> are considered and saved internally under helium-specific names.
+The options <code class="docutils literal notranslate"><span class="pre">fix_track</span></code> and <code class="docutils literal notranslate"><span class="pre">lookup_index</span></code> are not used in the format files of helium stars. Instead, the values provided in the format file for hydrogen stars are applied to both hydrogen and helium star tracks.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="input_files.html" class="btn btn-neutral float-left" title="Input files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="structure.html" class="btn btn-neutral float-right" title="Code structure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

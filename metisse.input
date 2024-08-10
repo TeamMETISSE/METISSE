@@ -5,7 +5,7 @@ METALLICITY_DIR = '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen'
 METALLICITY_DIR_HE = '/Users/poojan/stellar_tracks/MESA/big_z/helium'
 
 verbose = .true.
-
+Z_accuracy_limit = 8d-2
 /
 
 
