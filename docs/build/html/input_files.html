@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input files &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using custom input tracks" href="using_custom_input_tracks.html" />
+    <link rel="prev" title="Using METISSE to evolve binaries" href="usage_other.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            METISSE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Input files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sse-input-controls">SSE input controls</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#evolution-controls">EVOLUTION CONTROLS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#remnant-controls">REMNANT CONTROLS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timestep-controls">TIMESTEP CONTROLS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-controls">OUTPUT CONTROLS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#column-controls">COLUMN CONTROLS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#metisse-input-controls">METISSE input controls</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#track-controls">TRACK CONTROLS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#miscellaneous-controls">MISCELLANEOUS CONTROLS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Citing METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METISSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Input files</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/input_files.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="input-files">
+<h1>Input files<a class="headerlink" href="#input-files" title="Link to this heading"></a></h1>
+<p>Inputs to METISSE are provided using the following namelists:</p>
+<section id="sse-input-controls">
+<h2>1.&nbsp;&nbsp;SSE input controls<a class="headerlink" href="#sse-input-controls" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> holds input parameters describing the initial conditions of the star and stellar populations. For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/main_defaults.inc">main_defaults</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><em>main.input</em> is <strong>only</strong> read in METISSE’s standalone mode.
+When METISSE is used with other codes, the input parameters from the overlying code are used.</p>
+</div>
+<section id="evolution-controls">
+<h3>1.1.&nbsp;&nbsp;EVOLUTION CONTROLS<a class="headerlink" href="#evolution-controls" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>read_mass_from_file</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">.true.</span></code>, use initial masses listed in the <code class="docutils literal notranslate"><span class="pre">input_mass_file</span></code>.<br> Default is <code class="docutils literal notranslate"><span class="pre">.false.</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>input_mass_file</p></td>
+<td><p>Path to the input mass file if <code class="docutils literal notranslate"><span class="pre">read_mass_from_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code>. List one mass value per line of the file.</p></td>
+</tr>
+<tr class="row-even"><td><p>number_of_tracks</p></td>
+<td><p>Number of stars to be evolved. If <code class="docutils literal notranslate"><span class="pre">read_mass_from_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code>, <br>it denotes the number of mass values to be read from the <code class="docutils literal notranslate"><span class="pre">input_mass_file</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_mass</p></td>
+<td><p>Upper limit of the uniform distribution if <code class="docutils literal notranslate"><span class="pre">read_mass_from_file</span> <span class="pre">=</span> <span class="pre">.false.</span></code> and <code class="docutils literal notranslate"><span class="pre">number_of_tracks</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>min_mass</p></td>
+<td><p>Lower limit of the uniform distribution if <code class="docutils literal notranslate"><span class="pre">read_mass_from_file</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>initial_Z</p></td>
+<td><p>Initial metallicity</p></td>
+</tr>
+<tr class="row-even"><td><p>max_age</p></td>
+<td><p>Maximum age in Myrs</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>To evolve a single star, set <code class="docutils literal notranslate"><span class="pre">number_of_tracks</span> <span class="pre">=</span> <span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">min_mass</span></code> to the desired initial mass. In this case, <code class="docutils literal notranslate"><span class="pre">max_mass</span></code> is ignored.</p></li>
+<li><p>To compute the evolution of a population of stars with uniformly distributed initial masses, use <code class="docutils literal notranslate"><span class="pre">min_mass</span></code> to set the lower limit of the distribution, <code class="docutils literal notranslate"><span class="pre">max_mass</span></code> for the upper limit, and <code class="docutils literal notranslate"><span class="pre">number_of_tracks</span></code> for the size of the population.</p></li>
+</ol>
+</div>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! EVOLUTION CONTROLS</span>
+<span class="n">read_mass_from_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w">     </span>
+<span class="n">input_mass_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">number_of_tracks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="n">max_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">min_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">initial_Z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<span class="n">max_age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span><span class="w">   </span>
+</pre></div>
+</div>
+</section>
+<section id="remnant-controls">
+<h3>1.2.&nbsp;&nbsp;REMNANT CONTROLS<a class="headerlink" href="#remnant-controls" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>WD_mass_scheme</p></td>
+<td><p>White Dwarf (WD) luminosity calculation method:<br>(1) “Mestel” - <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/1983bhwd.book.....S/abstract">Shapiro S. L., Teukolsky S. A., 1983</a><br>(2) “Modified_mestel” - <a class="reference external" href="https://iopscience.iop.org/article/10.1086/374637">Hurley J. R., Shara M. M., 2003</a> <br> Default is “Modified_mestel”</p></td>
+</tr>
+<tr class="row-odd"><td><p>use_initial_final_mass_relation</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">.true.</span></code> use the initial final mass relation for white dwarfs <br> from <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/1995MNRAS.272..800H/abstract">Han, Z, Podsiadlowski, P., Eggleton, P. P. 1995</a>. <br> Default is <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>BHNS_mass_scheme</p></td>
+<td><p>Neutron Star/Black Hole (NS/BH) type and mass calculation method:<br>(1) “original_SSE” - <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">Hurley et al. 2000</a><br>(2) “Belczynski2002” - <a class="reference external" href="https://iopscience.iop.org/article/10.1086/340304">Belczynski et al. 2002</a><br>(3) “Belczynski2008” - <a class="reference external" href="https://iopscience.iop.org/article/10.1086/521026">Belczynski et al. 2008</a><br>(4) “Eldridge_Tout2004” - <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2004MNRAS.353...87E/abstract">Eldridge J. J., Tout C. A., 2004</a> <br> Default is “Belczynski2008”</p></td>
+</tr>
+<tr class="row-odd"><td><p>max_NS_mass</p></td>
+<td><p>Maximum neutron star mass. Recommended 1.8 for <br> BHNS_mass_scheme = “original_SSE”, 3.0 otherwise. Default is 3.0</p></td>
+</tr>
+<tr class="row-even"><td><p>allow_electron_capture</p></td>
+<td><p>Allow electron capture supernovae if <code class="docutils literal notranslate"><span class="pre">.true.</span></code>. <br> Default is <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! REMNANT CONTROLS </span>
+<span class="n">WD_mass_scheme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Modified_mestel&#39;</span>
+<span class="n">use_initial_final_mass_relation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w">       </span>
+<span class="n">BHNS_mass_scheme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Belczynski2008&#39;</span>
+<span class="n">max_NS_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.d0</span>
+<span class="n">allow_electron_capture</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w">  </span>
+</pre></div>
+</div>
+</section>
+<section id="timestep-controls">
+<h3>1.3.&nbsp;&nbsp;TIMESTEP CONTROLS<a class="headerlink" href="#timestep-controls" title="Link to this heading"></a></h3>
+<p>Like SSE, METISSE  uses <code class="docutils literal notranslate"><span class="pre">pts</span></code> variables to determine the timestep as the decimal fractions of the time spent in a phase.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>pts_1</p></td>
+<td><p>Determine timestep for 95% of MS, and HeMS. Default is 0.05</p></td>
+</tr>
+<tr class="row-odd"><td><p>pts_2</p></td>
+<td><p>Determine timestep for last 5% of MS, cHeBurn, HeHG, and HeGB. Default is 0.01</p></td>
+</tr>
+<tr class="row-even"><td><p>pts_3</p></td>
+<td><p>Determine timestep for HG, RGB, EAGB, and TPAGB. Default is 0.02</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! TIMESTEP CONTROLS</span>
+<span class="n">pts_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.05</span>
+<span class="n">pts_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.01</span>
+<span class="n">pts_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.02</span>
+</pre></div>
+</div>
+</section>
+<section id="output-controls">
+<h3>1.4.&nbsp;&nbsp;OUTPUT CONTROLS<a class="headerlink" href="#output-controls" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>write_output_to_file</p></td>
+<td><p>Generate a <a class="reference internal" href="glossary.html#sse-style-file"><span class="std std-ref">SSE-style</span></a> output file (file ending in .dat) at the END of the evolution. <br> Default is <code class="docutils literal notranslate"><span class="pre">.false.</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! OUTPUT CONTROLS</span>
+<span class="n">write_output_to_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+</pre></div>
+</div>
+</section>
+<section id="column-controls">
+<h3>1.5.&nbsp;&nbsp;COLUMN CONTROLS<a class="headerlink" href="#column-controls" title="Link to this heading"></a></h3>
+<p>By default, METISSE only uses the essential columns and the additional columns specified in <code class="docutils literal notranslate"><span class="pre">format_file</span></code> for interpolation. However, when using METISSE in its standalone mode, there exists an option for interpolating in all the columns or certain extra columns of the input tracks. The interpolated quantities are printed in a <a class="reference internal" href="glossary.html#mist-style-file"><span class="std std-ref">MIST-style</span></a> file if <code class="docutils literal notranslate"><span class="pre">write_eep_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">METISSE_controls</span></code>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>read_all_columns</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">.true.</span></code>, interpolate in all columns of input files. Default is <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>extra_columns</p></td>
+<td><p>Extra columns to be used for interpolation. Up to 100 column names can be listed <br> as strings, separated by commas. <br> <em>Only read if <code class="docutils literal notranslate"><span class="pre">read_all_columns</span></code> is <code class="docutils literal notranslate"><span class="pre">.false.</span></code></em></p></td>
+</tr>
+<tr class="row-even"><td><p>extra_columns_file</p></td>
+<td><p>Alternative way for listing extra column names. List one column name per line <br>in the <code class="docutils literal notranslate"><span class="pre">extra_columns_file</span></code> and provide the path of the file here. <br> <em>Only read if <code class="docutils literal notranslate"><span class="pre">read_all_columns</span></code> is <code class="docutils literal notranslate"><span class="pre">.false.</span></code></em>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! COLUMN CONTROLS</span>
+<span class="n">read_all_columns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="n">extra_columns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">extra_columns_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="metisse-input-controls">
+<h2>2.&nbsp;&nbsp;METISSE input controls<a class="headerlink" href="#metisse-input-controls" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> contains input parameters specific to METISSE.</p>
+<p>For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/metisse_defaults.inc">metisse_defaults</a>.</p>
+<section id="track-controls">
+<h3>2.1.&nbsp;&nbsp;TRACK CONTROLS<a class="headerlink" href="#track-controls" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>METALLICITY_DIR</p></td>
+<td><p>Absolute path to the folder containing the <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for the hydrogen stars. <br> <strong>METISSE will stop if <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> is an empty string.</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>METALLICITY_DIR_HE</p></td>
+<td><p>Absolute path to the folder containing the <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for the naked helium stars. <br>If <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> is an empty string, SSE fitting formulae for naked helium stars <br> are used.</p></td>
+</tr>
+<tr class="row-even"><td><p>Z_accuracy_limit</p></td>
+<td><p>METISSE checks for a match in metallicity based on the condition: <br> <img class="math" src="_images/math/5c215d5ac9f5ca31f62a167825847f2941054e43.png" alt="\frac{abs(Z\_files - Z\_input)}{min(Z\_files, Z\_input)} &gt;"/> <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code>, <br> where <img class="math" src="_images/math/a39d04832184c87e79cf05bc4416edc9210581ca.png" alt="Z\_files"/> is the metallicity value of the tracks (from the metallicity file)<br>   and <img class="math" src="_images/math/44f87b49ed15394ed402e55fe87bdc2041becf6d.png" alt="Z\_input"/> is the input value. Default is 10<sup>-2</sup></p></td>
+</tr>
+<tr class="row-odd"><td><p>mass_accuracy_limit</p></td>
+<td><p>METISSE skips mass-interpolation and uses a neighboring mass track if <br> the absolute difference between the initial mass of that track <br>and the input mass is less than the <code class="docutils literal notranslate"><span class="pre">mass_accuracy_limit</span></code>. Default is 10<sup>-4</sup></p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! TRACK CONTROLS</span>
+<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<span class="n">Z_accuracy_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="n">d</span><span class="o">-</span><span class="mi">2</span>
+<span class="n">mass_accuracy_limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="n">d</span><span class="o">-</span><span class="mi">4</span>
+</pre></div>
+</div>
+</section>
+<section id="miscellaneous-controls">
+<h3>2.2.&nbsp;&nbsp;MISCELLANEOUS CONTROLS<a class="headerlink" href="#miscellaneous-controls" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>verbose</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">.true.</span></code>, print important details when reading the input tracks on the terminal. <br>Default is <code class="docutils literal notranslate"><span class="pre">.false.</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>write_eep_file</p></td>
+<td><p>Generate a <a class="reference internal" href="glossary.html#mist-style-file"><span class="std std-ref">MIST-style</span></a> output file at every step of mass interpolation. <br> Useful when computing evolution of isolated single stars with <br>implicit mass loss and for debugging purposes. Default is <code class="docutils literal notranslate"><span class="pre">.false.</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p>write_error_to_file</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">.true.</span></code>, error messages from METISSE are written to a file named <code class="docutils literal notranslate"><span class="pre">fort.99</span></code> <br>otherwise they are printed on screen (does NOT apply to errors during <br>reading input files). Default is <code class="docutils literal notranslate"><span class="pre">.true.</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>construct_postagb_track</p></td>
+<td><p>Artificially construct the HRD (Hertzsprung-Russell diagram) track between <br> tip of the AGB to the WD cooling track (for low-mass stars). It is <br>important if input tracks do not contain this phase but can be used regardless. <br>Default is <code class="docutils literal notranslate"><span class="pre">.false.</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! MISCELLANEOUS CONTROLS</span>
+
+<span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="n">write_eep_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w">		</span>
+<span class="n">write_error_to_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="n">construct_postagb_track</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage_other.html" class="btn btn-neutral float-left" title="Using METISSE to evolve binaries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_custom_input_tracks.html" class="btn btn-neutral float-right" title="Using custom input tracks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
