@@ -4,7 +4,7 @@ module z_support
 
     character(LEN=strlen) :: eep_tracks_dir
     logical :: read_eep_files, read_all_columns, get_cols
-
+    
     integer :: max_files = 50
     character(LEN=strlen) :: format_file, extra_columns_file
     character(LEN=strlen), allocatable :: metallicity_file_list(:),metallicity_file_list_he(:)
@@ -18,7 +18,6 @@ module z_support
     character(LEN=strlen) :: column_name_file
     type(column), allocatable :: key_cols(:), temp_cols(:)
     integer :: total_cols
-
     character:: extra_char
 
     type(track), allocatable :: xa(:)
@@ -33,6 +32,7 @@ module z_support
     real(dp) :: he_core_mass_limit = 2.2d0 !Msun
 
     logical :: debug_z
+
 
     namelist /SSE_input_controls/ initial_Z, max_age,read_mass_from_file,&
                         input_mass_file, number_of_tracks, max_mass, min_mass, &
@@ -66,6 +66,7 @@ module z_support
         !path is relative to the executable
         METISSE_DIR = '.'
         include 'defaults/metisse_defaults.inc'
+        
     end subroutine read_defaults
     
     subroutine read_main_input(infile,ierr)
@@ -109,19 +110,17 @@ module z_support
     end subroutine read_metisse_input
     
     
-    subroutine get_metallicity_file_list(path,file_list)
-        character(LEN=strlen) :: path
+    subroutine get_metallicity_file_list(path,file_list,filename)
+        character(LEN=strlen) :: path, filename
         character(LEN=strlen), allocatable :: temp_list(:),file_list(:)
         integer :: ierr, n
 
         if (allocated(file_list)) deallocate(file_list)
         ierr = 0
         
-        call get_files_from_path(path,'_metallicity.in',temp_list,ierr)
+        call get_files_from_path(path,'_metallicity.in',filename,temp_list,ierr)
         if (.not. allocated(temp_list)) then
-            print*, 'Could not find metallicity file(s) in ',trim(path)
-            ierr = 1
-            return
+            ierr = 1; return
         endif
         
         n = size(temp_list)
@@ -249,32 +248,40 @@ module z_support
 
     end subroutine read_format
 
-    subroutine get_files_from_path(path,extension,file_list,ierr)
-        character(LEN=strlen), intent(in) :: path
+    subroutine get_files_from_path(path,extension,filename,list,ierr)
+        character(LEN=strlen), intent(in) :: path,  filename
+
         character(LEN=*), intent(in) :: extension
-        character(LEN=strlen), allocatable :: file_list(:)
+        
+        character(LEN=strlen), allocatable :: list(:)
         integer, intent(out) ::  ierr
 
         character(LEN=strlen) :: str,cmd
-        integer :: n,i, io,isize
+        integer :: n,i, io, iosize
         
         ierr = 0
         
-        if (len(trim(path)) <1 )then
-            ierr = 1; return
+        if (mode ==0) then
+        
+            if (path=='' .or. filename == '')then
+                ierr = 1; return
+            endif
+            
+            cmd = 'find '//trim(path)//'/*'//trim(extension)//' -maxdepth 1 > ' //trim(filename)// ' 2> .error.txt'
+            
+            call system(cmd,ierr)
+            if (ierr/=0) return
+
+            inquire(file='.error.txt', size=iosize)
+            if (iosize>0)then
+                ierr = 1; return
+            endif
+        
         endif
         
-        cmd = 'find '//trim(path)//'/*'//trim(extension)//' -maxdepth 1 > .file_name.txt 2> .error.txt'
-        call system(cmd,ierr)
-        if (ierr/=0) return
-
-        inquire(file='.error.txt', size=isize)
-        if (isize>0)then
-            ierr = 1; return
-        endif
-
+        
         io = alloc_iounit(ierr)
-        open(io,FILE='.file_name.txt',action="read")
+        open(io,FILE=trim(filename),status = "old", action="read")
 
         !count the number of tracks
         n = 0
@@ -284,14 +291,16 @@ module z_support
             n = n+1
         end do
 
-        allocate(file_list(n))
+        allocate(list(n))
         rewind(io)
         ierr = 0
         do i = 1,n
             read(io,'(a)',iostat=ierr)str
             if (ierr/=0) exit
-            file_list(i) = trim(str)
+            list(i) = trim(str)
         end do
+        
+        
         close(io)
         call free_iounit(io)
     end subroutine get_files_from_path

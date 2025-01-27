@@ -32,6 +32,11 @@ subroutine initialize_front_end(front_end_name)
     
 end subroutine initialize_front_end
 
+subroutine set_file_mode(i)
+    use track_support, only: mode
+    integer, intent(in) :: i
+    mode = i
+end subroutine
 
 subroutine allocate_track(n,mass)
     use track_support
