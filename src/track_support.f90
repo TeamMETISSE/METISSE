@@ -29,7 +29,10 @@ module track_support
     integer, parameter :: main = 0
     integer, parameter :: BSE = 1
     integer, parameter :: COSMIC = 2
-
+    
+    ! mode >0 enables read-only mode for files when multi-threading
+    integer :: mode = 0
+    
     character(len=strlen) :: METISSE_DIR,METALLICITY_DIR,METALLICITY_DIR_HE
 
     ! for use when constructing EEP distance
