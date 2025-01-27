@@ -21,7 +21,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     ! decide how to deal with errors.
 
     code_error = .false.
-    nloop = 2    ! read both hydrogen and helium tracks by default
     
     if (front_end <0) then
         print*, 'METISSE error: front_end is not initialized'
@@ -32,6 +31,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     
     ! read one set of stellar tracks (of input Z)
     load_tracks = .false.
+    use_sse_NHe = .false.
     
     if (allocated(sa) .eqv. .true.) then
         ! tracks have been loaded at least once, for initial_Z
@@ -136,7 +136,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         if (len(trim(METALLICITY_DIR_HE))< 1) then
             write(out_unit,*) "Warning: METALLICITY_DIR_HE/path_to_he_tracks is an empty string"
             write(out_unit,*) "Switching to SSE formulae for helium stars "
-            nloop = 1
+            use_sse_NHe = .true.
         else
             temp_filename  = '.Zfilenames_He.txt'
             call get_metallicity_file_list(METALLICITY_DIR_HE,metallicity_file_list_he,temp_filename)
@@ -155,8 +155,14 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     
     if (front_end /= main) initial_Z = z
     write(out_unit,'(a,1p1e13.5)') ' Input Z is :', z
-    
-    use_sse_NHe = .true.
+
+    if (use_sse_NHe)then
+        ! only read hydrogen tracks
+        nloop = 1
+    else
+        ! read both hydrogen and helium tracks
+        nloop = 2
+    endif
 
     ! need to intialize these seperately as they may be
     ! used uninitialized if he tracks are not present
@@ -175,10 +181,11 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
                 write(out_unit,'(a,1p1e13.5)')" No matching Z_files found with Z_accuracy_limit =",Z_accuracy_limit
                 write(out_unit,*)"Switching to SSE formulae for helium stars "
                 ierr = 0
+                use_sse_NHe = .true.
                 cycle
             endif
             write(out_unit,'(a,1p1e13.5)')" Found matching Z_files ",initial_Z
-
+          
             USE_DIR = METALLICITY_DIR_HE
             temp_filename = '.Mfilenames_He.txt'
 
@@ -278,8 +285,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             call set_zparameters_he(num_tracks)
             call copy_and_deallocatex(num_tracks,sa_he)
             call get_minmax(sa_he(1)% is_he_track,Mmax_he_array,Mmin_he_array)
-
-            use_sse_NHe = .false.
             if (allocated(core_cols_he)) deallocate(core_cols_he)
 
             allocate(core_cols_he(4))
