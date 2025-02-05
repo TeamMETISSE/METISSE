@@ -1148,8 +1148,6 @@ module z_support
 
         end do
         
-        !sort the array based on intial mass if not sorted already
-        call sort_minitial(y)
         !Now deallocate xa
         deallocate(xa)
         deallocate(key_cols)
@@ -1167,25 +1165,33 @@ module z_support
         endif
     end function
     
-    subroutine sort_minitial(y)
-        type(track):: y(:), temp
-        real(dp), allocatable :: list(:)
+    subroutine sort_minitial()
+        type(track):: temp
+        real(dp), allocatable :: list(:),d(:)
         integer :: i, a, loc, n
 
-        list = y% initial_mass
-        n = size(list)
+        n = size(xa)
+        allocate(list(n),d(n-1))
         
         !sort array and swap tracks where needed
+        do while (.true.)
+        list = xa% initial_mass
+        
+        d = list(2:n)-list(1:n-1)
+        if(all(d>=0)) exit !test for monotonicity
         do i = 1, n-1
             a = minloc(list(i:n),dim=1)
             loc = (i - 1) + a
             if (loc/=i) then
-                print*, 'swapping input tracks at',loc,i
-                temp = y(loc)
-                y(loc) = y(i)
-                y(i) = temp
+                if (debug_z)print*, 'swapping input tracks at',loc,i
+                temp = xa(loc)
+                xa(loc) = xa(i)
+                xa(i) = temp
             endif
         end do
+        end do
+        
+        deallocate(list,d)
     end subroutine sort_minitial
     
     subroutine get_minmax(is_he_track,Mmax,Mmin)

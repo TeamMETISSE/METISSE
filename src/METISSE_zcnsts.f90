@@ -278,6 +278,10 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
 
         ! Process the input tracks
         if (i==2) then
+            !sort the array based on intial mass if not sorted already
+            call sort_minitial()
+            !reset z parameters where available
+            !and determine cutoff masses
             call set_zparameters_he(num_tracks)
             call copy_and_deallocatex(num_tracks,sa_he)
             call get_minmax(sa_he(1)% is_he_track,Mmax_he_array,Mmin_he_array)
@@ -290,6 +294,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             core_cols_he(3) = i_co_core
             if (i_he_RCO>0) core_cols_he(4) = i_he_RCO
         else
+            !sort the array based on intial mass if not sorted already
+            call sort_minitial()
             !reset z parameters where available
             !and determine cutoff masses
             call set_zparameters(num_tracks,zpars)
