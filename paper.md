@@ -9,31 +9,27 @@ tags:
 authors:
   - name: Poojan Agrawal
     orcid: 0000-0002-1135-984X
-    affiliation: "1,2" # (Multiple affiliations must be quoted)
+    affiliation: 1 
   - name: Katie Brievik
     orcid: 0000-0001-5228-6598
     affiliation: 3 
   - name: Jarrod Hurley
     orcid: 0000-0003-2694-0415
-    affiliation: "4,5" 
-  - name: Duncan Maclean
-    orcid: 
-    affiliation: 2 
+    affiliation: "4,5" # (Multiple affiliations must be quoted)
   - name: Carl Rodriguez
     orcid: 0000-0003-4175-8881
-    affiliation: "2,3" 
-  - name: Alex Kemp
-    orcid: 0000-0003-2059-5841
-    affiliation: 1
+    affiliation: 2 
   - name: Simon Stevenson
     orcid: 0000-0002-6100-537X
     affiliation: "4,5" 
+  - name: Alex Kemp
+    orcid: 0000-0003-2059-5841
+    affiliation: 1
   - name: Dorottya Szécsi
     orcid: 0000-0001-6473-7085
     affiliation: 6
 
     
-
 
 affiliations:
  - name: Institute of Astronomy, KU Leuven, Celestijnenlaan 200D, B-3001, Leuven, Belgium
@@ -68,6 +64,10 @@ As a result, rapid stellar evolution codes that rely on fitting formulas, manual
 METISSE has already been employed in several scientific publications. For instance, it has been used to demonstrate the impact of core overshooting — one of the major uncertainties in stellar evolution — on the evolutionary outcomes of massive binary systems[@Agrawal:2023]. Multiple ongoing projects use METISSE alongside the binary population synthesis code COSMIC[@Breivik:2020] to investigate the population properties of black hole-X-ray binaries, LISA white dwarf binaries, and GAIA black hole-star systems. In the era of big-data astronomy, driven by high-quality observational data from both ground-based and space-based telescopes, as well as gravitational wave and multi-messenger detectors, METISSE facilitates the seamless incorporation of updates in stellar evolution into simulations that model stellar populations and their interactions.
 
 # Acknowledgements
+
+PA, JH and SS acknowledge support from the Australian Research Council Centre of Excellence for Gravitational Wave Discovery (OzGrav), through project number CE170100004. This work was supported by NSF Grant AST-2009916 to Carnegie Mellon University and The University of North Carolina at Chapel Hill. CR acknowledges support from a Charles E.~Kaufman Foundation New Investigator Research Grant, an Alfred P.~Sloan Research Fellowship, and a David and Lucile Packard Foundation Fellowship. 
+SS is supported by the ARC Discovery Early Career Research Award DE220100241. 
+DSz acknowledges support from the National Science Center (NCN), Poland under grant number OPUS 2021/41/B/ST9/00757.
 
 
 # References
