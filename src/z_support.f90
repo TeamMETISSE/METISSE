@@ -250,39 +250,33 @@ module z_support
 
     subroutine get_files_from_path(path,extension,filename,list,ierr)
         character(LEN=strlen), intent(in) :: path,  filename
-
         character(LEN=*), intent(in) :: extension
-        
         character(LEN=strlen), allocatable :: list(:)
         integer, intent(out) ::  ierr
-
-        character(LEN=strlen) :: str,cmd
+        character(LEN=512) :: str,cmd
         integer :: n,i, io, iosize
-        
+        logical :: exists
         ierr = 0
-        
         if (mode ==0) then
-        
             if (path=='' .or. filename == '')then
                 ierr = 1; return
             endif
+            ! remove any pre-existing file to avoid contamination'
+            inquire(file=trim(filename), exist=exists)
+            cmd  = 'rm '//trim(filename)
+            if (exists) call system (cmd)
             
             cmd = 'find '//trim(path)//'/*'//trim(extension)//' -maxdepth 1 > ' //trim(filename)// ' 2> .error.txt'
-            
             call system(cmd,ierr)
             if (ierr/=0) return
-
             inquire(file='.error.txt', size=iosize)
             if (iosize>0)then
                 ierr = 1; return
             endif
-        
         endif
-        
         
         io = alloc_iounit(ierr)
         open(io,FILE=trim(filename),status = "old", action="read")
-
         !count the number of tracks
         n = 0
         do while(.true.)
@@ -299,12 +293,24 @@ module z_support
             if (ierr/=0) exit
             list(i) = trim(str)
         end do
-        
-        
         close(io)
         call free_iounit(io)
     end subroutine get_files_from_path
 
+    subroutine get_csafe_string(cstring, fstring)
+        integer :: inull
+        character(LEN=*), intent(in) :: cstring
+        character(LEN=strlen), intent(out) ::  fstring
+
+        inull = index(cstring, char(0))
+        if (inull>0) then
+            fstring = adjustl((cstring(1:inull-1)))
+        else
+            fstring = trim(cstring)
+        endif
+            
+    end subroutine
+    
     subroutine read_eep(x)
         !adapted from iso/iso_eep_support.f90
         type(track), intent(inout) :: x
