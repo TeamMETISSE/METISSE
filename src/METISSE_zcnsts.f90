@@ -9,13 +9,11 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     
     character(LEN=strlen), allocatable :: track_list(:)
     character(LEN=strlen) :: USE_DIR, find_cmd, rnd, infile, temp_filename
-    integer :: i,j,nloop
-    integer :: num_tracks
+    integer :: i,j,nloop, num_tracks
     logical :: load_tracks, debug
     
     debug = .false.
     ierr = 0
-    mode = 0
     ! At this point in the code front_end might not be assigned
     ! So we return ierr and let zcnsts.f of the overlying code
     ! decide how to deal with errors.
@@ -88,8 +86,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             call read_metisse_input(infile,ierr)
             if (ierr/=0) call stop_code
         case(COSMIC)
-            METALLICITY_DIR = path_to_tracks
-            METALLICITY_DIR_HE = path_to_he_tracks
+             call get_csafe_string(path_to_tracks,METALLICITY_DIR)
+             call get_csafe_string(path_to_he_tracks,METALLICITY_DIR_HE)
         case default
             print*, "METISSE error: reading inputs; unrecognized front_end_name"
             ierr = 1; return
