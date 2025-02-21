@@ -8,20 +8,17 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     integer, intent(out) :: ierr
     
     character(LEN=strlen), allocatable :: track_list(:)
-    character(LEN=strlen) :: USE_DIR, find_cmd, rnd, infile
-    integer :: i,j,nloop
-    integer :: num_tracks
+    character(LEN=strlen) :: USE_DIR, find_cmd, rnd, infile, temp_filename
+    integer :: i,j,nloop, num_tracks
     logical :: load_tracks, debug
     
     debug = .false.
     ierr = 0
-    
     ! At this point in the code front_end might not be assigned
     ! So we return ierr and let zcnsts.f of the overlying code
     ! decide how to deal with errors.
 
     code_error = .false.
-    nloop = 2    ! read both hydrogen and helium tracks by default
     
     if (front_end <0) then
         print*, 'METISSE error: front_end is not initialized'
@@ -32,6 +29,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     
     ! read one set of stellar tracks (of input Z)
     load_tracks = .false.
+    use_sse_NHe = .false.
     
     if (allocated(sa) .eqv. .true.) then
         ! tracks have been loaded at least once, for initial_Z
@@ -50,7 +48,13 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             (trim(path_to_he_tracks)/=trim(METALLICITY_DIR_HE))) load_tracks = .true.
         endif
         
-        if (load_tracks.eqv. .false.) then
+        if (load_tracks) then
+            if (mode/=0) then
+              print*, 'METISSE error: cannot change path or metallicity mid-run when using mpi'
+              ierr = 1
+              return
+            endif
+        else
             if (debug) print*, 'No change in metallicity or paths, exiting METISSE_zcnsts',initial_Z,z
             return
         endif
@@ -82,8 +86,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             call read_metisse_input(infile,ierr)
             if (ierr/=0) call stop_code
         case(COSMIC)
-            METALLICITY_DIR = path_to_tracks
-            METALLICITY_DIR_HE = path_to_he_tracks
+             call get_csafe_string(path_to_tracks,METALLICITY_DIR)
+             call get_csafe_string(path_to_he_tracks,METALLICITY_DIR_HE)
         case default
             print*, "METISSE error: reading inputs; unrecognized front_end_name"
             ierr = 1; return
@@ -113,10 +117,11 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             ierr = 1
             return
         else
-            call get_metallicity_file_list(METALLICITY_DIR,metallicity_file_list)
+            temp_filename = '.Zfilenames_H.txt'
+            call get_metallicity_file_list(METALLICITY_DIR,metallicity_file_list,temp_filename)
                 
             if (.not. allocated(metallicity_file_list)) then
-                write(*,*) "METISSE error: metallicity file(s) not found in", trim(METALLICITY_DIR)
+                write(*,*) "METISSE error: metallicity file(s) not found in ", trim(METALLICITY_DIR)
                 write(*,*) "check if METALLICITY_DIR/path_to_tracks is correct"
                 ierr = 1
                 return
@@ -129,12 +134,13 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         if (len(trim(METALLICITY_DIR_HE))< 1) then
             write(out_unit,*) "Warning: METALLICITY_DIR_HE/path_to_he_tracks is an empty string"
             write(out_unit,*) "Switching to SSE formulae for helium stars "
-            nloop = 1
+            use_sse_NHe = .true.
         else
-            call get_metallicity_file_list(METALLICITY_DIR_HE,metallicity_file_list_he)
+            temp_filename  = '.Zfilenames_He.txt'
+            call get_metallicity_file_list(METALLICITY_DIR_HE,metallicity_file_list_he,temp_filename)
 
             if (.not. allocated(metallicity_file_list_he)) then
-                write(*,*) "METISSE error: metallicity file(s) not found in", trim(METALLICITY_DIR_HE)
+                write(*,*) "METISSE error: metallicity file(s) not found in ", trim(METALLICITY_DIR_HE)
                 write(*,*) "check if METALLICITY_DIR_HE/path_to_he_tracks is correct"
                 ierr = 1
                 return
@@ -147,8 +153,14 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
     
     if (front_end /= main) initial_Z = z
     write(out_unit,'(a,1p1e13.5)') ' Input Z is :', z
-    
-    use_sse_NHe = .true.
+
+    if (use_sse_NHe)then
+        ! only read hydrogen tracks
+        nloop = 1
+    else
+        ! read both hydrogen and helium tracks
+        nloop = 2
+    endif
 
     ! need to intialize these seperately as they may be
     ! used uninitialized if he tracks are not present
@@ -167,11 +179,14 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
                 write(out_unit,'(a,1p1e13.5)')" No matching Z_files found with Z_accuracy_limit =",Z_accuracy_limit
                 write(out_unit,*)"Switching to SSE formulae for helium stars "
                 ierr = 0
+                use_sse_NHe = .true.
                 cycle
             endif
             write(out_unit,'(a,1p1e13.5)')" Found matching Z_files ",initial_Z
-
+          
             USE_DIR = METALLICITY_DIR_HE
+            temp_filename = '.Mfilenames_He.txt'
+
         else
             write(out_unit,*) 'Reading main (hydrogen star) tracks'
             call get_metallcity_file_from_Z(metallicity_file_list,Z_H,initial_Z,ierr)
@@ -184,6 +199,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
 
             write(out_unit,'(a,1p1e13.5)')" Found matching Z_files ",initial_Z
             USE_DIR = METALLICITY_DIR
+            temp_filename = '.Mfilenames_H.txt'
         endif
         
         !read file-format
@@ -191,11 +207,11 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             
         !get filenames from eep_tracks_dir
         if (read_eep_files) file_extension = '.eep'
-        call get_files_from_path(eep_tracks_dir,file_extension,track_list,ierr)
+        call get_files_from_path(eep_tracks_dir,file_extension,temp_filename,track_list,ierr)
         
         if (ierr/=0) then
             eep_tracks_dir = trim(USE_DIR)//'/'//trim(eep_tracks_dir)
-            call get_files_from_path(eep_tracks_dir,file_extension,track_list,ierr)
+            call get_files_from_path(eep_tracks_dir,file_extension,temp_filename,track_list,ierr)
         endif
         
         if (ierr/=0 ) then
@@ -267,8 +283,6 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             call set_zparameters_he(num_tracks)
             call copy_and_deallocatex(num_tracks,sa_he)
             call get_minmax(sa_he(1)% is_he_track,Mmax_he_array,Mmin_he_array)
-
-            use_sse_NHe = .false.
             if (allocated(core_cols_he)) deallocate(core_cols_he)
 
             allocate(core_cols_he(4))

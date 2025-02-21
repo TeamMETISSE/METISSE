@@ -8,7 +8,7 @@ subroutine initialize_front_end(front_end_name)
     use track_support
     character (len=*), intent(in) :: front_end_name
 
-    if (verbose)print*, 'Setting front end to',trim(front_end_name)
+    if (verbose)print*, 'Setting front end to ',trim(front_end_name)
 
     if (ANY((/'MAIN','main'/)== trim(front_end_name))) then
         ! METISSE's main code as described in Agrawal et al. 2020
@@ -32,6 +32,11 @@ subroutine initialize_front_end(front_end_name)
     
 end subroutine initialize_front_end
 
+subroutine set_file_mode(i)
+    use track_support, only: mode
+    integer, intent(in) :: i
+    mode = i
+end subroutine
 
 subroutine allocate_track(n,mass)
     use track_support
