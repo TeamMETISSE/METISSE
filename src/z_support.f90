@@ -308,7 +308,6 @@ module z_support
         else
             fstring = trim(cstring)
         endif
-            
     end subroutine
     
     subroutine read_eep(x)
