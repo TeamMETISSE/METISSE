@@ -1,9 +1,8 @@
-subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
+subroutine METISSE_zcnsts(z,zpars,ierr)
     use track_support
     use z_support
 
     real(dp), intent(in) :: z
-    character(len=*), intent(in) :: path_to_tracks, path_to_he_tracks
     real(dp), intent(out) :: zpars(20)
     integer, intent(out) :: ierr
     
@@ -25,7 +24,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         ierr = 1; return
     endif
     
-    if (debug) print*, 'in METISSE_zcsnts',z, trim(path_to_tracks),trim(path_to_he_tracks)
+    if (debug) print*, 'in METISSE_zcsnts',z
     
     ! read one set of stellar tracks (of input Z)
     load_tracks = .false.
@@ -43,11 +42,8 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         ! Currently only for cosmic, as it can change path_to_tracks mid-computation
         ! through its python wrapper
         
-        if (front_end == COSMIC)then
-            if((trim(path_to_tracks)/=trim(METALLICITY_DIR)) .or. &
-            (trim(path_to_he_tracks)/=trim(METALLICITY_DIR_HE))) load_tracks = .true.
-        endif
-        
+        if (front_end == COSMIC) call check_path_change(load_tracks)
+    
         if (load_tracks) then
             if (mode/=0) then
               print*, 'METISSE error: cannot change path or metallicity mid-run when using mpi'
@@ -86,8 +82,7 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             call read_metisse_input(infile,ierr)
             if (ierr/=0) call stop_code
         case(COSMIC)
-             call get_csafe_string(path_to_tracks,METALLICITY_DIR)
-             call get_csafe_string(path_to_he_tracks,METALLICITY_DIR_HE)
+             call get_COSMIC_input()
         case default
             print*, "METISSE error: reading inputs; unrecognized front_end_name"
             ierr = 1; return
@@ -191,9 +186,9 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
             write(out_unit,*) 'Reading main (hydrogen star) tracks'
             call get_metallcity_file_from_Z(metallicity_file_list,Z_H,initial_Z,ierr)
             if (ierr/=0) then
-                write(out_unit,'(a,1p1e13.5)')" No matching Z_files found with Z_accuracy_limit =",Z_accuracy_limit
-                write(out_unit,*)"If needed, Z_accuracy_limit can be increased to match one of the available Z_files "
-                write(out_unit,'(1p100e13.5)') pack(Z_H, mask = Z_H>0)
+                write(*,'(a,1p1e13.5)')" No matching Z_files found with Z_accuracy_limit =",Z_accuracy_limit
+                write(*,*)"If needed, Z_accuracy_limit can be increased to match one of the available Z_files "
+                write(*,'(1p100e13.5)') pack(Z_H, mask = Z_H>0)
                 return
             endif
 
