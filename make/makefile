@@ -36,7 +36,7 @@ interp_support.o: $(METISSE_src_dir)/interp_support.f90 track_support.o
 sse_support.o: $(METISSE_src_dir)/sse_support.f90 track_support.o
 remnant_support.o: $(METISSE_src_dir)/remnant_support.f90 track_support.o sse_support.o
 
-assign_commons.o: $(METISSE_src_dir)/assign_commons_bse.f90 track_support.o remnant_support.o
+assign_commons.o: $(METISSE_src_dir)/assign_commons_other.f90 track_support.o remnant_support.o
 METISSE_miscellaneous.o: $(METISSE_src_dir)/METISSE_miscellaneous.f90 track_support.o
 comenv_lambda.o: $(METISSE_src_dir)/comenv_lambda.f90 track_support.o
 
