@@ -69,8 +69,8 @@ The usual input namelist `METISSE_input_controls` is not read when using COSMIC.
 
 ``` ipython
 SSEDict = {'stellar_engine': 'metisse', 
-               'path_to_tracks': '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen', 
-               'path_to_he_tracks': '/Users/poojan/stellar_tracks/MESA/big_z/helium' 
+               'path_to_tracks': '/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/', 
+               'path_to_he_tracks': '/Users/poojan/Downloads/sample_tracks_solarZ/Helium/' 
                }
 ```
 
@@ -124,9 +124,9 @@ $ ./mk
 &METISSE_input_controls
 
 
-METALLICITY_DIR = '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen'
+METALLICITY_DIR = '/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/'
             
-METALLICITY_DIR_HE = '/Users/poojan/stellar_tracks/MESA/big_z/helium'
+METALLICITY_DIR_HE = '/Users/poojan/Downloads/sample_tracks_solarZ/Helium/'
 
 /
 
