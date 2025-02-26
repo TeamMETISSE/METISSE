@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting started &mdash; METISSE 0.1 documentation</title>
+  <title>Installation &mdash; METISSE 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
@@ -46,10 +46,13 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#prequisites">Prequisites</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prequisites">Prequisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fortran-compiler">Fortran compiler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-tracks">Input tracks</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#code">Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#input-tracks">Input tracks</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-metisse">Running METISSE</a></li>
 </ul>
 </li>
@@ -58,7 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Citing METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Community guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -76,7 +79,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Getting started</li>
+      <li class="breadcrumb-item active">Installation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/getting_started.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -86,27 +89,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="getting-started">
-<h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
 <section id="prequisites">
 <h2>1.&nbsp;&nbsp;Prequisites<a class="headerlink" href="#prequisites" title="Link to this heading"></a></h2>
+<section id="fortran-compiler">
+<h3>1.1.&nbsp;&nbsp;Fortran compiler<a class="headerlink" href="#fortran-compiler" title="Link to this heading"></a></h3>
 <p>METISSE requires a Fortran installation specifically gfortran that comes with gcc/6.4.0 and more recent versions.
 Check out <a class="reference external" href="https://fortran-lang.org/learn/os_setup/install_gfortran/">this page</a> if you need help installing gfortran.</p>
+</section>
+<section id="input-tracks">
+<h3>1.2.&nbsp;&nbsp;Input tracks<a class="headerlink" href="#input-tracks" title="Link to this heading"></a></h3>
+<p>The user also needs to provide stellar tracks for METISSE to work.</p>
+<p>A set of sample tracks for testing METISSE can be downloaded from <a class="reference external" href="https://zenodo.org/records/14918163">zenodo</a>. The tracks have been computed using the stellar evolution code <a class="reference external" href="https://docs.mesastar.org/en/release-r24.03.1/">MESA</a> and are ready for use with METISSE.
+The folder <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> contains stellar tracks with initial masses between 0.1 and 300 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> for each metallicity. Similarly the folder <code class="docutils literal notranslate"><span class="pre">helium</span></code> contains tracks of naked helium stars in the mass range 0.3 and 150 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub>. The tracks are for non-rotating stars at solar metallicity (Z=0.02).
+A pre-packaged grid of MESA tracks for hydrogen and helium stars with metallicity values ranging from 10<sup>-5</sup> to 10<sup>-1</sup> will be available soon (a future Zenodo entry).</p>
+<p>One can also use their custom set of hydrogen and helium stellar tracks, computed using different input parameters, or even different stellar evolution codes with METISSE. For instructions on how to use a custom set of input stellar tracks with METISSE, refer to <a class="reference internal" href="using_custom_input_tracks.html"><span class="std std-doc">Using custom input tracks</span></a>.</p>
+</section>
 </section>
 <section id="code">
 <h2>2.&nbsp;&nbsp;Code<a class="headerlink" href="#code" title="Link to this heading"></a></h2>
 <p>The code package for METISSE is available at this <a class="reference external" href="https://github.com/TeamMETISSE/METISSE">GitHub Repository</a>.</p>
 </section>
-<section id="input-tracks">
-<h2>3.&nbsp;&nbsp;Input tracks<a class="headerlink" href="#input-tracks" title="Link to this heading"></a></h2>
-<p>The user also needs to provide stellar tracks for METISSE to work.</p>
-<p>A pre-packaged grid of stellar tracks for hydrogen and helium stars can be downloaded from (a future Zenodo entry). These tracks have been computed using the stellar evolution code <a class="reference external" href="https://docs.mesastar.org/en/release-r24.03.1/">MESA</a> and are ready for use with METISSE.
-The tracks are for non-rotating stars with metallicity values ranging from 10<sup>-5</sup> to 10<sup>-1</sup>.
-The folder <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> contains stellar tracks with initial masses between 0.1 and 300 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> for each metallicity. Similarly the folder <code class="docutils literal notranslate"><span class="pre">helium</span></code> contains tracks of naked helium stars in the mass range 0.3 and 150 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub>.</p>
-<p>METISSE can also use stellar tracks computed using different input parameters, or even different stellar evolution codes. <a class="reference internal" href="using_custom_input_tracks.html"><span class="std std-doc">Using custom input tracks</span></a> describes how to use a custom set of input stellar tracks with METISSE.</p>
-</section>
 <section id="running-metisse">
-<h2>4.&nbsp;&nbsp;Running METISSE<a class="headerlink" href="#running-metisse" title="Link to this heading"></a></h2>
+<h2>3.&nbsp;&nbsp;Running METISSE<a class="headerlink" href="#running-metisse" title="Link to this heading"></a></h2>
 <p>METISSE can be run in two different ways:</p>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="usage_standalone.html"><span class="std std-doc">Directly as a standalone code</span></a> for evolving populations of single stars.</p></li>

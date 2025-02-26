@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using METISSE to evolve binaries" href="usage_other.html" />
-    <link rel="prev" title="Getting started" href="getting_started.html" /> 
+    <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,7 +46,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using METISSE to evolve single stars</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#evolving-one-star">Evolving one star</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#evolving-a-stellar-population">Evolving a stellar population</a></li>
@@ -57,7 +57,7 @@
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Citing METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guidelines.html">Community guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -87,8 +87,9 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="using-metisse-to-evolve-single-stars">
 <h1>Using METISSE to evolve single stars<a class="headerlink" href="#using-metisse-to-evolve-single-stars" title="Link to this heading"></a></h1>
-<p>METISSE can be used independently to compute the evolution of one star or a population of single stars.</p>
-<p>In order to run METISSE, we first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:</p>
+<p>METISSE can be used independently to compute the evolution of one star or a population of single stars.
+Once you have downloaded the <a class="reference internal" href="installation.html#code"><span class="std std-ref">code package</span></a> for METISSE,
+you first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./mk
 </pre></div>
 </div>
@@ -123,9 +124,9 @@ In the standalone mode of METISSE, <code class="docutils literal notranslate"><s
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
 
-<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/hydrogen&#39;</span>
+<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span>
 <span class="w">            </span>
-<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/helium&#39;</span>
+<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span>
 
 <span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
 
@@ -134,7 +135,7 @@ In the standalone mode of METISSE, <code class="docutils literal notranslate"><s
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>The paths provided above are just examples. Users should input <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> based on the actual location of these folders on their machine after downloading the grid.</p>
+<p>The paths provided above are just examples. Users should provide <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> based on the actual location of the <code class="docutils literal notranslate"><span class="pre">Hydrogen</span></code> and  the <code class="docutils literal notranslate"><span class="pre">Helium</span></code> folders on their machine after downloading the grid.</p>
 </div>
 <p>Note that we have also set <code class="docutils literal notranslate"><span class="pre">verbose</span></code> to true so that we can see details of the input tracks on the screen.
 If verbose is False, then these details are saved in the <code class="docutils literal notranslate"><span class="pre">tracks_log.txt</span></code> file in the METISSE directory.</p>
@@ -219,14 +220,16 @@ Running METISSE now gives an error, as the metallicity value is not present in t
 <span class="go"> Reading main (hydrogen star) tracks</span>
 <span class="go"> No matching Z_files found with Z_accuracy_limit =  1.00000E-02</span>
 <span class="go"> If needed, Z_accuracy_limit can be increased to match one of the available Z_files </span>
-<span class="go">  1.00000E-05  1.40000E-05  1.90000E-05  2.00000E-05  2.60000E-05  3.60000E-05  4.90000E-05  6.70000E-05  9.20000E-05  1.00000E-04  1.27000E-04  1.40000E-04  1.74000E-04  2.00000E-04  2.40000E-04  3.29000E-04  4.52000E-04  6.21000E-04  8.53000E-04  1.00000E-03  1.17200E-03  1.40000E-03  1.61000E-03  2.00000E-03  2.21200E-03  3.03900E-03  4.17500E-03  5.73600E-03  7.88000E-03  1.00000E-02  1.08260E-02  1.40000E-02  1.48740E-02  2.00000E-02  2.04340E-02  2.80720E-02  3.85660E-02  5.29830E-02  7.27900E-02</span>
+<span class="go">    2.00000E-02</span>
 <span class="go">STOP Fatal error: terminating METISSE</span>
 </pre></div>
 </div>
 <p>METISSE does not interpolate in metallicity. So ideally, we should compute input tracks with Z = 0.016 and provide them to METISSE.</p>
 <p>Another option is that we can ask METISSE to use nearby metallicity values.
 This is achieved by increasing <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
-METISSE lists available metallicity values in the grid, whenever it cannot find the input value in the grid. We can increase <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> to <code class="docutils literal notranslate"><span class="pre">8d-2</span></code> so that METISSE can run using the closest metallicity in the list, which is <code class="docutils literal notranslate"><span class="pre">0.0148</span></code>.</p>
+METISSE lists available metallicity values in the grid, whenever it cannot find the input value.</p>
+<p>In the sample set, we have tracks for only one metallicity.
+However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1&lt;/sup, we could increase <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> to <code class="docutils literal notranslate"><span class="pre">8d-2</span></code>. This would allow METISSE to run using the closest metallicity in the list, which is <code class="docutils literal notranslate"><span class="pre">0.0148</span></code>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./metisse
 <span class="go"> Input Z is :  1.60000E-02</span>
 <span class="go"> Reading naked helium star tracks</span>
@@ -251,7 +254,6 @@ METISSE lists available metallicity values in the grid, whenever it cannot find 
 <span class="go"> Reached the end of the program</span>
 </pre></div>
 </div>
-<p>METISSE now runs but for metallicity <code class="docutils literal notranslate"><span class="pre">0.0148</span></code>.</p>
 </section>
 </section>
 
@@ -259,7 +261,7 @@ METISSE lists available metallicity values in the grid, whenever it cannot find 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="usage_other.html" class="btn btn-neutral float-right" title="Using METISSE to evolve binaries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

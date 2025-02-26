@@ -46,7 +46,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using METISSE to evolve binaries</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#cosmic">COSMIC</a></li>
@@ -56,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Citing METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Community guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -123,8 +123,8 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 </ol>
 <p>The usual input namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is not read when using COSMIC. Instead a Python dictionary, <code class="docutils literal notranslate"><span class="pre">SSEDict</span></code> is used to set the <code class="docutils literal notranslate"><span class="pre">stellar_engine</span></code> and provide the location of the folders containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for hydrogen and helium stars through variables <code class="docutils literal notranslate"><span class="pre">path_to_tracks</span></code> and <code class="docutils literal notranslate"><span class="pre">path_to_he_tracks</span></code>.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">SSEDict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;stellar_engine&#39;</span><span class="p">:</span> <span class="s1">&#39;metisse&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;path_to_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/hydrogen&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;path_to_he_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/helium&#39;</span> 
+               <span class="s1">&#39;path_to_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;path_to_he_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span> 
                <span class="p">}</span>
 </pre></div>
 </div>
@@ -165,9 +165,9 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
 
-<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/hydrogen&#39;</span>
+<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span>
 <span class="w">            </span>
-<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/big_z/helium&#39;</span>
+<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span>
 
 <span class="o">/</span>
 </pre></div>
