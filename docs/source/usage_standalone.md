@@ -2,7 +2,7 @@
 
  
 METISSE can be used independently to compute the evolution of one star or a population of single stars. 
-Once you have downloaded the [code package](getting_started.md#code) for METISSE,
+Once you have downloaded the [code package](installation.md#code) for METISSE,
 you first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:
 
 ```console
