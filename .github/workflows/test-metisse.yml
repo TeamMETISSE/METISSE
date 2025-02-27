@@ -2,7 +2,7 @@ name: Draft PDF
 on: 
   push:
 
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,7 +32,9 @@ jobs:
       - name: Download Zenodo data
         if: steps.cache.outputs.cache-hit != 'true'  # Only run this if cache isn't found
         run: |
-          # Use wget to download the files from Zenodo (replace YOUR_DOI_HERE with actual DOI)
+          # Ensure the data directory exists
+          mkdir -p data
+          # Use wget to download the files from Zenodo 
           wget -O data/datafile.zip https://zenodo.org/records/14918163/files/sample_tracks.zip?download=1
           # Unzip the data file (if applicable)
           unzip data/datafile.zip -d data/
