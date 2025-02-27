@@ -49,8 +49,7 @@ jobs:
           
       # Step 7: Build the Fortran project using Make
       - name: Build project
-        path: ../../Make
-        run: make
+        run: ./mk
 
       # Step 8: Run tests
       - name: Run tests
