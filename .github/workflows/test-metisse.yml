@@ -1,0 +1,49 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the repository's code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Install gfortran (Fortran compiler)
+      - name: Install gfortran
+        run: sudo apt-get update && sudo apt-get install -y gfortran
+
+      # Step 3: Install Make
+      - name: Install Make
+        run: sudo apt-get install -y make
+
+      # Step 4: Restore cache (if data file is cached from previous run)
+      - name: Restore Zenodo Data Cache
+        uses: actions/cache@v2
+        with:
+          path: data/  # Path where the data files will be stored
+          key: ${{ runner.os }}-zenodo-data-${{ hashFiles('**/*.zip') }}  # Use file hash to create unique cache key
+          restore-keys: |
+            ${{ runner.os }}-zenodo-data-  # Fallback cache key if exact match is not found
+
+      # Step 5: Download Zenodo data if no cache found
+      - name: Download Zenodo data
+        if: steps.cache.outputs.cache-hit != 'true'  # Only run this if cache isn't found
+        run: |
+          # Use wget to download the files from Zenodo (replace YOUR_DOI_HERE with actual DOI)
+          wget -O data/datafile.zip https://zenodo.org/records/14918163/files/sample_tracks.zip?download=1
+          # Unzip the data file (if applicable)
+          unzip data/datafile.zip -d data/
+
+      # Step 6: Save the cache after downloading
+      - name: Save Zenodo data cache
+        if: steps.cache.outputs.cache-hit != 'true'  # Only cache if the data was downloaded
+        uses: actions/cache@v2
+        with:
+          path: data/  # Path where the data is stored
+          key: ${{ runner.os }}-zenodo-data-${{ hashFiles('**/*.zip') }}  # Cache key based on data files
+          
+      # Step 7: Build the Fortran project using Make
+      - name: Build project
+        run: make
+
+      # Step 8: Run tests
+      - name: Run tests
+        run: ./metisse  
