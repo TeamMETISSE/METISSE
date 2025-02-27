@@ -21,7 +21,7 @@ jobs:
 
       # Step 4: Restore cache (if data file is cached from previous run)
       - name: Restore Zenodo Data Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: data/  # Path where the data files will be stored
           key: ${{ runner.os }}-zenodo-data-${{ hashFiles('**/*.zip') }}  # Use file hash to create unique cache key
@@ -49,6 +49,7 @@ jobs:
           
       # Step 7: Build the Fortran project using Make
       - name: Build project
+        path: ../../Make
         run: make
 
       # Step 8: Run tests
