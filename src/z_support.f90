@@ -115,9 +115,9 @@ module z_support
         min_mass = 0.9
         max_mass = 100.0
 
-        METALLICITY_DIR = '/home/runner/work/METISSE/METISSE/.github/workflows/data/sample_tracks_solarZ/Hydrogen/'
+        METALLICITY_DIR = '/home/runner/work/METISSE/METISSE/data/sample_tracks_solarZ/Hydrogen/'
                     
-        METALLICITY_DIR_HE = '/home/runner/work/METISSE/METISSE/.github/workflows/data/sample_tracks_solarZ/Helium/'
+        METALLICITY_DIR_HE = '/home/runner/work/METISSE/METISSE/data/sample_tracks_solarZ/Helium/'
 
         verbose = .true.
 
