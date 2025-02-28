@@ -49,8 +49,9 @@ jobs:
           
       # Step 7: Build the Fortran project using Make
       - name: Build project
-        run: pwd
-        run:  cd make && make test && cd ..
+        run: |
+          pwd
+          cd make && make test && cd ..
 
       # Step 8: Run tests
       - name: Run tests
