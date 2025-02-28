@@ -26,9 +26,11 @@ module track_support
     integer :: err_unit, out_unit
 
     integer :: front_end = -1
-    integer, parameter :: main = 0
-    integer, parameter :: BSE = 1
-    integer, parameter :: COSMIC = 2
+
+    integer, parameter :: TEST = 0
+    integer, parameter :: MAIN = 1
+    integer, parameter :: BSE = 2
+    integer, parameter :: COSMIC = 3
     
     ! mode >0 enables read-only mode for files when multi-threading
     integer :: mode = 0
@@ -379,7 +381,7 @@ module track_support
             if (i==5) print*, 'See terminal for details'
             if (i==99) print*, 'See error file (fort.99)for details'
         endif
-        if (front_end /=COSMIC) STOP
+        if (front_end /= COSMIC) STOP 1
     end subroutine stop_code
     
     subroutine write_eep_track(x,mt,filename)

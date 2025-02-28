@@ -59,12 +59,14 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
         if (debug) print*, 'Initializing METISSE_zcnsts'
 
         load_tracks = .true.
-        !read default options first
-        call read_defaults()
+        !path is relative to the executable
+        METISSE_DIR = '.'
 
         !read user inputs
         
         select case(front_end)
+        case(test)
+             call get_test_inputs()
         case(main)
             infile = trim(METISSE_DIR)// '/main.input'
             call read_main_input(infile,ierr)
@@ -146,7 +148,7 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
         endif
     endif
     
-    if (front_end /= main) initial_Z = z
+    if (front_end > main) initial_Z = z
     write(out_unit,'(a,1p1e13.5)') ' Input Z is :', z
 
     if (use_sse_NHe)then
@@ -312,7 +314,7 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
     end do
     
     ! for main, commons are assigned within the METISSE_main
-    if (front_end /= main) call assign_commons()
+    if (front_end > main) call assign_commons()
         
 end subroutine METISSE_zcnsts
 

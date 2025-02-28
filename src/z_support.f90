@@ -31,7 +31,8 @@ module z_support
     real(dp) :: high_mass_limit = 1d1 !Msun
     real(dp) :: he_core_mass_limit = 2.2d0 !Msun
 
-    logical :: debug_z
+    logical :: debug_z = .false.
+
 
 
     namelist /SSE_input_controls/ initial_Z, max_age,read_mass_from_file,&
@@ -60,20 +61,13 @@ module z_support
                         mass_conv_envelope, radius_conv_envelope, binding_energy_colname
                         
     contains
-
-    subroutine read_defaults()
-        debug_z = .false.
-        !path is relative to the executable
-        METISSE_DIR = '.'
-        include 'defaults/metisse_defaults.inc'
-        
-    end subroutine read_defaults
     
     subroutine read_main_input(infile,ierr)
         character(len=strlen), intent(in) :: infile
         integer, intent(out) :: ierr
         integer :: io
         
+        !read default options first
         include 'defaults/main_defaults.inc'
         ierr = 0
 
@@ -95,6 +89,8 @@ module z_support
         integer, intent(out) :: ierr
         integer :: io
 
+        !read default options first
+        include 'defaults/metisse_defaults.inc'
         ierr = 0
         
         io = alloc_iounit(ierr)
@@ -109,7 +105,25 @@ module z_support
         call free_iounit(io)
     end subroutine read_metisse_input
     
+    subroutine get_test_inputs()
     
+        include 'defaults/main_defaults.inc'
+        include 'defaults/metisse_defaults.inc'
+        
+        initial_Z = 0.02
+        max_age = 1.2d4   !max age in Myrs
+        number_of_tracks = 10
+        min_mass = 0.9
+        max_mass = 100.0
+
+        METALLICITY_DIR = '/home/runner/data/sample_tracks_solarZ/Hydrogen/'
+                    
+        METALLICITY_DIR_HE = '/home/runner/data/sample_tracks_solarZ/Helium/'
+
+        verbose = .true.
+
+    end subroutine
+
     subroutine get_metallicity_file_list(path,file_list,filename)
         character(LEN=strlen) :: path, filename
         character(LEN=strlen), allocatable :: temp_list(:),file_list(:)
@@ -653,7 +667,7 @@ module z_support
             if (i_Rcenv>0) call assign_sgl_col(temp, i_Rcenv, radius_conv_envelope,n)
         endif
         
-        if (front_end == main) call check_for_extra_columns(cols,temp,n)
+        if (front_end <= main) call check_for_extra_columns(cols,temp,n)
         
         allocate(key_cols(n-1))
         key_cols% name = temp(1:n-1)% name
@@ -1120,7 +1134,7 @@ module z_support
             y(k)% is_he_track = xa(n)% is_he_track
             y(k)% complete = xa(n)% complete
         
-            if ((front_end == main) .and. read_all_columns) then
+            if ((front_end <= main) .and. read_all_columns) then
                 if (debug) print*, 'using all columns'
                 y(k)% ncol = xa(n)% ncol
                 allocate(y(k)% tr(y(k)% ncol, y(k)% ntrack), y(k)% cols(y(k)% ncol))
