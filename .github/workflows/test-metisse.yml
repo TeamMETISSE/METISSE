@@ -51,8 +51,6 @@ jobs:
       - name: Build project
         run:  cd make && make test && cd ..
 
-        /Users/poojan/Downloads
-
       # Step 8: Run tests
       - name: Run tests
         run: ./test  
