@@ -21,16 +21,16 @@ jobs:
 
       # Step 4: Restore cache (if data file is cached from previous run)
       - name: Restore Zenodo Data Cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
-          path: data/  # Path where the data files will be stored
+          path: /home/runner/data/  # Path where the data files will be stored
           key: ${{ runner.os }}-zenodo-data-${{ hashFiles('**/*.zip') }}  # Use file hash to create unique cache key
-          # restore-keys: |
-          #   ${{ runner.os }}-zenodo-data-  # Fallback cache key if exact match is not found
+          restore-keys: |
+            ${{ runner.os }}-zenodo-data-  # Fallback cache key if exact match is not found
 
       # Step 5: Download Zenodo data if no cache found
       - name: Download Zenodo data
-        # if: steps.cache.outputs.cache-hit == 'false'  # Only run this if cache isn't found
+        if: steps.cache.outputs.cache-hit == 'false'  # Only run this if cache isn't found
         run: |
           echo "Cache not found, downloading data..."
           # Ensure the data directory exists
@@ -42,17 +42,15 @@ jobs:
 
       # Step 6: Save the cache after downloading
       - name: Save Zenodo data cache
-        if: steps.cache.outputs.cache-hit == 'false'  # Only cache if the data was downloaded
-        uses: actions/cache@v4
+        if: steps.cache.outputs.cache-hit != 'true'  # Only cache if the data was downloaded
+        uses: actions/cache/save@v4
         with:
-          path: data/  # Path where the data is stored
+          path: /home/runner/data/  # Path where the data is stored
           key: ${{ runner.os }}-zenodo-data-${{ hashFiles('**/*.zip') }}  # Cache key based on data files
           
       # Step 7: Build the Fortran project using Make
       - name: Build project
-        run: |
-          pwd
-          cd make && make test && cd ..
+        run: cd make && make test && cd ..
 
       # Step 8: Run tests
       - name: Run tests
