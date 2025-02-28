@@ -36,9 +36,9 @@ jobs:
           # Ensure the data directory exists
           mkdir -p /home/runner/data
           # Use wget to download the files from Zenodo 
-          wget -O data/sample_tracks.zip https://zenodo.org/records/14918163/files/sample_tracks.zip?download=1
-          # Unzip the data file (if applicable)
-          unzip data/sample_tracks.zip -d data/
+          wget -O /home/runner/data/sample_tracks.zip https://zenodo.org/records/14918163/files/sample_tracks.zip?download=1
+          # Unzip the data file 
+          unzip /home/runner/data/sample_tracks.zip -d /home/runner/data/
 
       # Step 6: Save the cache after downloading
       - name: Save Zenodo data cache
