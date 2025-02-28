@@ -10,7 +10,10 @@ subroutine initialize_front_end(front_end_name)
 
     if (verbose)print*, 'Setting front end to ',trim(front_end_name)
 
-    if (ANY((/'MAIN','main'/)== trim(front_end_name))) then
+    if (ANY((/'TEST','test'/)== trim(front_end_name))) then
+        ! for running unit tests
+        front_end = test
+    elseif (ANY((/'MAIN','main'/)== trim(front_end_name))) then
         ! METISSE's main code as described in Agrawal et al. 2020
         ! Can be used to evolve single stars and/or debugging purposes.
         front_end = main
