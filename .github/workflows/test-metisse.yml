@@ -1,6 +1,5 @@
-name: Draft PDF
-on: 
-  push:
+name: Test-metisse
+on: [pull_request]
 
 
 jobs:
