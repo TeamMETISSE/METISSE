@@ -32,6 +32,7 @@ jobs:
       - name: Download Zenodo data
         if: steps.cache.outputs.cache-hit == 'false'  # Only run this if cache isn't found
         run: |
+          echo "Cache not found, downloading data..."
           # Ensure the data directory exists
           mkdir -p data
           # Use wget to download the files from Zenodo 
