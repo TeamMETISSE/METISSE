@@ -25,16 +25,16 @@ jobs:
         with:
           path: data/  # Path where the data files will be stored
           key: ${{ runner.os }}-zenodo-data-${{ hashFiles('**/*.zip') }}  # Use file hash to create unique cache key
-          restore-keys: |
-            ${{ runner.os }}-zenodo-data-  # Fallback cache key if exact match is not found
+          # restore-keys: |
+          #   ${{ runner.os }}-zenodo-data-  # Fallback cache key if exact match is not found
 
       # Step 5: Download Zenodo data if no cache found
       - name: Download Zenodo data
-        if: steps.cache.outputs.cache-hit == 'false'  # Only run this if cache isn't found
+        # if: steps.cache.outputs.cache-hit == 'false'  # Only run this if cache isn't found
         run: |
           echo "Cache not found, downloading data..."
           # Ensure the data directory exists
-          mkdir -p data
+          mkdir -p /home/runner/data
           # Use wget to download the files from Zenodo 
           wget -O data/sample_tracks.zip https://zenodo.org/records/14918163/files/sample_tracks.zip?download=1
           # Unzip the data file (if applicable)
