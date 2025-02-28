@@ -30,7 +30,7 @@ jobs:
 
       # Step 5: Download Zenodo data if no cache found
       - name: Download Zenodo data
-        if: steps.cache.outputs.cache-hit != 'true'  # Only run this if cache isn't found
+        if: steps.cache.outputs.cache-hit == 'false'  # Only run this if cache isn't found
         run: |
           # Ensure the data directory exists
           mkdir -p data
@@ -41,7 +41,7 @@ jobs:
 
       # Step 6: Save the cache after downloading
       - name: Save Zenodo data cache
-        if: steps.cache.outputs.cache-hit != 'true'  # Only cache if the data was downloaded
+        if: steps.cache.outputs.cache-hit == 'false'  # Only cache if the data was downloaded
         uses: actions/cache@v4
         with:
           path: data/  # Path where the data is stored
@@ -49,6 +49,7 @@ jobs:
           
       # Step 7: Build the Fortran project using Make
       - name: Build project
+        run: pwd
         run:  cd make && make test && cd ..
 
       # Step 8: Run tests

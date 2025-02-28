@@ -115,10 +115,9 @@ module z_support
         min_mass = 0.9
         max_mass = 100.0
 
-        BHNS_mass_scheme = 'Belczynski2008'
-        METALLICITY_DIR = './.github/workflows/data/sample_tracks_solarZ/Hydrogen/'
+        METALLICITY_DIR = '.github/workflows/data/sample_tracks_solarZ/Hydrogen/'
                     
-        METALLICITY_DIR_HE = './.github/workflows/data/sample_tracks_solarZ/Helium/'
+        METALLICITY_DIR_HE = '.github/workflows/data/sample_tracks_solarZ/Helium/'
 
         verbose = .true.
 
