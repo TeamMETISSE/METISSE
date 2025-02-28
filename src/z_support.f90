@@ -34,6 +34,7 @@ module z_support
     logical :: debug_z = .false.
 
 
+
     namelist /SSE_input_controls/ initial_Z, max_age,read_mass_from_file,&
                         input_mass_file, number_of_tracks, max_mass, min_mass, &
                         WD_mass_scheme,use_initial_final_mass_relation, allow_electron_capture, &
@@ -122,7 +123,6 @@ module z_support
         verbose = .true.
 
     end subroutine
-
 
     subroutine get_metallicity_file_list(path,file_list,filename)
         character(LEN=strlen) :: path, filename
