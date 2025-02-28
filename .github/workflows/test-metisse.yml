@@ -19,19 +19,19 @@ jobs:
       - name: Install Make
         run: sudo apt-get install -y make
 
-      Step 4: Restore cache (if data file is cached from previous run)
-      - name: Restore Zenodo Data Cache
-        id: cache-tracks-restore
-        uses: actions/cache/restore@v4
-        with:
-          path: /home/runner/data/  # Path where the data files will be stored
-          key: ${{ runner.os }}-tracks
+      # Step 4: Restore cache (if data file is cached from previous run)
+      # - name: Restore Zenodo Data Cache
+      #   id: cache-tracks-restore
+      #   uses: actions/cache/restore@v4
+      #   with:
+      #     path: /home/runner/data/  # Path where the data files will be stored
+      #     key: ${{ runner.os }}-tracks
 
       # Step 5: Download Zenodo data if no cache found
       - name: Download Zenodo data
         # if: steps.cache.outputs.cache-hit != 'true'  # Only run this if cache isn't found
         run: |
-          echo "Cache not found, downloading data..."
+          # echo "Cache not found, downloading data..."
           # Ensure the data directory exists
           mkdir -p /home/runner/data
           # Use wget to download the files from Zenodo 
@@ -40,13 +40,13 @@ jobs:
           unzip /home/runner/data/sample_tracks.zip -d /home/runner/data/
 
       # Step 6: Save the cache after downloading
-      - name: Save Zenodo data cache
-        id: cache-tracks-save
-        if: steps.cache.outputs.cache-hit != 'true'  # Only cache if the data was downloaded
-        uses: actions/cache/save@v4
-        with:
-          path: /home/runner/data/  # Path where the data is stored
-          key: ${{ steps.cache-tarcks-restore.outputs.cache-primary-key }} 
+      # - name: Save Zenodo data cache
+      #   id: cache-tracks-save
+      #   if: steps.cache.outputs.cache-hit != 'true'  # Only cache if the data was downloaded
+      #   uses: actions/cache/save@v4
+      #   with:
+      #     path: /home/runner/data/  # Path where the data is stored
+      #     key: ${{ steps.cache-tarcks-restore.outputs.cache-primary-key }} 
           
       # Step 7: Build the Fortran project using Make
       - name: Build project
