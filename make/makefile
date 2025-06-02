@@ -7,7 +7,7 @@ METISSE_test_dir=$(BASE_dir)/src/test
 FC=gfortran
 
 WARN= -Wno-tabs -Wno-maybe-uninitialized -fimplicit-none  -Wsurprising  -Waliasing -pedantic
-DEBUG= -g3 -O2 -fbacktrace -fcheck=all -fbounds-check
+DEBUG= -g2 -O2 -fbacktrace -fcheck=all -fbounds-check
 #-ffpe-trap=zero,overflow,underflow
 
 FFLAGS1= -ffree-form -fimplicit-none $(WARN) $(DEBUG)

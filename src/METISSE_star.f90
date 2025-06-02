@@ -17,6 +17,13 @@ subroutine METISSE_star(kw,mass,mt,tm,tn,tscls,lums,GB,zpars,dtm,id)
     logical :: debug, exclude_core,consvR, mass_check
     type(track), pointer :: t
 
+    ! for single stars in BSE/COSMIC
+    if(mass.lt.0.1d0.and.kw.le.1)then
+     tscls = 1.0d+10
+     tn = 1.0d+10
+     return
+    endif
+    
     idd = 1
     if(present(id)) idd = id
     t => tarr(idd)
@@ -51,8 +58,6 @@ subroutine METISSE_star(kw,mass,mt,tm,tn,tscls,lums,GB,zpars,dtm,id)
     elseif(kw>= low_mass_MS) then
         t% is_he_track = .false.
         age_col = i_age
-!        if (t% pars% phase>= He_MS .and. t% pars% phase<=He_GB) t% star_type = switch
-        ! above line causes random segfaults if activated
     endif
         
     select case(t% star_type)
@@ -133,19 +138,6 @@ subroutine METISSE_star(kw,mass,mt,tm,tn,tscls,lums,GB,zpars,dtm,id)
             ! Check if mass has changed since the last time star was called.
 
             if (debug) print*, 'diff in mt', mt, t% pars% mass,mt-t% pars% mass
-            
-!            if(dtm<0.d0 .and.(kw<=MS .or. kw==He_MS)) THEN !
-!                if (debug)print*,'dtm<0',t% pars% age,dtm
-!                quant = (t% pars% age*t% MS_old/t% ms_time)+dtm
-!                if (debug)print*, 'quant', quant, t% pars% age_old
-!                if(quant.le.t% pars% age_old) then
-!                    t% initial_mass = t% initial_mass_old
-!                    mass_check = .true.
-!                    if (debug)print*,'rev to old initial_mass',t% initial_mass,quant,t% pars% age_old
-!                endif
-!            endif
-!
-!            if(mass_check .eqv. .false.) then
                 ! For tracks that already have wind mass loss, exclude contribution from winds
                 if (t% has_mass_loss) then
                     delta_wind = (t% pars% dms*dtm*1.0d+06)
@@ -167,17 +159,13 @@ subroutine METISSE_star(kw,mass,mt,tm,tn,tscls,lums,GB,zpars,dtm,id)
         !               call stop_code
                     endif
                     t% pars% age_old = t% pars% age
-    !                t% pars% age = (t% pars% age*t% MS_old/t% ms_time)+dtm
-    !                  t% pars% age = t% pars% age2
                     t% initial_mass_old = t% initial_mass
                     Mnew = t% pars% mass+t% pars% delta
                     t% ms_old = t% times(MS)
                     call get_initial_mass_for_new_track(t,idd,mnew,eep_m)
-!                    t% pars% age = t% pars% age_old
                     mass_check = .true.
                     if (debug)print*, 'new initial mass',t% initial_mass,t% pars% age
                 endif
-!            endif
             
             t% zams_mass = mass
             t% pars% mass = mt
@@ -202,7 +190,6 @@ subroutine METISSE_star(kw,mass,mt,tm,tn,tscls,lums,GB,zpars,dtm,id)
                 times_old = t% times
 
                 if ((t% pars% mcenv/t% pars% mass).ge.0.2d0) then
-!                     .and.(t% pars% env_frac.ge.0.2)
                     allocate(rlist(t% ntrack))
                     rlist = t% tr(i_logR,:)
                     consvR = .true.
