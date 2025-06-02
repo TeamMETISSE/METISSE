@@ -6,7 +6,7 @@
 
 initial_Z = 0.02
 
-max_age = 1.2d4   !max age in Myrs
+max_age = 2.0d4   !max age in Myrs
 
 number_of_tracks = 1
 min_mass = 1
