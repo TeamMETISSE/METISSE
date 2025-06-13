@@ -265,7 +265,6 @@ module track_support
 
         if (present(debug)) then
             if (debug)  then
-    !            print*, "in index search",value,size_list
             print*, "in index search; list(1),list(size_list-1),list(size_list)"
             print*, list(1),list(size_list-1),list(size_list)
             endif

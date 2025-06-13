@@ -3,7 +3,7 @@
 
 &METISSE_input_controls
 
-METALLICITY_DIR = '/Users/poojan/stellar_tracks/MIST/'
+METALLICITY_DIR = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Hydrogen/'
             
 METALLICITY_DIR_HE = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Helium/'
 

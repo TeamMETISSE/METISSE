@@ -139,7 +139,7 @@ module interp_support
         t% j_bgb = -1
         if (t% is_he_track .eqv. .false.) then
             !determine the base of the giant branch, if present
-            if (t% initial_mass > Mcrit(2)% mass .and. t% initial_mass< Mcrit(5)% mass) then
+            if (t% initial_mass< Mcrit(5)% mass) then
                 if (BGB_EEP>0 .and. t% ntrack >= BGB_EEP) then
                     !Red giant Branch
                     t% j_bgb = BGB_EEP
