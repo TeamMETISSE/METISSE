@@ -807,11 +807,8 @@ module interp_support
 
             if (debug) print*,"len_eep:",len_eep,"bounds:",age_list(1),age_list(len_eep)
 
-            if (len_eep<5) then
             call index_search(len_eep,age_list,age,min_index)
-        else
-            min_index = binary_search(len_eep,age_list,age)
-        endif
+
             if(abs(age_list(min_index)-age)< tiny) then        !less than a year
                 if (debug) print*,"no interpolation, min_index", age_list(min_index)
                 allocate(min_eeps(1))
@@ -1114,8 +1111,8 @@ module interp_support
             endif
             if (debug) print*,"getting new initial mass mnew at age and phase: ",mnew,age,t% pars% phase,id,t% is_he_track
             
-!            call index_search(nt-initial_eep+1,age_list(initial_eep:),age,eep_m)
-            eep_m = binary_search(nt-initial_eep+1,age_list(initial_eep:),age)
+            call index_search(nt-initial_eep+1,age_list(initial_eep:),age,eep_m)
+!            eep_m = binary_search(nt-initial_eep+1,age_list(initial_eep:),age)
 
             eep_m = eep_m+initial_eep-1
 

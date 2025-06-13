@@ -280,7 +280,13 @@ module track_support
             min_index = size_list+1; return
         end if
 
-        min_index = minloc(abs(list-value), dim=1)
+        if (size_list<5) then
+            min_index = minloc(abs(list-value), dim=1)
+        else
+            min_index = binary_search(size_list,list,value)
+        endif
+        
+        
     end subroutine index_search
 
     ! from ISO (Dotter et al. 2016), adapted from MESA; modified by PA to avoid 0 loc
@@ -308,13 +314,13 @@ module track_support
 
      if (vec(n) < vec(1)) then ! decreasing values
 
-        if (val > vec(1)) then
-           loc = 1; return
-        else if (abs(val - vec(1)) < tiny ) then
-           loc = 1; return
-        else if (val <= vec(n)) then
-           loc = n; return
-        end if
+!        if (val > vec(1)) then
+!           loc = 1; return
+!        else if (abs(val - vec(1)) < tiny ) then
+!           loc = 1; return
+!        else if (val <= vec(n)) then
+!           loc = n; return
+!        end if
 
 
         first = 1
@@ -335,16 +341,15 @@ module track_support
 
      else ! increasing values
      
-!        print*, 'test', vec(1),vec(n),val
-        if (val < vec(1)) then
-           loc = 1; return
-        else if (abs(val - vec(1)) < tiny) then
-           loc = 1; return
-        else if (check_equal(val,vec(n))) then
-            loc = n; return
-        else if (val >= vec(n)) then
-           loc = n; return
-        end if
+!        if (val < vec(1)) then
+!           loc = 1; return
+!        else if (abs(val - vec(1)) < tiny) then
+!           loc = 1; return
+!        else if (check_equal(val,vec(n))) then
+!            loc = n; return
+!        else if (val >= vec(n)) then
+!           loc = n; return
+!        end if
 
         first = 1
         last = n-1
