@@ -59,8 +59,12 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
         if (debug) print*, 'Initializing METISSE_zcnsts'
 
         load_tracks = .true.
+        
         !path is relative to the executable
         METISSE_DIR = '.'
+
+        !read default options first
+        include 'defaults/metisse_defaults.inc'
 
         !read user inputs
         

@@ -26,11 +26,22 @@
 
     idd = 1
     if(present(id)) idd = id
-    t => tarr(idd)
+    if(tarr(idd)% star_type == unknown)then
+        aj = 1.0d+10
+        kw = 15
+        r = 1d-10
+        return
+    else
+        t => tarr(idd)
+    endif
+
+
+    
     
     debug = .false.
-!    if ((id == 1).and. kw<=10 )debug = .true.
-!if(id ==1 .and. t% is_he_track)debug = .true.
+!   if ((id == 1).and. kw<=10 )debug = .true.
+!   if(id ==1 .and. t% is_he_track)debug = .true.
+
     if (debug) print*, '-----------HRDIAG-------------'
     if (debug) print*,"started hrdiag",mt,mc,aj,tn,kw,id,t% post_agb
 

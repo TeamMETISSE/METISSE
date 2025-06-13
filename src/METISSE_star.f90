@@ -18,11 +18,7 @@ subroutine METISSE_star(kw,mass,mt,tm,tn,tscls,lums,GB,zpars,dtm,id)
     type(track), pointer :: t
 
     ! for single stars in BSE/COSMIC
-    if(mass.lt.0.1d0.and.kw.le.1)then
-     tscls = 1.0d+10
-     tn = 1.0d+10
-     return
-    endif
+    if(mass.lt.0.1d0.and.kw.le.1) return
     
     idd = 1
     if(present(id)) idd = id
