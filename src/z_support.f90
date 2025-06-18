@@ -89,10 +89,7 @@ module z_support
         integer, intent(out) :: ierr
         integer :: io
 
-        !read default options first
-        include 'defaults/metisse_defaults.inc'
         ierr = 0
-        
         io = alloc_iounit(ierr)
         open(io,FILE=trim(infile),action="read",iostat=ierr)
             if (ierr /= 0) then
@@ -106,20 +103,15 @@ module z_support
     end subroutine read_metisse_input
     
     subroutine get_test_inputs()
-    
         include 'defaults/main_defaults.inc'
-        include 'defaults/metisse_defaults.inc'
         
         initial_Z = 0.02
         max_age = 1.2d4   !max age in Myrs
         number_of_tracks = 10
         min_mass = 0.9
         max_mass = 100.0
-
         METALLICITY_DIR = '/home/runner/data/sample_tracks_solarZ/Hydrogen/'
-                    
         METALLICITY_DIR_HE = '/home/runner/data/sample_tracks_solarZ/Helium/'
-
         verbose = .true.
 
     end subroutine
@@ -179,7 +171,6 @@ module z_support
 
         real(dp) :: initial_Z
         real(dp), allocatable,intent(in) :: Z_list(:)
-
         integer :: i,n, ierr
         real(dp), allocatable :: min_z(:)
         
