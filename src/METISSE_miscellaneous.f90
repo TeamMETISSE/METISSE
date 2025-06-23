@@ -24,6 +24,10 @@ subroutine initialize_front_end(front_end_name)
         ! COSMIC (Compact Object Synthesis and Monte Carlo Investigation Code)
         ! Binary evolution code from Breivik et al. 2020
         front_end = COSMIC
+    elseif (ANY((/'AMUSE','amuse'/)== trim(front_end_name))) then
+        ! Astrophysical Multipurpose Software Environment
+        ! Pelupessy et al. 2010
+        front_end = AMUSE
         
     else
         print*, "METISSE error: Unrecongnized front_end_name for METISSE"

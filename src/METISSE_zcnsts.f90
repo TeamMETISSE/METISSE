@@ -84,6 +84,19 @@ subroutine METISSE_zcnsts(z,zpars,path_to_tracks,path_to_he_tracks,ierr)
         case(COSMIC)
             METALLICITY_DIR = path_to_tracks
             METALLICITY_DIR_HE = path_to_he_tracks
+        case(AMUSE)
+            write(*,*) "We're letting AMUSE set everything-HARDCODED in METISSE_zcnsts!"
+            ! METISSE_input_controls:
+            METALLICITY_DIR = "/Users/rieder/Code/UvA/Toonen/tres3.0/amuse/src/amuse_metisse/data/hydrogen"
+            METALLICITY_DIR_HE = "/Users/rieder/Code/UvA/Toonen/tres3.0/amuse/src/amuse_metisse/data/helium"
+            ! Z_accuracy_limit =
+            ! mass_accuracy_limit =
+            ! verbose =
+            ! write_eep_file =
+            ! write_error_to_file =
+            ! construct_postagb_track =
+            write(*,*) "METALLICITY_DIR: ", METALLICITY_DIR
+            write(*,*) "path_to_tracks", path_to_tracks
         case default
             print*, "METISSE error: reading inputs; unrecognized front_end_name"
             ierr = 1; return

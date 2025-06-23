@@ -29,6 +29,7 @@ module track_support
     integer, parameter :: main = 0
     integer, parameter :: BSE = 1
     integer, parameter :: COSMIC = 2
+    integer, parameter :: AMUSE = 3
 
     character(len=strlen) :: METISSE_DIR,METALLICITY_DIR,METALLICITY_DIR_HE
 
