@@ -249,7 +249,7 @@ module track_support
     !in case of direct call
     real(dp) :: max_NS_mass         !maximum NS mass
     logical :: construct_postagb_track, allow_electron_capture, use_Initial_final_mass_relation
-    character (len=strlen) :: BHNS_mass_scheme, WD_mass_scheme
+    character (len=strlen) :: BHNS_mass_scheme, WD_mass_scheme, sampling_scheme
 !    real(dp) :: mc1, mc2 !mass cutoffs for Belczynski methods
     real(dp) :: pts_1,pts_2,pts_3
     
@@ -747,24 +747,6 @@ module track_support
         endif
         return
     end function identified
-    
-    subroutine uniform_distribution(n, minval, maxval, marray)
-        implicit none
-        integer, intent(in) :: n
-        real(dp), intent(in) :: minval, maxval
-        real(dp), intent(out) :: marray(n)
-        real(dp) :: h
-        integer :: i
-
-        marray = 0.d0
-        !linearly spaced
-        h = abs(maxval- minval)/(n-1)
-        do i= 1,n
-            marray(i) = minval + (i-1)*h
-        end do
-        
-        !for log spaced
-    end subroutine uniform_distribution
 
     !from COMPAS (Team Compas 2020)
     real(dp) function quadratic(a,b,c) result(x)

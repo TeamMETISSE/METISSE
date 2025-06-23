@@ -36,7 +36,7 @@ module z_support
 
 
     namelist /SSE_input_controls/ initial_Z, max_age,read_mass_from_file,&
-                        input_mass_file, number_of_tracks, max_mass, min_mass, &
+                        input_mass_file, number_of_tracks, max_mass, min_mass, sampling_scheme, &
                         WD_mass_scheme,use_initial_final_mass_relation, allow_electron_capture, &
                         BHNS_mass_scheme, max_NS_mass,pts_1, pts_2, pts_3, write_output_to_file, &
                         read_all_columns, extra_columns, extra_columns_file
