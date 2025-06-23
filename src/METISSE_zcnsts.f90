@@ -101,7 +101,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
             ! write_error_to_file =
             ! construct_postagb_track =
             write(*,*) "METALLICITY_DIR: ", METALLICITY_DIR
-            write(*,*) "path_to_tracks", path_to_tracks
+            !write(*,*) "path_to_tracks", path_to_tracks
         case default
             print*, "METISSE error: reading inputs; unrecognized front_end_name"
             ierr = 1; return
