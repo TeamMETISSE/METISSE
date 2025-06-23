@@ -90,11 +90,7 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
             call read_metisse_input(infile,ierr)
             if (ierr/=0) call stop_code
         case(COSMIC)
-<<<<<<< HEAD
              call get_COSMIC_input()
-=======
-            METALLICITY_DIR = path_to_tracks
-            METALLICITY_DIR_HE = path_to_he_tracks
         case(AMUSE)
             write(*,*) "We're letting AMUSE set everything-HARDCODED in METISSE_zcnsts!"
             ! METISSE_input_controls:
@@ -107,8 +103,6 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
             ! write_error_to_file =
             ! construct_postagb_track =
             write(*,*) "METALLICITY_DIR: ", METALLICITY_DIR
-            write(*,*) "path_to_tracks", path_to_tracks
->>>>>>> cf212de (changes for AMUSE runs)
         case default
             print*, "METISSE error: reading inputs; unrecognized front_end_name"
             ierr = 1; return
