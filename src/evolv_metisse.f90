@@ -64,6 +64,7 @@ subroutine evolv_metisse(mass,max_age,ierr,id)
     endif
     
     do while(.true.)
+        if (verbose) write(*,*) "evolving time: ", tphys, "timestep: ", timestep
         
         ! advance the time
         tphys = tphys+timestep
@@ -84,13 +85,15 @@ subroutine evolv_metisse(mass,max_age,ierr,id)
             t% pars% log_Teff = log10(t% pars% Teff)
             t% pars% log_R =  log10(t% pars% radius)
         endif
-       
-       if (tphys>=max_age) then
+      
+        if (verbose) write(*,*) "tphys: ", tphys, "max_age: ", max_age
+        if (tphys >= max_age) then
             tphys = max_age
             t_end  = .true. ! to print output before exiting
             !it is different to end_of_file defined in hrdiag
         end if
-        
+       
+        if (verbose) write(*,*) "old_phase: ", old_phase, "phase: ", t% pars% phase, "t_end: ", t_end
         !write output if flag is true
         if ((old_phase /=t% pars% phase) .or. t_end) then
             if (verbose) write(*,'(a10,f10.1,3a10,f7.3)') "Time ", tphys, "Phase ", phase_label(t% pars% phase+1), &
@@ -108,6 +111,7 @@ subroutine evolv_metisse(mass,max_age,ierr,id)
         !calculate next time step
         call METISSE_deltat(id,t% pars% age,dt,dtr)
         timestep = min(dt,dtr)
+        if (verbose) write(*,*) "timestep: ", timestep, "dt: ", dt, "dtr: ", dtr
 
         ! only for SSE_he stars
         ! Calculate mass loss and modify timestep if need be
