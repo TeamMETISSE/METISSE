@@ -15,11 +15,11 @@ Check out the following sections for more information about METISSE and how to u
 .. toctree::
    :maxdepth: 1
 
-   getting_started
+   installation
    usage_standalone
    usage_other
    input_files
    using_custom_input_tracks
    structure
-   citing_metisse
+   guidelines
    glossary

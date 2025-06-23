@@ -2,9 +2,8 @@
 
  
 METISSE can be used independently to compute the evolution of one star or a population of single stars. 
-
-
-In order to run METISSE, we first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:
+Once you have downloaded the [code package](installation.md#code) for METISSE,
+you first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:
 
 ```console
 
@@ -57,9 +56,9 @@ We use the variable `METALLICITY_DIR` to supply paths to the folder containing [
 &METISSE_input_controls
 
 
-METALLICITY_DIR = '/Users/poojan/stellar_tracks/MESA/big_z/hydrogen'
+METALLICITY_DIR = '/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/'
             
-METALLICITY_DIR_HE = '/Users/poojan/stellar_tracks/MESA/big_z/helium'
+METALLICITY_DIR_HE = '/Users/poojan/Downloads/sample_tracks_solarZ/Helium/'
 
 verbose = .true.
 
@@ -69,7 +68,7 @@ verbose = .true.
 
 :::{Important}
 
-The paths provided above are just examples. Users should input `METALLICITY_DIR` and `METALLICITY_DIR_HE` based on the actual location of these folders on their machine after downloading the grid.
+The paths provided above are just examples. Users should provide `METALLICITY_DIR` and `METALLICITY_DIR_HE` based on the actual location of the `Hydrogen` and  the `Helium` folders on their machine after downloading the grid.
 :::
 
 
@@ -181,7 +180,7 @@ $ ./metisse
  Reading main (hydrogen star) tracks
  No matching Z_files found with Z_accuracy_limit =  1.00000E-02
  If needed, Z_accuracy_limit can be increased to match one of the available Z_files 
-  1.00000E-05  1.40000E-05  1.90000E-05  2.00000E-05  2.60000E-05  3.60000E-05  4.90000E-05  6.70000E-05  9.20000E-05  1.00000E-04  1.27000E-04  1.40000E-04  1.74000E-04  2.00000E-04  2.40000E-04  3.29000E-04  4.52000E-04  6.21000E-04  8.53000E-04  1.00000E-03  1.17200E-03  1.40000E-03  1.61000E-03  2.00000E-03  2.21200E-03  3.03900E-03  4.17500E-03  5.73600E-03  7.88000E-03  1.00000E-02  1.08260E-02  1.40000E-02  1.48740E-02  2.00000E-02  2.04340E-02  2.80720E-02  3.85660E-02  5.29830E-02  7.27900E-02
+    2.00000E-02
 STOP Fatal error: terminating METISSE
 
 ````
@@ -190,7 +189,10 @@ METISSE does not interpolate in metallicity. So ideally, we should compute input
 
 Another option is that we can ask METISSE to use nearby metallicity values. 
 This is achieved by increasing `Z_accuracy_limit` in `METISSE_input_controls`.
-METISSE lists available metallicity values in the grid, whenever it cannot find the input value in the grid. We can increase `Z_accuracy_limit` to `8d-2` so that METISSE can run using the closest metallicity in the list, which is `0.0148`. 
+METISSE lists available metallicity values in the grid, whenever it cannot find the input value. 
+
+In the sample set, we have tracks for only one metallicity. 
+However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1</sup>, we could increase `Z_accuracy_limit` to `8d-2`. This would allow METISSE to run using the closest metallicity in the list, which is `0.0148`. 
 
 ``` console
 $ ./metisse
@@ -217,5 +219,3 @@ $ ./metisse
  Reached the end of the program
 
 ```
-
-METISSE now runs but for metallicity `0.0148`. 

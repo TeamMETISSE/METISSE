@@ -26,11 +26,22 @@
 
     idd = 1
     if(present(id)) idd = id
-    t => tarr(idd)
+    if(tarr(idd)% star_type == unknown)then
+        aj = 1.0d+10
+        kw = 15
+        r = 1d-10
+        return
+    else
+        t => tarr(idd)
+    endif
+
+
+    
     
     debug = .false.
-!    if ((id == 1).and. kw<=10 )debug = .true.
-!if(id ==1 .and. t% is_he_track)debug = .true.
+!   if ((id == 1).and. kw<=10 )debug = .true.
+!   if(id ==1 .and. t% is_he_track)debug = .true.
+
     if (debug) print*, '-----------HRDIAG-------------'
     if (debug) print*,"started hrdiag",mt,mc,aj,tn,kw,id,t% post_agb
 
@@ -68,7 +79,7 @@
              !interpolate in age
             call interpolate_age(t,t% pars% age)
             if (debug)print*, "mt difference",t% pars% mass, mt, mt-t% pars% mass,kw
-            if (front_end==main) then
+            if (front_end <= main) then
                 mt = t% pars% mass
             else
                 t% pars% mass = mt
@@ -170,7 +181,7 @@
             !interpolate in age
             call interpolate_age(t,t% pars% age)
             if(debug)print*,"mt difference",t% pars% mass,mt,mt-t% pars% mass,t% pars% phase
-            if (front_end /=main) t% pars% mass = mt
+            if (front_end > main) t% pars% mass = mt
             if (check_ge(t% pars% age,t% times(11)) .or. (t% pars% core_mass.ge.t% pars% mass)) then
                 !have reached the end of the eep track; self explanatory
                 if (debug) print*,"end of file:aj,tn ",t% pars% age,t% tr(i_he_age,t% ntrack),t% times(kw)
@@ -194,7 +205,7 @@
     IF(has_become_remnant) THEN
 !        print*, 'star',id,'is remnant',t% pars% mass,mcbagb,t% pars% core_mass
         t% star_type = remnant
-        if (front_end == main .or. front_end == BSE) then
+        if (front_end <= main .or. front_end == BSE) then
             if(t% pars% phase /= HeWD) then
                 call assign_remnant_METISSE(t% pars, mcbagb)
                 ! kw at this point contains old phase of the star,
@@ -219,7 +230,7 @@
     ENDIF
 
     IF(t% pars% phase >= HeWD) THEN
-        if (front_end == main .or. front_end == BSE) then
+        if (front_end <= main .or. front_end == BSE) then
             call evolve_remnants_METISSE(t% pars)
         elseif (front_end == COSMIC) then
             call hrdiag_remnant(zpars,t% pars% mass,t% pars% core_mass,t% pars% luminosity,&

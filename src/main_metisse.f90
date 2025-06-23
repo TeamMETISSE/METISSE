@@ -19,7 +19,7 @@ program metisse_main
     
     ! read input metallicity and load the crresponding EEP tracks
     ! path for tracks are read from inlists
-    call METISSE_zcnsts(initial_Z,zpars,'','',ierr)
+    call METISSE_zcnsts(initial_Z,zpars,ierr)
     if (ierr/=0 .or. code_error) STOP 'Fatal error: terminating METISSE'
     
     ! sets remnant schmeme from SSE_input_controls

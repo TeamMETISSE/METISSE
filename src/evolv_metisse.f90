@@ -27,7 +27,7 @@ subroutine evolv_metisse(mass,max_age,ierr,id)
     t => tarr(idd)
    
 !    initialize variables
-
+    output = .false.
     ierr = 0
     timestep = 0.d0
     mt = mass
