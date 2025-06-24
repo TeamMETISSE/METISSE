@@ -39,6 +39,8 @@ module track_support
 
     character(len = strlen):: amuse_metisse_dir, amuse_metallicity_dir, amuse_metallicity_dir_he
 
+    character(len = strlen):: amuse_metisse_dir, amuse_metallicity_dir, amuse_metallicity_dir_he
+
     ! for use when constructing EEP distance
     logical:: weight_center_rho_T_by_Xc
     real(dp):: Teff_scale = 2d0
