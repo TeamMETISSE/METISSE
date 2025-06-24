@@ -3,9 +3,9 @@
 
 &METISSE_input_controls
 
-METALLICITY_DIR = '/Users/rieder/Code/UvA/Toonen/tres3.0/amuse/src/amuse_metisse/data/hydrogen'
+METALLICITY_DIR = 'poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Hydrogen/'
             
-METALLICITY_DIR_HE = '/Users/rieder/Code/UvA/Toonen/tres3.0/amuse/src/amuse_metisse/data/helium'
+METALLICITY_DIR_HE = 'poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Helium'
 
 verbose = .true.
 
