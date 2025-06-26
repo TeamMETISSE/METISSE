@@ -6,7 +6,8 @@ program metisse_main
 
     use track_support
     use z_support
-
+    use imf_support
+    
     implicit none
     integer:: ierr,i, io
     real(dp):: zpars(20)
@@ -46,7 +47,17 @@ program metisse_main
         call free_iounit(io)
     else
         if (number_of_tracks>1) then
-            call uniform_distribution(number_of_tracks,min_mass,max_mass,mass_array)
+            if (sampling_scheme=='Uniform') then
+            
+                call sample_uniform(number_of_tracks,min_mass,max_mass,mass_array)
+            elseif(sampling_scheme=='Kroupa2001') then
+                call sample_kroupa_imf(mass_array, number_of_tracks, min_mass, 0.5d0, max_mass)
+            else
+                print*, 'Error generating mass function: '
+                print*, 'number_of_tracks>1 but sampling_scheme is invalid'
+                print*, 'Choose between Uniform and Kroupa2001'
+                STOP 'Fatal error: terminating METISSE'
+            endif
         else
             mass_array = min_mass
         endif
