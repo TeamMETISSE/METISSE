@@ -382,10 +382,15 @@ module track_support
         integer, optional:: i
         print*, 'METISSE error: terminating code'
         if (present(i)) then
-            if (i==5) print*, 'See terminal for details'
+            if (i==6) print*, 'See terminal for details'
             if (i==99) print*, 'See error file (fort.99)for details'
         endif
-        if (front_end /= COSMIC) STOP 1
+        call flush(6)
+        if (front_end == COSMIC) then
+            return
+        else
+            STOP 1
+        endif
     end subroutine stop_code
     
     subroutine write_eep_track(x,mt,filename)
@@ -506,12 +511,11 @@ module track_support
         integer :: j, jstart,jend
 
         j_bgb = -1
-!        print*, 'teff',s% tr(i_logTe,jend)
         if ((t% is_he_track .eqv. .false. ).and.t% tr(i_logTe,jend)> T_bgb_limit) return
 
         do j = jstart,jend
             if (t% tr(i_mcenv,j)/t% tr(i_mass,j).ge.0.12d0) then
-                j_bgb = j+ jstart-1
+                j_bgb = j
                 exit
             endif
         enddo
