@@ -58,7 +58,7 @@ evolv_metisse.o: $(METISSE_src_dir)/evolv_metisse.f90 track_support.o sse_suppor
 main_metisse.o: $(METISSE_src_dir)/main_metisse.f90 track_support.o z_support.o imf_support.o
 assign_commons_main.o: $(METISSE_src_dir)/assign_commons_main.f90 track_support.o remnant_support.o
 
-test_metisse.o: $(METISSE_test_dir)/test_metisse.f90 track_support.o z_support.o
+test_metisse.o: $(METISSE_test_dir)/test_metisse.f90 track_support.o z_support.o imf_support.o
 
 
 
