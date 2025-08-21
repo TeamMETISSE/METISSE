@@ -1816,10 +1816,7 @@ module z_support
             offset = offset + ntrack_arr(i)
 
         end do  
-
         
-
-
     end subroutine set_tracks_from_python_inputs
     
     elemental function relative_diff(z1,z2) result(y)
