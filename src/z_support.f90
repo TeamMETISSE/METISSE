@@ -31,7 +31,7 @@ module z_support
     real(dp) :: high_mass_limit = 1d1 !Msun
     real(dp) :: he_core_mass_limit = 2.2d0 !Msun
 
-    logical :: debug_z = .true.
+    logical :: debug_z = .false.
 
 
 
@@ -597,10 +597,6 @@ module z_support
 
         !now find the column
         locate_column = -1
-        print*,trim(colname)
-        print*,'------'
-        print*,adjustl(adjustr(cols(i)% name))
-        print*,'------'
         if (len(trim(colname))<1) return
         
         do i=1,size(cols)
@@ -1764,7 +1760,6 @@ module z_support
             tr_data = tr_data_h_in
             col_names = col_names_h_in
         end if
-        print*, col_names
     
         ! Allocate xa
         if (allocated(xa)) deallocate(xa)
@@ -1783,7 +1778,6 @@ module z_support
             xa(i)%neep = neep_arr(i)
             xa(i)%ncol = ncol_arr(i)
             xa(i)%is_he_track = is_he_arr(i)
-            print*, 'initial_mass 1', initial_mass(i), xa(i)% initial_mass
     
             ! Allocate arrays
             allocate(xa(i)%eep(neep_arr(i)))
@@ -1792,32 +1786,21 @@ module z_support
     
             ! Copy data
             xa(i)%eep = eep_data(1:neep_arr(i), i)
-            print*, 'number of tracks', ntrack_arr(i)
             do j = 1, ntrack_arr(i)
                 xa(i)%tr(:, j) = tr_data(1:ncol_arr(i), offset + j)
-                if (xa(i)%is_he_track) print*, 'j: ',j
-                if (xa(i)%is_he_track) print*, xa(i)%tr(:, j)
-                if (xa(i)%is_he_track) print*, '---------------------'
-                if (xa(i)%is_he_track) print*, '---------------------'
             end do
             
             do j = 1, ncol_arr(i)
-                xa(i)%cols(j)%name = col_names(j, i)
+                xa(i)%cols(j)%name = adjustl(col_names(j,i)) // repeat(' ',32-len_trim(col_names(j,i)))
             end do
             !determine column of mass, age etc.
-            print*, xa(i)% cols 
             call get_named_columns(xa(i)% cols, xa(i)% ncol,xa(i)% is_he_track)
             if (code_error) return
             
             if (xa(i)% is_he_track) then
                 xa(i)% initial_mass = xa(i)% tr(i_mass,ZAMS_HE_EEP)
-                print*, 'initial_mass 2', initial_mass(i), xa(i)% initial_mass
-                print*, 'indices', i_mass, ZAMS_HE_EEP
-                
             else
                 xa(i)% initial_mass = xa(i)% tr(i_mass,ZAMS_EEP)
-                print*, 'initial_mass 2', initial_mass(i), xa(i)% initial_mass
-                print*, 'indices', i_mass, ZAMS_EEP
             endif
             
             call set_star_type_from_history(xa(i))
