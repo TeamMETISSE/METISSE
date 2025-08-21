@@ -195,15 +195,12 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
                     call apply_cosmic_format_controls('He')
                     call read_key_eeps_he()
                     if (debug) print*, "key eeps for he stars", key_eeps_he
-                    allocate(xa(num_tracks))
-                    xa% filename = track_list
-                    xa% is_he_track = .true.
                     call set_tracks_from_python_inputs(.true.)
                 end if
             else
                 ! Hydrogen rich stars
                 if (allocated(py_track_list)) then
-                    ! First get info on the properties of the track_lis
+                    ! First get info on the properties of the track_list
                     if (allocated(track_list)) deallocate(track_list)
                     allocate(track_list(size(py_track_list)))
                     track_list = py_track_list
@@ -212,14 +209,9 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
                     call apply_cosmic_format_controls('H')
                     call read_key_eeps()
                     if (debug) print*, "key eeps", key_eeps   
-                    allocate(xa(num_tracks))
-                    xa% filename = track_list
-                    xa% is_he_track = .false.
                     call set_tracks_from_python_inputs(.false.)
                 end if
             endif
-
-            ! now allocate the tracks and read in the eeps
             
             if (debug) print*, "num_tracks", num_tracks
             if (debug) print*, "tracks set by COSMIC"
