@@ -544,7 +544,10 @@ module z_support
         i_co_core = locate_column(cols, co_core_mass, essential)
         
         !Return if cannot locate any of the essential columns
-        if (code_error) return
+        if (code_error) then
+            print*, "ahhhh columns" 
+            return
+        end if
         
         !optional columns
         i_binding_energy = -1
@@ -594,6 +597,10 @@ module z_support
 
         !now find the column
         locate_column = -1
+        print*,trim(colname)
+        print*,'------'
+        print*,adjustl(adjustr(cols(i)% name))
+        print*,'------'
         if (len(trim(colname))<1) return
         
         do i=1,size(cols)
@@ -1705,6 +1712,7 @@ module z_support
             c12_mass_frac = py_c12_mass_frac_He
             o16_mass_frac = py_o16_mass_frac_He
         end if
+
     end subroutine apply_cosmic_format_controls
 
     subroutine set_tracks_from_python_inputs(is_he)
@@ -1756,6 +1764,7 @@ module z_support
             tr_data = tr_data_h_in
             col_names = col_names_h_in
         end if
+        print*, col_names
     
         ! Allocate xa
         if (allocated(xa)) deallocate(xa)
@@ -1796,7 +1805,7 @@ module z_support
                 xa(i)%cols(j)%name = col_names(j, i)
             end do
             !determine column of mass, age etc.
-            print*, xa(i)% cols
+            print*, xa(i)% cols 
             call get_named_columns(xa(i)% cols, xa(i)% ncol,xa(i)% is_he_track)
             if (code_error) return
             
@@ -1816,7 +1825,7 @@ module z_support
             offset = offset + ntrack_arr(i)
 
         end do  
-        
+
     end subroutine set_tracks_from_python_inputs
     
     elemental function relative_diff(z1,z2) result(y)
