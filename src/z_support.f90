@@ -1632,6 +1632,174 @@ module z_support
         zpars(14) = z**0.4d0
 
     end subroutine
+
+        ! --------------------------
+    ! Apply Python-provided values based on track type
+    ! --------------------------
+    subroutine apply_cosmic_format_controls(track_type)
+        use c_m_interface
+        character(len=*), intent(in) :: track_type
+
+        if (track_type == 'H') then
+            read_eep_files = py_read_eep_files_H
+            PreMS_EEP = py_PreMS_EEP_H
+            ZAMS_EEP = py_ZAMS_EEP_H
+            IAMS_EEP = py_IAMS_EEP_H
+            TAMS_EEP = py_TAMS_EEP_H
+            BGB_EEP = py_BGB_EEP_H
+            cHeIgnition_EEP = py_cHeIgnition_EEP_H
+            cHeBurn_EEP = py_cHeBurn_EEP_H
+            TA_cHeB_EEP = py_TA_cHeB_EEP_H
+            TPAGB_EEP = py_TPAGB_EEP_H
+            cCBurn_EEP = py_cCBurn_EEP_H
+            post_AGB_EEP = py_post_AGB_EEP_H
+            Initial_EEP = py_Initial_EEP_H
+            Final_EEP = py_Final_EEP_H
+            fix_track = py_fix_track_H
+            low_mass_final_eep = py_low_mass_final_eep_H
+            high_mass_final_eep = py_high_mass_final_eep_H
+
+            age_colname = py_age_colname_H
+            mass_colname = py_mass_colname_H
+            log_L_colname = py_log_L_colname_H
+            log_T_colname = py_log_T_colname_H
+            log_R_colname = py_log_R_colname_H
+            he_core_mass = py_he_core_mass_H
+            co_core_mass = py_co_core_mass_H
+            he_core_radius = py_he_core_radius_H
+            co_core_radius = py_co_core_radius_H
+            mass_conv_envelope = py_mass_conv_envelope_H
+            radius_conv_envelope = py_radius_conv_envelope_H
+            log_Tc = py_log_Tc_H
+            He4_mass_frac = py_He4_mass_frac_H
+            c12_mass_frac = py_c12_mass_frac_H
+            o16_mass_frac = py_o16_mass_frac_H
+
+        else if (track_type == 'He') then
+            read_eep_files = py_read_eep_files_He
+            BGB_EEP = py_BGB_EEP_He
+            cHeBurn_EEP = py_cHeBurn_EEP_He
+            TA_cHeB_EEP = py_TA_cHeB_EEP_He
+            TPAGB_EEP = py_TPAGB_EEP_He
+            cCBurn_EEP = py_cCBurn_EEP_He
+            post_AGB_EEP = py_post_AGB_EEP_He
+            Initial_EEP = py_Initial_EEP_He
+            Final_EEP = py_Final_EEP_He
+            fix_track = py_fix_track_He
+            low_mass_final_eep = py_low_mass_final_eep_He
+            high_mass_final_eep = py_high_mass_final_eep_He
+
+            age_colname = py_age_colname_He
+            mass_colname = py_mass_colname_He
+            log_L_colname = py_log_L_colname_He
+            log_T_colname = py_log_T_colname_He
+            log_R_colname = py_log_R_colname_He
+            he_core_mass = py_he_core_mass_He
+            co_core_mass = py_co_core_mass_He
+            he_core_radius = py_he_core_radius_He
+            co_core_radius = py_co_core_radius_He
+            mass_conv_envelope = py_mass_conv_envelope_He
+            radius_conv_envelope = py_radius_conv_envelope_He
+            log_Tc = py_log_Tc_He
+            He4_mass_frac = py_He4_mass_frac_He
+            c12_mass_frac = py_c12_mass_frac_He
+            o16_mass_frac = py_o16_mass_frac_He
+        end if
+    end subroutine apply_cosmic_format_controls
+
+    subroutine set_tracks_from_python_inputs(is_he)
+        use c_m_interface
+        implicit none
+        logical, intent(in) :: is_he
+        integer :: i, j, offset
+        integer :: ntracks_local
+        character(len=256), allocatable :: filenames(:)
+        real(8), allocatable :: initial_mass(:), initial_Y(:), initial_Z_local(:)
+        real(8), allocatable :: Fe_div_H(:), alpha_div_Fe(:), v_div_vcrit(:)
+        integer, allocatable :: ntrack_arr(:), neep_arr(:), ncol_arr(:)
+        logical, allocatable :: is_he_arr(:)
+        integer, allocatable :: eep_data(:,:)
+        real(8), allocatable :: tr_data(:,:)
+        character(len=256), allocatable :: col_names(:,:)
+    
+        ! Select appropriate input arrays
+        if (is_he) then
+            ntracks_local = ntracks_he_in
+            filenames = filenames_he_in
+            initial_mass = initial_mass_he_in
+            initial_Y = initial_Y_he_in
+            initial_Z_local = initial_Z_he_in
+            Fe_div_H = Fe_div_H_he_in
+            alpha_div_Fe = alpha_div_Fe_he_in
+            v_div_vcrit = v_div_vcrit_he_in
+            ntrack_arr = ntrack_arr_he_in
+            neep_arr = neep_arr_he_in
+            ncol_arr = ncol_arr_he_in
+            is_he_arr = is_he_arr_he_in
+            eep_data = eep_data_he_in
+            tr_data = tr_data_he_in
+            col_names = col_names_he_in
+        else
+            ntracks_local = ntracks_h_in
+            filenames = filenames_h_in
+            initial_mass = initial_mass_h_in
+            initial_Y = initial_Y_h_in
+            initial_Z_local = initial_Z_h_in
+            Fe_div_H = Fe_div_H_h_in
+            alpha_div_Fe = alpha_div_Fe_h_in
+            v_div_vcrit = v_div_vcrit_h_in
+            ntrack_arr = ntrack_arr_h_in
+            neep_arr = neep_arr_h_in
+            ncol_arr = ncol_arr_h_in
+            is_he_arr = is_he_arr_h_in
+            eep_data = eep_data_h_in
+            tr_data = tr_data_h_in
+            col_names = col_names_h_in
+        end if
+    
+        ! Allocate xa
+        if (allocated(xa)) deallocate(xa)
+        allocate(xa(ntracks_local))
+    
+        offset = 0
+        do i = 1, ntracks_local
+            xa(i)%filename = filenames(i)
+            xa(i)%initial_mass = initial_mass(i)
+            xa(i)%initial_Y = initial_Y(i)
+            xa(i)%initial_Z = initial_Z_local(i)
+            xa(i)%Fe_div_H = Fe_div_H(i)
+            xa(i)%alpha_div_Fe = alpha_div_Fe(i)
+            xa(i)%v_div_vcrit = v_div_vcrit(i)
+            xa(i)%ntrack = ntrack_arr(i)
+            xa(i)%neep = neep_arr(i)
+            xa(i)%ncol = ncol_arr(i)
+            xa(i)%is_he_track = is_he_arr(i)
+    
+            ! Allocate arrays
+            allocate(xa(i)%eep(neep_arr(i)))
+            allocate(xa(i)%tr(ncol_arr(i), ntrack_arr(i)))
+            allocate(xa(i)%cols(ncol_arr(i)))
+    
+            ! Copy data
+            xa(i)%eep = eep_data(1:neep_arr(i), i)
+            do j = 1, ntrack_arr(i)
+                xa(i)%tr(:, j) = tr_data(1:ncol_arr(i), sum(ntrack_arr(1:i-1)) + j)
+            end do
+            do j = 1, ncol_arr(i)
+                xa(i)%cols(j)%name = col_names(j, i)
+            end do
+            !determine column of mass, age etc.
+            if (get_cols) call get_named_columns(xa(i)% cols, xa(i)% ncol,xa(i)% is_he_track)
+            if (code_error) return
+            
+            if (xa(i)% is_he_track) then
+                xa(i)% initial_mass = xa(i)% tr(i_mass,ZAMS_HE_EEP)
+            else
+                xa(i)% initial_mass = xa(i)% tr(i_mass,ZAMS_EEP)
+            endif
+            call set_star_type_from_history(xa(i))
+        end do  
+    end subroutine set_tracks_from_python_inputs
     
     elemental function relative_diff(z1,z2) result(y)
         real(dp),intent(in) :: z1,z2

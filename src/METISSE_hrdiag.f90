@@ -259,7 +259,7 @@
     if(t% ierr<0) code_error = .true.
     if(code_error) t% ierr = -1
     
-    if(debug) print*,"finished hrdiag",mt,mc,aj,kw,id,tm,tn
+    if(debug) print*,"finished hrdiag",mt,mc,aj,kw,id,tm,tn,t% pars% phase
 !    if (t% is_he_track)print*,"finished hrdiag",t% pars% mass, t% pars% core_mass,t% pars% age,t% pars% radius,id
 
     
