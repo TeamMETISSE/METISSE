@@ -36,7 +36,8 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
         ! New tracks need to be loaded
         ! if input metallicity 'z' has changed significantly from the old 'initial_z'
         if (relative_diff(initial_Z, z) .ge. Z_accuracy_limit) load_tracks = .true.
-
+        if (all(abs(zpars) == 0.d0)) load_tracks = .true.
+        
         ! or maybe metallicity is the same, but paths may have changed
         ! (for example, for sets of tracks computed with different stellar parameters)
         ! Currently only for cosmic, as it can change path_to_tracks mid-computation
