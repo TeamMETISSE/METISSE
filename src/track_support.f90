@@ -26,12 +26,12 @@ module track_support
     integer :: err_unit, out_unit
 
     integer :: front_end = -1
-
     integer, parameter :: TEST = 0
     integer, parameter :: MAIN = 1
     integer, parameter :: BSE = 2
     integer, parameter :: COSMIC = 3
-    
+    integer, parameter :: AMUSE = 4
+
     ! mode >0 enables read-only mode for files when multi-threading
     integer :: mode = 0
     
