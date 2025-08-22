@@ -25,7 +25,7 @@ module interp_support
         integer:: i, j, k, mlo, mhi, nt, age_col, start
         integer, allocatable:: eeps(:), excl_cols(:)
         
-        debug_mass = .false.
+        debug_mass = .true.
 !        if(t% is_he_track)debug_mass = .true.
 
         if (debug_mass) print*, 'in interpolate_mass',t% initial_mass, t% pars% phase

@@ -3,8 +3,6 @@
     use sse_support
     implicit none
     
-    logical :: end_of_file, debug_rem
-
     !flags to be used while making decision for which method to use
     !for calculating properties of remnnants: neutron stars and black holes
     integer, parameter :: original_SSE = 0
@@ -26,15 +24,17 @@
     integer :: wd_flag = 0
     integer :: ec_flag = 0
     integer :: if_flag = 0
+
+    logical :: end_of_file
+    logical :: debug_rem = .false.
+
     contains
     
     logical function check_remnant_phase(pars,mc_max)
         type(star_parameters) :: pars
         real(dp) :: mc_max,mc_threshold
-
-        debug_rem = .false.
-        check_remnant_phase = .false.
         
+        check_remnant_phase = .false.
         mc_threshold = pars% core_mass
         
         if (pars% phase <= TPAGB) then       !without envelope loss

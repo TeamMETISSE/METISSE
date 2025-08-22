@@ -1014,9 +1014,10 @@ module z_support
     end subroutine set_star_type_from_label
 
     subroutine check_tracks(num_tracks)
-        integer :: n, abs_min_ntrack
-        real(dp) :: co_core, he_core, min_val
+        
         integer, intent(out):: num_tracks
+        integer :: n, abs_min_ntrack,loc
+        real(dp) :: co_core, he_core, min_val
         real(dp), allocatable, dimension(:) :: core_mass
         real(dp), allocatable, dimension(:) :: sgn
 
@@ -1028,9 +1029,11 @@ module z_support
 
         do n = 1,size(xa)
             xa(n)% complete = .true.
-            co_core = xa(n)% tr(i_co_core,xa(n)% ntrack)
-            he_core = xa(n)% tr(i_he_core,xa(n)% ntrack)
-            min_val = 0.01* xa(n)% tr(i_mass,xa(n)% ntrack)
+            loc = min(maxloc(xa(n)% tr(i_co_core,:),dim=1),xa(n)% ntrack)
+            print*, xa(n)% initial_mass, xa(n)% ntrack, loc
+            co_core = xa(n)% tr(i_co_core,loc)
+            he_core = xa(n)% tr(i_he_core,loc)
+            min_val = 0.01* xa(n)% tr(i_mass,loc)
             if (xa(n)% star_type == star_high_mass) then
                 if (co_core< min_val .or. he_core< min_val .or. he_core< co_core) then
                 write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: invalid core mass',co_core, he_core, xa(n)% initial_mass

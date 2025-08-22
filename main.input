@@ -4,12 +4,12 @@
 
 &SSE_input_controls
 
-initial_Z = 0.02
+initial_Z = 1.23d-4
 
 max_age = 2.0d4   !max age in Myrs
 
-number_of_tracks = 100
-min_mass = 0.3
+number_of_tracks = 1
+min_mass = 57.5
 max_mass = 100.0
 sampling_scheme = 'Kroupa2001'
 
