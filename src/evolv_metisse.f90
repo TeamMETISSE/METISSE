@@ -61,8 +61,6 @@ subroutine evolv_metisse(mass, max_age, ierr, id)
         open (io, FILE = trim(output_file), action="write")
         write(io, '(9a15, 2a10)') "time", "age", "mass","core_mass","He_core" &
                     ,"CO_core","log_L","log_Teff","log_radius", "phase","e"
-    else
-        output = .false.
     endif
     
     do while(.true.)
