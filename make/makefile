@@ -16,6 +16,9 @@ FFLAGS2= -ffixed-form -fimplicit-none $(DEBUG)
 # metisse in standalone mode
 METISSE=metisse
 
+# metisse as a library
+LIBMETISSE=libmetisse
+
 SRCE_main = main_metisse.f90
 
 SRCE_test = test_metisse.f90
@@ -30,11 +33,44 @@ METISSE_hrdiag.f90 METISSE_deltat.f90
 SRCE00 = \
 assign_remnant.f hrdiag_remnant.f mrenv.f \
 
+LIBSRCE = \
+		evolv_metisse.f90 \
+		assign_commons_main.f90 \
+		assign_commons_other.f90 \
+		track_support.f90 \
+		z_support.f90 \
+		sse_support.f90 \
+		remnant_support.f90 \
+		interp_support.f90 \
+		METISSE_miscellaneous.f90 \
+		METISSE_zcnsts.f90 \
+		METISSE_star.f90 \
+		METISSE_hrdiag.f90 \
+		METISSE_deltat.f90
+
+LIBSRCE1 = \
+	   METISSE_gntage.f90 \
+       METISSE_deltat.f90 \
+       METISSE_mlwind.f90 \
+       METISSE_hrdiag.f90 \
+       METISSE_star.f90 \
+       METISSE_zcnsts.f90 \
+       track_support.f90 \
+       z_support.f90 \
+       sse_support.f90  \
+       remnant_support.f90 \
+       interp_support.f90 \
+       comenv_lambda.f90 \
+       METISSE_miscellaneous.f90 \
+	   evolv_metisse.f90 \
+	   assign_commons_other.f90
+	
 
 OBJT_main = $(SRCE_main:.f90=.o)
 OBJT_test = $(SRCE_test:.f90=.o)
 OBJT0 = $(SRCE0:.f90=.o)
 OBJT00 = $(SRCE00:.f=.o)
+LIBOBJ = $(LIBSRCE:.f90=.o)
 	
 track_support.o: $(METISSE_src_dir)/track_support.f90
 imf_support.o: $(METISSE_src_dir)/imf_support.f90 track_support.o
@@ -71,8 +107,13 @@ test_metisse.o: $(METISSE_test_dir)/test_metisse.f90 track_support.o z_support.o
 %.o : $(METISSE_test_dir)/%.f90
 	$(FC) $(FFLAGS1) -c $<
 
+
 $(METISSE): $(OBJT_main) $(OBJT0) $(OBJT00)
 	$(FC) $(FFLAGS1) -o $(BASE_dir)/$(METISSE) $^
+
+$(LIBMETISSE): $(LIBOBJ) $(OBJT00)
+	# $(FC) $(FFLAGS1) -c $^
+	ar rc $(BASE_dir)/$(LIBMETISSE).a *.o
 	
 all: $(METISSE)
 
@@ -84,5 +125,6 @@ $(TEST): $(OBJT_test) $(OBJT0) $(OBJT00)
 clean:
 	rm -f $(BASE_dir)/$(METISSE)
 	rm -f $(BASE_dir)/$(TEST)
+	rm -f $(BASE_dir)/$(LIBMETISSE).a
 	rm -f *.mod *.o
 

@@ -79,7 +79,7 @@
              !interpolate in age
             call interpolate_age(t,t% pars% age)
             if (debug)print*, "mt difference",t% pars% mass, mt, mt-t% pars% mass,kw
-            if (front_end <= main) then
+            if (front_end <= main .or. front_end ==AMUSE) then
                 mt = t% pars% mass
             else
                 t% pars% mass = mt
@@ -205,7 +205,7 @@
     IF(has_become_remnant) THEN
 !        print*, 'star',id,'is remnant',t% pars% mass,mcbagb,t% pars% core_mass
         t% star_type = remnant
-        if (front_end <= main .or. front_end == BSE) then
+        if (front_end <= main .or. front_end == BSE .or. front_end ==AMUSE) then
             if(t% pars% phase /= HeWD) then
                 call assign_remnant_METISSE(t% pars, mcbagb)
                 ! kw at this point contains old phase of the star,
@@ -229,8 +229,9 @@
         !has_become_remnant is only for assigning remnants, setting it to false now
     ENDIF
 
+    ! Evolution of stellar remnants
     IF(t% pars% phase >= HeWD) THEN
-        if (front_end <= main .or. front_end == BSE) then
+        if (front_end <= main .or. front_end == BSE .or. front_end ==AMUSE) then
             call evolve_remnants_METISSE(t% pars)
         elseif (front_end == COSMIC) then
             call hrdiag_remnant(zpars,t% pars% mass,t% pars% core_mass,t% pars% luminosity,&
