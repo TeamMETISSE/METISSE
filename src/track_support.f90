@@ -384,10 +384,15 @@ module track_support
         integer, optional:: i
         print*, 'METISSE error: terminating code'
         if (present(i)) then
-            if (i == 5) print*, 'See terminal for details'
+            if (i == 6) print*, 'See terminal for details'
             if (i == 99) print*, 'See error file (fort.99)for details'
         endif
-        if (front_end /= COSMIC) STOP 1
+        call flush(6)
+        if (front_end == COSMIC) then
+            return
+        else
+            STOP 1
+        endif
     end subroutine stop_code
     
     subroutine write_eep_track(x, mt, filename)
@@ -749,24 +754,6 @@ module track_support
         endif
         return
     end function identified
-    
-    subroutine uniform_distribution(n, minval, maxval, marray)
-        implicit none
-        integer, intent(in):: n
-        real(dp), intent(in):: minval, maxval
-        real(dp), intent(out):: marray(n)
-        real(dp):: h
-        integer:: i
-
-        marray = 0.d0
-        !linearly spaced
-        h = abs(maxval-minval)/(n-1)
-        do i = 1, n
-            marray(i) = minval + (i-1)*h
-        end do
-        
-        !for log spaced
-    end subroutine uniform_distribution
 
     !from COMPAS (Team Compas 2020)
     real(dp) function quadratic(a, b, c) result(x)

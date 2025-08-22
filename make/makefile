@@ -25,7 +25,7 @@ SRCE_test = test_metisse.f90
 
 SRCE0 = \
 evolv_metisse.f90 assign_commons_main.f90 assign_commons_other.f90 \
-track_support.f90 z_support.f90 sse_support.f90 \
+track_support.f90 imf_support.f90 z_support.f90 sse_support.f90 \
 remnant_support.f90 interp_support.f90 \
 METISSE_miscellaneous.f90 METISSE_zcnsts.f90 METISSE_star.f90 \
 METISSE_hrdiag.f90 METISSE_deltat.f90
@@ -73,6 +73,7 @@ OBJT00 = $(SRCE00:.f=.o)
 LIBOBJ = $(LIBSRCE:.f90=.o)
 	
 track_support.o: $(METISSE_src_dir)/track_support.f90
+imf_support.o: $(METISSE_src_dir)/imf_support.f90 track_support.o
 z_support.o: $(METISSE_src_dir)/z_support.f90 track_support.o
 interp_support.o: $(METISSE_src_dir)/interp_support.f90 track_support.o
 sse_support.o: $(METISSE_src_dir)/sse_support.f90 track_support.o
@@ -90,10 +91,10 @@ METISSE_hrdiag.o: $(METISSE_src_dir)/METISSE_hrdiag.f90 track_support.o interp_s
 METISSE_gntage.o: $(METISSE_src_dir)/METISSE_gntage.f90 track_support.o interp_support.o
 
 evolv_metisse.o: $(METISSE_src_dir)/evolv_metisse.f90 track_support.o sse_support.o
-main_metisse.o: $(METISSE_src_dir)/main_metisse.f90 track_support.o z_support.o
+main_metisse.o: $(METISSE_src_dir)/main_metisse.f90 track_support.o z_support.o imf_support.o
 assign_commons_main.o: $(METISSE_src_dir)/assign_commons_main.f90 track_support.o remnant_support.o
 
-test_metisse.o: $(METISSE_test_dir)/test_metisse.f90 track_support.o z_support.o
+test_metisse.o: $(METISSE_test_dir)/test_metisse.f90 track_support.o z_support.o imf_support.o
 
 
 

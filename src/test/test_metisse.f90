@@ -6,6 +6,7 @@ program test_metisse
 
     use track_support
     use z_support
+    use imf_support
 
     implicit none
     integer:: ierr,i, io
@@ -27,7 +28,7 @@ program test_metisse
         
     
     allocate(mass_array(number_of_tracks))
-    call uniform_distribution(number_of_tracks,min_mass,max_mass,mass_array)
+    call sample_uniform(number_of_tracks,min_mass,max_mass,mass_array)
     
 
     !evolve stars
