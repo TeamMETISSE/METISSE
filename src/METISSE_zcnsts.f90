@@ -1,16 +1,16 @@
-subroutine METISSE_zcnsts(z,zpars,ierr)
+subroutine METISSE_zcnsts(z, zpars, ierr)
     use track_support
     use z_support
     use c_m_interface
 
-    real(dp), intent(in) :: z
-    real(dp), intent(out) :: zpars(20)
-    integer, intent(out) :: ierr
+    real(dp), intent(in):: z
+    real(dp), intent(out):: zpars(20)
+    integer, intent(out):: ierr
     
-    character(LEN=strlen), allocatable :: track_list(:)
-    character(LEN=strlen) :: USE_DIR, find_cmd, rnd, infile, temp_filename
-    integer :: i,j,nloop, num_tracks
-    logical :: load_tracks, debug
+    character(LEN = strlen), allocatable:: track_list(:)
+    character(LEN = strlen):: USE_DIR, find_cmd, rnd, infile, temp_filename
+    integer:: i, j, nloop, num_tracks
+    logical:: load_tracks, debug
     
     debug = .false.
     ierr = 0
@@ -20,7 +20,7 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
 
     code_error = .false.
     
-    if (front_end <0) then
+    if (front_end < 0) then
         print*, 'METISSE error: front_end is not initialized'
         ierr = 1; return
     endif
@@ -36,9 +36,9 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
         
         ! New tracks need to be loaded
         ! if input metallicity 'z' has changed significantly from the old 'initial_z'
-        if (relative_diff(initial_Z,z) .ge. Z_accuracy_limit) load_tracks = .true.
+        if (relative_diff(initial_Z, z) .ge. Z_accuracy_limit) load_tracks = .true.
         if (all(abs(zpars) == 0.d0)) load_tracks = .true.
-
+        
         ! or maybe metallicity is the same, but paths may have changed
         ! (for example, for sets of tracks computed with different stellar parameters)
         ! Currently only for cosmic, as it can change path_to_tracks mid-computation
@@ -47,13 +47,13 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
         if (front_end == COSMIC) call check_path_change(load_tracks)
     
         if (load_tracks) then
-            if (mode/=0) then
+            if (mode /= 0) then
               print*, 'METISSE error: cannot change path or metallicity mid-run when using mpi'
               ierr = 1
               return
             endif
         else
-            if (debug) print*, 'No change in metallicity or paths, exiting METISSE_zcnsts',initial_Z,z
+            if (debug) print*, 'No change in metallicity or paths, exiting METISSE_zcnsts',initial_Z, z
             return
         endif
     else
@@ -75,26 +75,35 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
              call get_test_inputs()
         case(main)
             infile = trim(METISSE_DIR)// '/main.input'
-            call read_main_input(infile,ierr)
+            call read_main_input(infile, ierr)
             if (.not. defined(initial_Z ))then
                 print*,"METISSE error: initial_Z is not defined in ",trim(infile)
                 ierr = 1
             endif
-            if (ierr/=0) call stop_code
+            if (ierr /= 0) call stop_code
             
             infile = trim(METISSE_DIR)// '/metisse.input'
-            call read_metisse_input(infile,ierr)
-            if (ierr/=0) call stop_code
+            call read_metisse_input(infile, ierr)
+            if (ierr /= 0) call stop_code
         case(bse)
             infile = 'evolve_metisse.in'
-            call read_metisse_input(infile,ierr)
-            if (ierr/=0) call stop_code
+            call read_metisse_input(infile, ierr)
+            if (ierr /= 0) call stop_code
         case(COSMIC)
              call get_COSMIC_input()
+        case(AMUSE)
+            ! If AMUSE has not set METALLICITY_DIR, it will use the defaults from METISSE
+            if (len(trim(amuse_metallicity_dir)) > 0) METALLICITY_DIR = amuse_metallicity_dir
+            if (len(trim(amuse_metallicity_dir_he)) > 0) METALLICITY_DIR_HE = amuse_metallicity_dir_he
+            !write(*,*) "path_to_tracks", path_to_tracks
         case default
             print*, "METISSE error: reading inputs; unrecognized front_end_name"
             ierr = 1; return
         end select
+        if (verbose) then
+            write(*,*) "METALLICITY_DIR: ", METALLICITY_DIR
+            write(*,*) "METALLICITY_DIR_HE: ", METALLICITY_DIR_HE
+        endif
         
         !Some unit numbers are reserved: 5 is standard input, 6 is standard output.
         if (verbose) then
@@ -102,7 +111,7 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
             out_unit = 6
         else
             out_unit = alloc_iounit(ierr)
-            open(out_unit,file='tracks_log.txt',action='write',status='unknown')
+            open(out_unit, file='tracks_log.txt',action='write',status='unknown')
         endif
         
         if (write_error_to_file) then
@@ -111,14 +120,11 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
             err_unit = 6      !will write to screen
         endif
         
-        ! use input file/path to locate list of *metallicity.in files
+        ! use input file/path to locate list of*metallicity.in files
         ! these file contain information about eep tracks, their metallicity
         ! and the format file
         
-        select case(front_end)
-        case(COSMIC)
-            ! hold for now since we read eeps directly
-        case default    
+        if (front_end /= COSMIC) then    
             if (len(trim(METALLICITY_DIR))< 1) then
                 write(*,*) "METISSE error: METALLICITY_DIR/path_to_tracks is an empty string"
                 ierr = 1
@@ -156,11 +162,11 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
                     call get_metallicity_list(metallicity_file_list_he,Z_He)
                 endif
             endif
-        end select
+        end if
     endif
     
     if (front_end > main) initial_Z = z
-    write(out_unit,'(a,1p1e13.5)') ' Input Z is :', z
+    write(out_unit, '(a, 1p1e13.5)') ' Input Z is :', z
 
     if (use_sse_NHe)then
         ! only read hydrogen tracks
@@ -323,14 +329,14 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
         call check_tracks(num_tracks)
 
         ! Process the input tracks
-        if (i==2) then
+        if (i == 2) then
             !sort the array based on intial mass if not sorted already
             call sort_minitial()
             !reset z parameters where available
             !and determine cutoff masses
             call set_zparameters_he(num_tracks)
-            call copy_and_deallocatex(num_tracks,sa_he)
-            call get_minmax(sa_he(1)% is_he_track,Mmax_he_array,Mmin_he_array)
+            call copy_and_deallocatex(num_tracks, sa_he)
+            call get_minmax(sa_he(1)% is_he_track, Mmax_he_array, Mmin_he_array)
             if (allocated(core_cols_he)) deallocate(core_cols_he)
 
             allocate(core_cols_he(4))
@@ -338,16 +344,16 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
             core_cols_he(1) = i_he_age
             core_cols_he(2) = i_logL
             core_cols_he(3) = i_co_core
-            if (i_he_RCO>0) core_cols_he(4) = i_he_RCO
+            if (i_he_RCO > 0) core_cols_he(4) = i_he_RCO
         else
             !sort the array based on intial mass if not sorted already
             call sort_minitial()
             !reset z parameters where available
             !and determine cutoff masses
-            call set_zparameters(num_tracks,zpars)
-            call copy_and_deallocatex(num_tracks,sa)
+            call set_zparameters(num_tracks, zpars)
+            call copy_and_deallocatex(num_tracks, sa)
             
-            call get_minmax(sa(1)% is_he_track,Mmax_array,Mmin_array)
+            call get_minmax(sa(1)% is_he_track, Mmax_array, Mmin_array)
             if (allocated(core_cols)) deallocate(core_cols)
 
             allocate(core_cols(6))
@@ -358,8 +364,8 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
             core_cols(3) = i_he_core
             core_cols(4) = i_co_core
 
-            if (i_RHe_core>0) core_cols(5) = i_RHe_core
-            if (i_RCO_core>0) core_cols(6) = i_RCO_core
+            if (i_RHe_core > 0) core_cols(5) = i_RHe_core
+            if (i_RCO_core > 0) core_cols(6) = i_RCO_core
         endif
         deallocate(track_list)
         
