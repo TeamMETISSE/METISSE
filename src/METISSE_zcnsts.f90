@@ -90,7 +90,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
             call read_metisse_input(infile, ierr)
             if (ierr /= 0) call stop_code
         case(COSMIC)
-             call get_COSMIC_input()
+             ! call get_COSMIC_input()
         case(AMUSE)
             ! If AMUSE has not set METALLICITY_DIR, it will use the defaults from METISSE
             if (len(trim(amuse_metallicity_dir)) > 0) METALLICITY_DIR = amuse_metallicity_dir
@@ -176,7 +176,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
         nloop = 2
     endif
 
-    ! need to intialize these seperately as they may be
+    ! need to initialize these separately as they may be
     ! used uninitialized if he tracks are not present
     i_he_RCO = -1
     i_he_mcenv = -1
@@ -192,7 +192,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
             if (i == 2) then
                 ! Naked helium stars
                 if (allocated(py_track_list_he)) then
-                    ! First get info on the properties of the track_lis
+                    ! First get info on the properties of the track_list
                     if (allocated(track_list)) deallocate(track_list)
                     allocate(track_list(size(py_track_list_he)))
                     track_list = py_track_list_he
@@ -300,7 +300,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
 !                    if(debug) write(*,'(a100,f8.2,99i8)') trim(xa(j)% filename), xa(j)% initial_mass, xa(j)% ncol
                 end do
             else
-                !read and store column names in temp_cols from the the file if header location is not provided
+                !read and store column names in temp_cols from the file if the header location is not provided
                 if (header_location<=0) then
                     if (debug) print*,"Reading column names from file"
                     call process_columns(column_name_file,temp_cols,ierr)
