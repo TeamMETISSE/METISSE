@@ -90,7 +90,7 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
             call read_metisse_input(infile,ierr)
             if (ierr/=0) call stop_code
         case(COSMIC)
-             call get_COSMIC_input()
+            !  call get_COSMIC_input()
         case(AMUSE)
             ! If AMUSE has not set METALLICITY_DIR, it will use the defaults from METISSE
             if (len(trim(amuse_metallicity_dir)) > 0) METALLICITY_DIR = amuse_metallicity_dir
@@ -124,10 +124,7 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
         ! these file contain information about eep tracks, their metallicity
         ! and the format file
         
-        select case(front_end)
-        case(COSMIC)
-            ! hold for now since we read eeps directly
-        case default    
+        if (front_end /= COSMIC) then   
             if (len(trim(METALLICITY_DIR))< 1) then
                 write(*,*) "METISSE error: METALLICITY_DIR/path_to_tracks is an empty string"
                 ierr = 1
@@ -165,7 +162,7 @@ subroutine METISSE_zcnsts(z,zpars,ierr)
                     call get_metallicity_list(metallicity_file_list_he,Z_He)
                 endif
             endif
-        end select
+        end if
     endif
     
     if (front_end > main) initial_Z = z
