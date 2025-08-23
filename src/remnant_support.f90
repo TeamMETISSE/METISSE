@@ -36,7 +36,7 @@
         
         check_remnant_phase = .false.
         
-        if ((pars% mass > very_low_mass_limit) .and. (pars% core_mass<tiny)) then
+        if ((pars% phase >0) .and. (pars% core_mass<tiny)) then
             write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",mc_max, mc_threshold
             code_error = .true.
             !assigning an ad-hoc non-zero core mass so the code doesn't break
