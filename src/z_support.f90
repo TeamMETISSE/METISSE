@@ -1014,9 +1014,10 @@ module z_support
     end subroutine set_star_type_from_label
 
     subroutine check_tracks(num_tracks)
-        integer :: n, abs_min_ntrack
-        real(dp) :: co_core, he_core, min_val
+        
         integer, intent(out):: num_tracks
+        integer :: n, abs_min_ntrack,loc
+        real(dp) :: co_core, he_core, min_val
         real(dp), allocatable, dimension(:) :: core_mass
         real(dp), allocatable, dimension(:) :: sgn
 
@@ -1028,26 +1029,40 @@ module z_support
 
         do n = 1,size(xa)
             xa(n)% complete = .true.
-            co_core = xa(n)% tr(i_co_core,xa(n)% ntrack)
-            he_core = xa(n)% tr(i_he_core,xa(n)% ntrack)
-            min_val = 0.01* xa(n)% tr(i_mass,xa(n)% ntrack)
-            if (xa(n)% star_type == star_high_mass) then
-                if (co_core< min_val .or. he_core< min_val .or. he_core< co_core) then
-                write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: invalid core mass',co_core, he_core, xa(n)% initial_mass
-                    xa(n)% complete = .false.
-                    cycle
-                endif
+
+            ! first check if tracks at least have MS
+            abs_min_ntrack = TAMS_EEP
+            if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
+            if (xa(n)% ntrack < abs_min_ntrack) then
+                write(out_unit,*)'skipping ',trim(xa(n)% filename)
+                write(out_unit,*) 'REASON: length < TAMS_EEP',xa(n)% ntrack, xa(n)% initial_mass
+                xa(n)% complete = .false.
+                cycle
             endif
 
-            if (xa(n)% ntrack< get_min_ntrack(xa(n)% star_type, xa(n)% is_he_track)) then
-                abs_min_ntrack = TAMS_EEP
-                if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
-                if (xa(n)% ntrack < abs_min_ntrack) then
-                    write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
-                    xa(n)% complete = .false.
-                    cycle
+            ! next check for core masses for massive stars
+            if (xa(n)% star_type == star_high_mass) then
+                loc = xa(n)% ntrack 
+                co_core = xa(n)% tr(i_co_core,loc)
+                he_core = xa(n)% tr(i_he_core,loc)
+                min_val = 0.01* xa(n)% tr(i_mass,loc)
+                if (co_core< min_val .or. he_core< min_val .or. he_core< co_core) then
+                    ! workaround to include tracks with decaying co core  
+                    ! it's possibly a numerical issue- tracks should take care of this 
+                    ! check if co core was ever formed 
+                    loc = maxloc(xa(n)% tr(i_co_core,:),dim=1)
+                    co_core = xa(n)% tr(i_co_core,loc)
+                    he_core = xa(n)% tr(i_he_core,loc)
+                    min_val = 0.01* xa(n)% tr(i_mass,loc)
+                    if (co_core< min_val .or. he_core< min_val .or. he_core< co_core) then
+                        write(out_unit,*)'skipping ',trim(xa(n)% filename)
+                        write(out_unit,*)'REASON: invalid core mass', xa(n)% initial_mass, he_core, co_core
+                        xa(n)% complete = .false.
+                        cycle
+                    else
+                        xa(n)% tr(i_co_core,loc:xa(n)% ntrack) = co_core
+                    endif
                 endif
-            
             endif
             
             ! for complete tracks, make logcolumns if need be

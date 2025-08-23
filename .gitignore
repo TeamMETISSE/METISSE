@@ -1,3 +1,9 @@
 *.swp
 *.o
 *.mod
+*.txt
+.DS_Store
+fort.99
+metisse
+output/evolve*
+.gitignore
