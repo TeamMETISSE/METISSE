@@ -1029,28 +1029,28 @@ module z_support
 
         do n = 1,size(xa)
             xa(n)% complete = .true.
-            loc = min(maxloc(xa(n)% tr(i_co_core,:),dim=1),xa(n)% ntrack)
-            print*, xa(n)% initial_mass, xa(n)% ntrack, loc
+
+            ! first check if tracks at least have MS
+            abs_min_ntrack = TAMS_EEP
+            if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
+            if (xa(n)% ntrack < abs_min_ntrack) then
+                write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
+                xa(n)% complete = .false.
+                cycle
+            endif
+
+            ! next check for core masses 
+            loc = xa(n)% ntrack !min(maxloc(xa(n)% tr(i_co_core,:),dim=1),xa(n)% ntrack)
             co_core = xa(n)% tr(i_co_core,loc)
             he_core = xa(n)% tr(i_he_core,loc)
             min_val = 0.01* xa(n)% tr(i_mass,loc)
             if (xa(n)% star_type == star_high_mass) then
                 if (co_core< min_val .or. he_core< min_val .or. he_core< co_core) then
-                write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: invalid core mass',co_core, he_core, xa(n)% initial_mass
+                    write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: invalid core mass'
+                    write(out_unit,*) xa(n)% initial_mass, he_core, co_core
                     xa(n)% complete = .false.
                     cycle
                 endif
-            endif
-
-            if (xa(n)% ntrack< get_min_ntrack(xa(n)% star_type, xa(n)% is_he_track)) then
-                abs_min_ntrack = TAMS_EEP
-                if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
-                if (xa(n)% ntrack < abs_min_ntrack) then
-                    write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
-                    xa(n)% complete = .false.
-                    cycle
-                endif
-            
             endif
             
             ! for complete tracks, make logcolumns if need be
