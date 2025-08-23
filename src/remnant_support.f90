@@ -35,25 +35,15 @@
         real(dp) :: mc_max,mc_threshold
         
         check_remnant_phase = .false.
-        mc_threshold = pars% core_mass
         
-        if (pars% phase <= TPAGB) then       !without envelope loss
-            !mc = MAX(mc_max,mc_threshold)
-            !mc_max = MIN(pars% mass,mc_max)
-            mc_threshold = pars% McCO
-        elseif (pars% phase >= He_MS) then
-            mc_threshold = pars% core_mass
-        else
-            return
-        endif
-
-        if (mc_max<=0.d0 .or. mc_threshold<=0.d0) then
+        if ((pars% mass > very_low_mass_limit) .and. (pars% core_mass<tiny)) then
             write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",mc_max, mc_threshold
             code_error = .true.
             !assigning an ad-hoc non-zero core mass so the code doesn't break
-            !TODO: fix very low-mass stars that form hewd and may get caught in this
             mc_threshold = 0.7*pars% McHe
             mc_max = mc_threshold
+        else
+            mc_threshold = pars% core_mass
         endif
         
         if(mc_threshold>=mc_max .or. abs(mc_max-mc_threshold)<tiny .or. end_of_file)then
