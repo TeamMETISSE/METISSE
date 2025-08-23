@@ -1034,22 +1034,34 @@ module z_support
             abs_min_ntrack = TAMS_EEP
             if(xa(n)% is_he_track) abs_min_ntrack = TAMS_HE_EEP
             if (xa(n)% ntrack < abs_min_ntrack) then
-                write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: length < TAMS_EEP',xa(n)% ntrack
+                write(out_unit,*)'skipping ',trim(xa(n)% filename)
+                write(out_unit,*) 'REASON: length < TAMS_EEP',xa(n)% ntrack, xa(n)% initial_mass
                 xa(n)% complete = .false.
                 cycle
             endif
 
-            ! next check for core masses 
-            loc = xa(n)% ntrack !min(maxloc(xa(n)% tr(i_co_core,:),dim=1),xa(n)% ntrack)
-            co_core = xa(n)% tr(i_co_core,loc)
-            he_core = xa(n)% tr(i_he_core,loc)
-            min_val = 0.01* xa(n)% tr(i_mass,loc)
+            ! next check for core masses for massive stars
             if (xa(n)% star_type == star_high_mass) then
+                loc = xa(n)% ntrack 
+                co_core = xa(n)% tr(i_co_core,loc)
+                he_core = xa(n)% tr(i_he_core,loc)
+                min_val = 0.01* xa(n)% tr(i_mass,loc)
                 if (co_core< min_val .or. he_core< min_val .or. he_core< co_core) then
-                    write(out_unit,*)'skipping ',xa(n)% filename, 'REASON: invalid core mass'
-                    write(out_unit,*) xa(n)% initial_mass, he_core, co_core
-                    xa(n)% complete = .false.
-                    cycle
+                    ! workaround to include tracks with decaying co core  
+                    ! it's possibly a numerical issue- tracks should take care of this 
+                    ! check if co core was ever formed 
+                    loc = maxloc(xa(n)% tr(i_co_core,:),dim=1)
+                    co_core = xa(n)% tr(i_co_core,loc)
+                    he_core = xa(n)% tr(i_he_core,loc)
+                    min_val = 0.01* xa(n)% tr(i_mass,loc)
+                    if (co_core< min_val .or. he_core< min_val .or. he_core< co_core) then
+                        write(out_unit,*)'skipping ',trim(xa(n)% filename)
+                        write(out_unit,*)'REASON: invalid core mass', xa(n)% initial_mass, he_core, co_core
+                        xa(n)% complete = .false.
+                        cycle
+                    else
+                        xa(n)% tr(i_co_core,loc:xa(n)% ntrack) = co_core
+                    endif
                 endif
             endif
             

@@ -25,7 +25,7 @@ module interp_support
         integer:: i, j, k, mlo, mhi, nt, age_col, start
         integer, allocatable:: eeps(:), excl_cols(:)
         
-        debug_mass = .true.
+        debug_mass = .false.
 !        if(t% is_he_track)debug_mass = .true.
 
         if (debug_mass) print*, 'in interpolate_mass',t% initial_mass, t% pars% phase
@@ -855,12 +855,10 @@ module interp_support
     subroutine save_values(new_line, pars)
         type(star_parameters):: pars
         real(dp), intent (in):: new_line(:,:)
-        real(dp):: lim_R
-        real(dp):: env_mass
-        real(dp):: sgn
+        real(dp):: lim_R, env_mass, sgn
 
         pars% mass = new_line(i_mass, 1)
-        pars% McHe = new_line(i_he_core, 1)
+        pars% McHe = new_line(i_he_core, 1)            
         pars% McCO = new_line(i_co_core, 1)
         pars% log_L = new_line(i_logL, 1)
         pars% luminosity = 10**pars% log_L
