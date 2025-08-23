@@ -93,9 +93,9 @@
                 
                 j_bagb = min(t% ntrack, TA_cHeB_EEP)
                 Mcbagb = t% tr(i_he_core, j_bagb)
-                mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
+                ! mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
 
-                if (check_remnant_phase(t% pars, mc_max)) has_become_remnant = .true.
+                 has_become_remnant  = check_remnant_phase(t% pars)
             
             
             ELSEIF (check_ge(t% pars% core_mass,t% pars% mass)) THEN
@@ -148,12 +148,16 @@
     ! Stripped/ naked helium stars phase 7:9
     IF(t% pars% phase >= He_MS .and. t% pars% phase <=He_GB) THEN
         if (use_sse_NHe) then
+            ! sse formulae for naked helium stars
             call evolve_after_envelope_loss(t,zpars(10))
             Mcbagb = t% zams_mass
             mc_max = max_core_mass_he(t% pars% mass, Mcbagb)
             
             if(t% pars% phase >He_MS) then
-                if(check_remnant_phase(t% pars, mc_max)) has_become_remnant = .true.
+                if ((t% pars% core_mass >=mc_max) .or. (abs(mc_max-t% pars% core_mass)<tiny)) then
+                    t% pars% core_mass = mc_max
+                    has_become_remnant  = check_remnant_phase(t% pars)
+                endif
             endif
             
             if (has_become_remnant .eqv..false.) then
@@ -189,8 +193,8 @@
                 
                 j_bagb = min(t% ntrack, TAMS_HE_EEP)
                 Mcbagb = t% tr(i_mass, j_bagb)
-                mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
-                if (check_remnant_phase(t% pars, mc_max)) has_become_remnant = .true.
+                ! mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
+                has_become_remnant  = check_remnant_phase(t% pars)
             else
                 ! Calculate mass and radius of convective envelope, and envelope gyration radius.
                 if (t% pars% core_radius<0) CALL calculate_rc(t,tscls,zpars,t% pars% core_radius)

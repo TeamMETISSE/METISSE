@@ -26,37 +26,24 @@
     integer :: if_flag = 0
 
     logical :: end_of_file
-    logical :: debug_rem = .false.
+    logical :: debug_rem = .true.
 
     contains
     
-    logical function check_remnant_phase(pars,mc_max)
+    logical function check_remnant_phase(pars)
         type(star_parameters) :: pars
-        real(dp) :: mc_max,mc_threshold
-        
-        check_remnant_phase = .false.
-        
+
+        check_remnant_phase = .true.
+
+        pars% core_mass = pars% McCO
         if ((pars% phase >0) .and. (pars% core_mass<tiny)) then
-            write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",mc_max, mc_threshold
-            code_error = .true.
+            write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",pars% core_mass
+            if (front_end/=COSMIC) code_error = .true.
             !assigning an ad-hoc non-zero core mass so the code doesn't break
-            mc_threshold = 0.7*pars% McHe
-            mc_max = mc_threshold
-        else
-            mc_threshold = pars% core_mass
+            pars% core_mass = 0.75*pars% McHe
         endif
-        
-        if(mc_threshold>=mc_max .or. abs(mc_max-mc_threshold)<tiny .or. end_of_file)then
-            !mc = MIN(mc_max,mc_threshold)
-            pars% core_mass = mc_threshold
-            pars% age_old = pars% age
-            check_remnant_phase = .true.
-            if (debug_rem) then
-                print*, "check_remnant_phase is true"
-                print*, "mass, core_mass, McCO, mc_max"
-                print*, pars% mass, pars% core_mass, pars% McCO, mc_max
-            end if
-        endif
+        pars% age_old = pars% age
+        if (debug_rem) print*, 'Remnant: mass, core_mass ', pars% mass, pars% McHe, pars% McCO
         
         end function check_remnant_phase
         
@@ -118,7 +105,7 @@
                     call check_ns_bh(pars)
                 endif
             endif
-        if (debug_rem .and. pars% phase>9) print*,"In remnant phase", phase_label(pars% phase+1)," , mass", pars% mass
+        if (debug_rem .and. pars% phase>9) print*,"Assigned remnant phase ", phase_label(pars% phase+1)
         
     end subroutine assign_remnant_METISSE
 
@@ -217,7 +204,7 @@
         pars% age = 0.0
 
         call evolve_white_dwarf(pars)
-        if (debug_rem) print*, "Remnant phase = ", phase_label(pars% phase+1), ", mass =", pars% mass
+        if (debug_rem) print*, phase_label(pars% phase+1), ", mass =", pars% mass
     end subroutine
 
     subroutine check_IFMR(mass, mc)
@@ -243,7 +230,7 @@
         if (debug_rem) print*,"In CCSNe section",pars% core_mass,pars% mass
         pars% age = 0.0
         Mrem = calculate_NSBH_mass(pars% core_mass,pars% mass)
-        if(debug_rem) print*, "Mrem= ", Mrem
+        if(debug_rem) print*, "Mrem = ", Mrem
 
         if(Mrem <= Max_NS_mass)then
             pars% phase = NS       !Zero-age Neutron star
@@ -255,7 +242,7 @@
             call evolve_black_hole(pars)
 
         endif
-        if (debug_rem) print*, "NS/BH mass from", trim(BHNS_mass_scheme),"scheme = ",pars% mass
+        if (debug_rem) print*, "NS/BH mass from ", trim(BHNS_mass_scheme)," scheme = ",pars% mass
     end subroutine
 
     real(dp) function calculate_NSBH_mass(Mc,Mt) result(Mrem)
