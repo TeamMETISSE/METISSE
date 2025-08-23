@@ -34,9 +34,6 @@
     else
         t => tarr(idd)
     endif
-
-
-    
     
     debug = .false.
 !   if ((id == 1).and. kw<=10 )debug = .true.

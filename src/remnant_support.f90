@@ -26,7 +26,7 @@
     integer :: if_flag = 0
 
     logical :: end_of_file
-    logical :: debug_rem = .true.
+    logical :: debug_rem = .false.
 
     contains
     
