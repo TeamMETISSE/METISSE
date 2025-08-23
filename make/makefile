@@ -90,7 +90,7 @@ track_support.o: $(METISSE_src_dir)/track_support.f90
 c_m_interface.o: $(METISSE_src_dir)/c_m_interface.f90
 
 imf_support.o: $(METISSE_src_dir)/imf_support.f90 track_support.o
-z_support.o: $(METISSE_src_dir)/z_support.f90 track_support.o c_m_interface.o
+z_support.o: $(METISSE_src_dir)/z_support.f90 track_support.o 
 interp_support.o: $(METISSE_src_dir)/interp_support.f90 track_support.o
 sse_support.o: $(METISSE_src_dir)/sse_support.f90 track_support.o
 remnant_support.o: $(METISSE_src_dir)/remnant_support.f90 track_support.o sse_support.o
@@ -101,7 +101,7 @@ comenv_lambda.o: $(METISSE_src_dir)/comenv_lambda.f90 track_support.o
 
 METISSE_mlwind.o: $(METISSE_src_dir)/METISSE_mlwind.f90 track_support.o
 METISSE_deltat.o: $(METISSE_src_dir)/METISSE_deltat.f90 track_support.o
-METISSE_zcnsts.o: $(METISSE_src_dir)/METISSE_zcnsts.f90 track_support.o z_support.o
+METISSE_zcnsts.o: $(METISSE_src_dir)/METISSE_zcnsts.f90 track_support.o z_support.o c_m_interface.o
 METISSE_star.o: $(METISSE_src_dir)/METISSE_star.f90 track_support.o interp_support.o sse_support.o
 METISSE_hrdiag.o: $(METISSE_src_dir)/METISSE_hrdiag.f90 track_support.o interp_support.o sse_support.o remnant_support.o
 METISSE_gntage.o: $(METISSE_src_dir)/METISSE_gntage.f90 track_support.o interp_support.o
