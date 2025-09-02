@@ -12,7 +12,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
     integer:: i, j, nloop, num_tracks
     logical:: load_tracks, debug
     
-    debug = .false.
+    debug = .true.
     ierr = 0
     ! At this point in the code front_end might not be assigned
     ! So we return ierr and let zcnsts.f of the overlying code
@@ -394,7 +394,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
     
     ! for main, commons are assigned within the METISSE_main
     if (front_end > main) call assign_commons()
-    if (debug) print*, 'Finsihed in zcsnts'
+    if (debug) print*, 'Finished in zcsnts'
 
         
 end subroutine METISSE_zcnsts
