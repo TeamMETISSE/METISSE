@@ -91,6 +91,10 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
             if (ierr /= 0) call stop_code
         case(COSMIC)
              ! call get_COSMIC_input()
+            if (.not. allocated(filenames_he_in)) then
+                write(out_unit,*)"Switching to SSE formulae for helium stars "
+                use_sse_NHe = .true.
+            endif
         case(AMUSE)
             ! If AMUSE has not set METALLICITY_DIR, it will use the defaults from METISSE
             if (len(trim(amuse_metallicity_dir)) > 0) METALLICITY_DIR = amuse_metallicity_dir
@@ -188,38 +192,34 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
             ! we won't read in any metallicity files
             ! instead we will read in the format files and eeps 
             ! directly with COSMIC and pass them to METISSE
-
             if (i == 2) then
                 ! Naked helium stars
-                if (allocated(py_track_list_he)) then
+                ! if (allocated(py_track_list_he)) then
                     ! First get info on the properties of the track_list
-                    if (allocated(track_list)) deallocate(track_list)
-                    allocate(track_list(size(py_track_list_he)))
-                    track_list = py_track_list_he
-                    USE_DIR = METALLICITY_DIR_HE
-                    num_tracks = size(track_list)
+                    ! if (allocated(track_list)) deallocate(track_list)
+                    ! allocate(track_list(size(py_track_list_he)))
+                    ! track_list = py_track_list_he
+                    ! USE_DIR = METALLICITY_DIR_HE 
                     call apply_cosmic_format_controls('He')
                     call read_key_eeps_he()
                     if (debug) print*, "key eeps for he stars", key_eeps_he
                     call set_tracks_from_python_inputs(.true.)
-                end if
             else
                 ! Hydrogen rich stars
-                if (allocated(py_track_list)) then
+                ! if (allocated(py_track_list)) then
                     ! First get info on the properties of the track_list
-                    if (allocated(track_list)) deallocate(track_list)
-                    allocate(track_list(size(py_track_list)))
-                    track_list = py_track_list
-                    USE_DIR = METALLICITY_DIR
-                    num_tracks = size(track_list)
+                    ! if (allocated(track_list)) deallocate(track_list)
+                    ! allocate(track_list(size(py_track_list)))
+                    ! track_list = py_track_list
+                    ! USE_DIR = METALLICITY_DIR
                     call apply_cosmic_format_controls('H')
                     call read_key_eeps()
                     if (debug) print*, "key eeps", key_eeps   
                     call set_tracks_from_python_inputs(.false.)
-                end if
+                ! end if
             endif
             
-            if (debug) print*, "num_tracks", num_tracks
+            if (debug) print*, "num_tracks", size(xa)
             if (debug) print*, "tracks set by COSMIC"
 
         case default
@@ -295,7 +295,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
             if (read_eep_files) then
                 if (debug) print*,"reading eep files"
                 do j=1,num_tracks
-                    call read_eep(xa(j))
+                    call read_MIST_track(xa(j))
                     if (code_error) return
 !                    if(debug) write(*,'(a100,f8.2,99i8)') trim(xa(j)% filename), xa(j)% initial_mass, xa(j)% ncol
                 end do
@@ -319,24 +319,31 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
                 end if
     
                 do j=1,num_tracks
-                    call read_input_file(xa(j))
+                    call read_other_track(xa(j))
                     if (code_error) return
 !                    if(debug) write(*,'(a100,f8.2,99i8)') trim(xa(j)% filename), xa(j)% initial_mass, xa(j)% ncol
                 end do
             endif
+            deallocate(track_list)
         end select
             
-        call check_tracks(num_tracks)
-
         ! Process the input tracks
         if (i == 2) then
+            if (debug) print*, 'Processing helium tracks'
+            call check_tracks(num_tracks)
+            if (debug) print*, 'checked tracks for completeness'
             !sort the array based on intial mass if not sorted already
             call sort_minitial()
+            if (debug) print*, 'sorted tracks'
             !reset z parameters where available
             !and determine cutoff masses
             call set_zparameters_he(num_tracks)
+            if (debug) print*, 'set zpars'
             call copy_and_deallocatex(num_tracks, sa_he)
+            if (debug) print*, 'Copy and deallocated'
             call get_minmax(sa_he(1)% is_he_track, Mmax_he_array, Mmin_he_array)
+            if (debug) print*, 'minmax done'
+
             if (allocated(core_cols_he)) deallocate(core_cols_he)
 
             allocate(core_cols_he(4))
@@ -345,17 +352,30 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
             core_cols_he(2) = i_logL
             core_cols_he(3) = i_co_core
             if (i_he_RCO > 0) core_cols_he(4) = i_he_RCO
+            if (debug) print*, 'columns assigned'
+
         else
+            if (debug) print*, 'Processing hydrogen tracks'
+
+            call check_tracks(num_tracks)
+            if (debug) print*, 'checked tracks for completeness'
+
             !sort the array based on intial mass if not sorted already
             call sort_minitial()
+            if (debug) print*, 'sorted tracks'
+
             !reset z parameters where available
             !and determine cutoff masses
             call set_zparameters(num_tracks, zpars)
-            call copy_and_deallocatex(num_tracks, sa)
-            
-            call get_minmax(sa(1)% is_he_track, Mmax_array, Mmin_array)
-            if (allocated(core_cols)) deallocate(core_cols)
+            if (debug) print*, 'set zpars'
 
+            call copy_and_deallocatex(num_tracks, sa)
+            if (debug) print*, 'Copy and deallocated'
+          
+            call get_minmax(sa(1)% is_he_track, Mmax_array, Mmin_array)
+            if (debug) print*, 'minmax done'
+
+            if (allocated(core_cols)) deallocate(core_cols)
             allocate(core_cols(6))
             core_cols = -1
             
@@ -366,14 +386,16 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
 
             if (i_RHe_core > 0) core_cols(5) = i_RHe_core
             if (i_RCO_core > 0) core_cols(6) = i_RCO_core
+            if (debug) print*, 'columns assigned'
+
         endif
-        deallocate(track_list)
-        
     end do
     
     
     ! for main, commons are assigned within the METISSE_main
     if (front_end > main) call assign_commons()
+    if (debug) print*, 'Finsihed in zcsnts'
+
         
 end subroutine METISSE_zcnsts
 

@@ -315,7 +315,7 @@ module z_support
         endif
     end subroutine
     
-    subroutine read_eep(x)
+    subroutine read_MIST_track(x)
         !adapted from iso/iso_eep_support.f90
         type(track), intent(inout) :: x
         integer :: ierr
@@ -386,10 +386,10 @@ module z_support
         close(io)
         call free_iounit(io)
     
-    end subroutine read_eep
+    end subroutine read_MIST_track
     
     !adapted from read_history_file of iso_eep_support
-    subroutine read_input_file(x)
+    subroutine read_other_track(x)
         type(track), intent(inout) :: x
         integer :: ierr
         
@@ -406,6 +406,7 @@ module z_support
         open(unit=io,file=trim(x% filename),status='old',action='read')
         !read lines of header as comments
 
+        ! Handle header
         if (header_location>0)then
             do i = 1,header_location-1
                 read(io,*) !header
@@ -413,10 +414,10 @@ module z_support
             allocate(temp_cols(total_cols))
             !get column names
             read(io,'(a)') line
-            do i =1, total_cols
+            do i = 1, total_cols
                 j = scan(line," ")
                 temp_cols(i)% name = line(1:j)
-                if (trim(temp_cols(i)% name)==extra_char) then
+                if (trim(temp_cols(i)% name)/=extra_char) then
                     line = adjustl(line(j:))
                     j = scan(line," ")
                     temp_cols(i)% name = line(1:j)
@@ -424,7 +425,8 @@ module z_support
                 line = adjustl(line(j:))
             end do
         endif
-        !figure out how many data lines
+
+        ! Count data lines
         j=0
         do while(.true.)
             read(io,*,iostat=ierr)
@@ -442,11 +444,13 @@ module z_support
             enddo
         endif
 
+        ! allocate arrays
         x% ntrack = j
         x% ncol = total_cols
         allocate(x% tr(x% ncol, x% ntrack),x% cols(x% ncol))
         x% cols% name = temp_cols% name
 
+        ! Fill track data
         do j=1, x% ntrack
             read(io,'(a)') line
             call split(line, x% tr(:,j), x% ncol)
@@ -461,6 +465,7 @@ module z_support
         
         if(header_location >0) deallocate(temp_cols)
 
+        ! Setup eep arrays
         if (x% is_he_track) then
             x% neep = count(key_eeps_he .le. x% ntrack,1)
             allocate(x% eep(x% neep))
@@ -471,18 +476,20 @@ module z_support
             x% eep = pack(key_eeps,mask = key_eeps .le. x% ntrack)
         endif
 
+        ! Initial mass
         if (x% is_he_track) then
             x% initial_mass = x% tr(i_mass,ZAMS_HE_EEP)
         else
             x% initial_mass = x% tr(i_mass,ZAMS_EEP)
         endif
         
+        ! Other initial params
         call set_star_type_from_history(x)
         x% initial_Z = initial_Z
         x% initial_Y = Y_files
 
         if (debug) print*,x% initial_mass, x% initial_Z, x% ncol
-    end subroutine read_input_file
+    end subroutine read_other_track
 
     !from C.Flynn's driver routine
 
@@ -544,10 +551,7 @@ module z_support
         i_co_core = locate_column(cols, co_core_mass, essential)
         
         !Return if cannot locate any of the essential columns
-        if (code_error) then
-            print*, "ahhhh columns" 
-            return
-        end if
+        if (code_error) return
         
         !optional columns
         i_binding_energy = -1
@@ -1065,41 +1069,41 @@ module z_support
                 endif
             endif
             
-            ! for complete tracks, make logcolumns if need be
+            ! for complete tracks, make logcolumns 
             if (log_L_colname == '') call make_logcolumn(xa(n), i_logL)
             if (log_R_colname == '') call make_logcolumn(xa(n), i_logR)
             if (log_T_colname == '') call make_logcolumn(xa(n), i_logTe)
             
             ! store core mass for processing binding energy
-            allocate(core_mass(xa(n)% ntrack))
-            allocate(sgn(xa(n)% ntrack))
-            sgn = 1d0
-            if ( xa(n)% is_he_track ) then
-                core_mass(:) = xa(n)% tr(i_co_core, :)
-            else if ( xa(n)% star_type == star_high_mass ) then
-                if (cCBurn_EEP > xa(n)% ntrack) then
-                    core_mass(:) = xa(n)% tr(i_he_core, :)
-                else
-                    core_mass(: cCBurn_EEP-1) = xa(n)% tr(i_he_core, : cCBurn_EEP-1)
-                    core_mass(cCBurn_EEP :) = xa(n)% tr(i_co_core, cCBurn_EEP :)
-                endif
-            else
-                if (TPAGB_EEP > xa(n)% ntrack) then
-                    core_mass(:) = xa(n)% tr(i_he_core, :)
-                else
-                    core_mass(: TPAGB_EEP-1) = xa(n)% tr(i_he_core, : TPAGB_EEP-1)
-                    core_mass(TPAGB_EEP :) = xa(n)% tr(i_co_core, TPAGB_EEP :)
-                endif
-            end if
-            
-            ! store log(binding energy) per envelope mass
             if (i_binding_energy > 0) then
+                allocate(core_mass(xa(n)% ntrack))
+                allocate(sgn(xa(n)% ntrack))
+                sgn = 1d0
+                if (xa(n)% is_he_track ) then
+                    core_mass(:) = xa(n)% tr(i_co_core, :)
+                else if ( xa(n)% star_type == star_high_mass ) then
+                    if (cCBurn_EEP > xa(n)% ntrack) then
+                        core_mass(:) = xa(n)% tr(i_he_core, :)
+                    else
+                        core_mass(: cCBurn_EEP-1) = xa(n)% tr(i_he_core, : cCBurn_EEP-1)
+                        core_mass(cCBurn_EEP :) = xa(n)% tr(i_co_core, cCBurn_EEP :)
+                    endif
+                else
+                    if (TPAGB_EEP > xa(n)% ntrack) then
+                        core_mass(:) = xa(n)% tr(i_he_core, :)
+                    else
+                        core_mass(: TPAGB_EEP-1) = xa(n)% tr(i_he_core, : TPAGB_EEP-1)
+                        core_mass(TPAGB_EEP :) = xa(n)% tr(i_co_core, TPAGB_EEP :)
+                    endif
+                end if
+                
+                ! store log(binding energy) per envelope mass
                 sgn = sign(sgn, xa(n)% tr(i_binding_energy, :))
-                xa(n)% tr(i_binding_energy, :) = sgn * log10( abs(xa(n)% tr(i_binding_energy, :)) )
-                xa(n)% tr(i_binding_energy, :) = xa(n)% tr(i_binding_energy, :) / ( xa(n)% tr(i_mass, :) - core_mass(:) )
+                xa(n)% tr(i_binding_energy,:) = sgn * log10( abs(xa(n)% tr(i_binding_energy,:)) )
+                xa(n)% tr(i_binding_energy,:) = xa(n)% tr(i_binding_energy,:) / ( xa(n)% tr(i_mass,:) - core_mass(:))
+                deallocate(sgn)
+                deallocate(core_mass)
             endif
-            deallocate(sgn)
-            deallocate(core_mass)
         end do
         
         num_tracks = count(xa% complete)
@@ -1401,6 +1405,7 @@ module z_support
         do i = 2,8
             if (Mcrit(i)% mass <= Mcrit(1)% mass) then
                 Mcrit(i)% mass= -1.d0
+                Mcrit(i)% loc = 0
             endif
         end do
         
@@ -1465,13 +1470,13 @@ module z_support
         ! default is SSE
         Mup_core = 1.6d0
         Mec_core = 2.2d0
-        
-        if (Mcrit(7)% loc >= 1 .and. Mcrit(7)% loc <=num_tracks) then
+        print*, Mcrit(7)% loc, Mcrit(6)% loc
+        if ((Mcrit(7)% loc >= 1) .and. (Mcrit(7)% loc <=size(xa))) then
             j_bagb = min(xa(Mcrit(7)% loc)% ntrack,TA_cHeB_EEP)
             Mec_core = xa(Mcrit(7)% loc)% tr(i_he_core,j_bagb)
         endif
         
-        if (Mcrit(6)% loc >= 1 .and. Mcrit(6)% loc <=num_tracks) then
+        if ((Mcrit(6)% loc >= 1) .and. (Mcrit(6)% loc <=size(xa))) then
             j_bagb = min(xa(Mcrit(6)% loc)% ntrack,TA_cHeB_EEP)
             Mup_core = xa(Mcrit(6)% loc)% tr(i_he_core,j_bagb)
         endif
@@ -1732,14 +1737,13 @@ module z_support
         logical, intent(in) :: is_he
         integer :: i, j, offset
         integer :: ntracks_local
-        character(len=256), allocatable :: filenames(:)
-        real(8), allocatable :: initial_mass(:), initial_Y(:), initial_Z_local(:)
-        real(8), allocatable :: Fe_div_H(:), alpha_div_Fe(:), v_div_vcrit(:)
+        character(len=strlen), allocatable :: filenames(:)
+        real(dp), allocatable :: initial_mass(:), initial_Y(:), initial_Z_local(:)
+        real(dp), allocatable :: Fe_div_H(:), alpha_div_Fe(:), v_div_vcrit(:)
         integer, allocatable :: ntrack_arr(:), neep_arr(:), ncol_arr(:)
-        logical, allocatable :: is_he_arr(:)
         integer, allocatable :: eep_data(:,:)
-        real(8), allocatable :: tr_data(:,:)
-        character(len=256), allocatable :: col_names(:,:)
+        real(dp), allocatable :: tr_data(:,:)
+        character(len=strlen), allocatable :: col_names(:,:)
     
         ! Select appropriate input arrays
         if (is_he) then
@@ -1754,8 +1758,7 @@ module z_support
             ntrack_arr = ntrack_arr_he_in
             neep_arr = neep_arr_he_in
             ncol_arr = ncol_arr_he_in
-            is_he_arr = is_he_arr_he_in
-            eep_data = eep_data_he_in
+            if(allocated(eep_data_he_in)) eep_data = eep_data_he_in
             tr_data = tr_data_he_in
             col_names = col_names_he_in
         else
@@ -1770,8 +1773,7 @@ module z_support
             ntrack_arr = ntrack_arr_h_in
             neep_arr = neep_arr_h_in
             ncol_arr = ncol_arr_h_in
-            is_he_arr = is_he_arr_h_in
-            eep_data = eep_data_h_in
+            if(allocated(eep_data_h_in)) eep_data = eep_data_h_in
             tr_data = tr_data_h_in
             col_names = col_names_h_in
         end if
@@ -1782,44 +1784,61 @@ module z_support
     
         offset = 0
         do i = 1, ntracks_local
-            xa(i)%filename = filenames(i)
-            xa(i)%initial_mass = initial_mass(i)
-            xa(i)%initial_Y = initial_Y(i)
-            xa(i)%initial_Z = initial_Z_local(i)
-            xa(i)%Fe_div_H = Fe_div_H(i)
-            xa(i)%alpha_div_Fe = alpha_div_Fe(i)
-            xa(i)%v_div_vcrit = v_div_vcrit(i)
-            xa(i)%ntrack = ntrack_arr(i)
-            xa(i)%neep = neep_arr(i)
-            xa(i)%ncol = ncol_arr(i)
-            xa(i)%is_he_track = is_he_arr(i)
-    
+            xa(i)% filename = filenames(i)
+            ! xa(i)% initial_mass = initial_mass(i)
+            xa(i)% initial_Y = initial_Y(i)
+            xa(i)% initial_Z = initial_Z_local(i)
+            xa(i)% Fe_div_H = Fe_div_H(i)
+            xa(i)% alpha_div_Fe = alpha_div_Fe(i)
+            xa(i)% v_div_vcrit = v_div_vcrit(i)
+            xa(i)% ntrack = ntrack_arr(i)
+            xa(i)% neep = neep_arr(i)
+            xa(i)% ncol = ncol_arr(i)
+            xa(i)% is_he_track = is_he
             ! Allocate arrays
-            allocate(xa(i)%eep(neep_arr(i)))
+
             allocate(xa(i)%tr(ncol_arr(i), ntrack_arr(i)))
-            allocate(xa(i)%cols(ncol_arr(i)))
-    
             ! Copy data
-            xa(i)%eep = eep_data(1:neep_arr(i), i)
             do j = 1, ntrack_arr(i)
-                xa(i)%tr(:, j) = tr_data(1:ncol_arr(i), offset + j)
+                xa(i)% tr(:, j) = tr_data(1:ncol_arr(i), offset + j)
             end do
-            
+
+            if (allocated(eep_data)) then
+                allocate(xa(i)% eep(neep_arr(i)))
+                xa(i)% eep = eep_data(1:neep_arr(i), i)
+            else
+                ! Setup metallicity and eep arrays for non-mist files
+                xa(i)% initial_Z = initial_Z
+                if (xa(i)% is_he_track) then
+                    xa(i)% neep = count(key_eeps_he .le. xa(i)% ntrack,1)
+                    allocate(xa(i)% eep(xa(i)% neep))
+                    xa(i)% eep = pack(key_eeps_he,mask = key_eeps_he .le. xa(i)% ntrack)
+                else
+                    xa(i)% neep = count(key_eeps .le. xa(i)% ntrack,1)
+                    allocate(xa(i)% eep(xa(i)% neep))
+                    xa(i)% eep = pack(key_eeps,mask = key_eeps .le. xa(i)% ntrack)
+                endif
+            endif
+
+            allocate(xa(i)% cols(ncol_arr(i)))
             do j = 1, ncol_arr(i)
-                xa(i)%cols(j)%name = adjustl(col_names(j,i)) // repeat(' ',32-len_trim(col_names(j,i)))
+                xa(i)% cols(j)% name = adjustl(col_names(j,i)) // repeat(' ',32-len_trim(col_names(j,i)))
             end do
+
             !determine column of mass, age etc.
             call get_named_columns(xa(i)% cols, xa(i)% ncol,xa(i)% is_he_track)
             if (code_error) return
-            
+
             if (xa(i)% is_he_track) then
                 xa(i)% initial_mass = xa(i)% tr(i_mass,ZAMS_HE_EEP)
             else
                 xa(i)% initial_mass = xa(i)% tr(i_mass,ZAMS_EEP)
             endif
-            
             call set_star_type_from_history(xa(i))
             
+            print*, xa(i)% initial_mass, i_mass, ZAMS_EEP, ZAMS_HE_EEP
+
+
             offset = offset + ntrack_arr(i)
 
         end do  

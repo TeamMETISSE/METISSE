@@ -9,7 +9,7 @@ initial_Z = 0.02
 max_age = 2.0d4   !max age in Myrs
 
 number_of_tracks = 1
-min_mass = 0.3
+min_mass = 1.0
 max_mass = 100.0
 sampling_scheme = 'Kroupa2001'
 
