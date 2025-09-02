@@ -1470,7 +1470,6 @@ module z_support
         ! default is SSE
         Mup_core = 1.6d0
         Mec_core = 2.2d0
-
         if ((Mcrit(7)% loc >= 1) .and. (Mcrit(7)% loc <=size(xa))) then
             j_bagb = min(xa(Mcrit(7)% loc)% ntrack,TA_cHeB_EEP)
             Mec_core = xa(Mcrit(7)% loc)% tr(i_he_core,j_bagb)
@@ -1836,6 +1835,9 @@ module z_support
             endif
             call set_star_type_from_history(xa(i))
             
+            print*, xa(i)% initial_mass, i_mass, ZAMS_EEP, ZAMS_HE_EEP
+
+
             offset = offset + ntrack_arr(i)
 
         end do  
