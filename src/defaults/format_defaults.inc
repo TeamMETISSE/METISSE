@@ -9,7 +9,7 @@
     
     ! Set `read_eep_files` to .true. only for MIST-style files;
     ! set to .false. for other types of files.
-    !If .true., other options in this section do not need to be provided.
+    ! If .true., other options in this section do not need to be provided.
     ! The required details are read directly from the input files.
 
     read_eep_files = .false.
@@ -172,7 +172,7 @@
     high_mass_final_eep = -1
     
 
-    ! if fix_track is true,  METISSE relaxes criteria for finding
+    ! if fix_track is true, METISSE relaxes criteria for finding
     ! neighboring tracks to fix incomplete tracks.
     
     fix_track = .true.

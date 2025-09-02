@@ -1,4 +1,5 @@
 module c_m_interface
+    use track_support, only: dp
     implicit none
     integer, parameter :: f2py_strlen = 256
 
@@ -7,37 +8,34 @@ module c_m_interface
     ! -----------------------
     ! Arrays
     integer :: ntracks_h_in, max_ncol_h_in, max_neep_h_in, max_points_h_in
-    logical :: is_he_in
     character(len=f2py_strlen), allocatable :: filenames_h_in(:)
-    real(8), allocatable :: initial_mass_h_in(:)
-    real(8), allocatable :: initial_Y_h_in(:)
-    real(8), allocatable :: initial_Z_h_in(:)
-    real(8), allocatable :: Fe_div_H_h_in(:)
-    real(8), allocatable :: alpha_div_Fe_h_in(:)
-    real(8), allocatable :: v_div_vcrit_h_in(:)
+    real(dp), allocatable :: initial_mass_h_in(:)
+    real(dp), allocatable :: initial_Y_h_in(:)
+    real(dp), allocatable :: initial_Z_h_in(:)
+    real(dp), allocatable :: Fe_div_H_h_in(:)
+    real(dp), allocatable :: alpha_div_Fe_h_in(:)
+    real(dp), allocatable :: v_div_vcrit_h_in(:)
     integer, allocatable :: ntrack_arr_h_in(:)
     integer, allocatable :: neep_arr_h_in(:)
     integer, allocatable :: ncol_arr_h_in(:)
-    logical, allocatable :: is_he_arr_h_in(:)
     integer, allocatable :: eep_data_h_in(:,:)       ! (max_neep, ntracks)
-    real(8), allocatable :: tr_data_h_in(:,:)       ! (max_ncol, max_points)
+    real(dp), allocatable :: tr_data_h_in(:,:)       ! (max_ncol, max_points)
     character(len=f2py_strlen), allocatable :: col_names_h_in(:,:) ! (max_ncol, ntracks)
 
     ! Similarly for helium tracks
     integer :: ntracks_he_in, max_ncol_he_in, max_neep_he_in, max_points_he_in
     character(len=f2py_strlen), allocatable :: filenames_he_in(:)
-    real(8), allocatable :: initial_mass_he_in(:)
-    real(8), allocatable :: initial_Y_he_in(:)
-    real(8), allocatable :: initial_Z_he_in(:)
-    real(8), allocatable :: Fe_div_H_he_in(:)
-    real(8), allocatable :: alpha_div_Fe_he_in(:)
-    real(8), allocatable :: v_div_vcrit_he_in(:)
+    real(dp), allocatable :: initial_mass_he_in(:)
+    real(dp), allocatable :: initial_Y_he_in(:)
+    real(dp), allocatable :: initial_Z_he_in(:)
+    real(dp), allocatable :: Fe_div_H_he_in(:)
+    real(dp), allocatable :: alpha_div_Fe_he_in(:)
+    real(dp), allocatable :: v_div_vcrit_he_in(:)
     integer, allocatable :: ntrack_arr_he_in(:)
     integer, allocatable :: neep_arr_he_in(:)
     integer, allocatable :: ncol_arr_he_in(:)
-    logical, allocatable :: is_he_arr_he_in(:)
     integer, allocatable :: eep_data_he_in(:,:)       
-    real(8), allocatable :: tr_data_he_in(:,:)       
+    real(dp), allocatable :: tr_data_he_in(:,:)       
     character(len=f2py_strlen), allocatable :: col_names_he_in(:,:) 
     ! -----------------------
     ! File lists
@@ -50,8 +48,8 @@ module c_m_interface
     ! -----------------------
     ! Metallicity values
     ! -----------------------
-    real(8), allocatable :: py_Z_list(:)
-    real(8), allocatable :: py_Z_list_he(:)
+    real(dp), allocatable :: py_Z_list(:)
+    real(dp), allocatable :: py_Z_list_he(:)
 
     ! -----------------------
     ! Hydrogen format controls
@@ -219,7 +217,7 @@ contains
 
     subroutine set_mets(nmet, Z_values, nmet_he, Z_values_he)
         integer, intent(in) :: nmet, nmet_he
-        real(8), intent(in) :: Z_values(nmet), Z_values_he(nmet_he)
+        real(dp), intent(in) :: Z_values(nmet), Z_values_he(nmet_he)
 
         if (allocated(py_Z_list)) deallocate(py_Z_list)
         allocate(py_Z_list(nmet))
@@ -230,32 +228,30 @@ contains
         py_Z_list_he = Z_values_he
     end subroutine set_mets
 
-    subroutine set_tracks_from_python(ntracks, max_ncol, max_neep, max_points, filenames, &
-                                      initial_mass, initial_Y, initial_Z, &
+    subroutine set_tracks_from_python(ntracks, max_ncol, max_neep, max_points, &
+                                      filenames, initial_mass, initial_Y, initial_Z, &
                                       Fe_div_H, alpha_div_Fe, v_div_vcrit, ntrack_arr, &
-                                      neep_arr, ncol_arr, is_he_arr, eep_data, tr_data, col_names, is_he)
+                                      neep_arr, ncol_arr, eep_data, tr_data, col_names, is_he)
         implicit none
         integer, intent(in) :: ntracks, max_ncol, max_neep, max_points
         character(len=*), intent(in) :: filenames(ntracks)
-        real(8), intent(in) :: initial_mass(ntracks), initial_Y(ntracks), initial_Z(ntracks)
-        real(8), intent(in) :: Fe_div_H(ntracks), alpha_div_Fe(ntracks), v_div_vcrit(ntracks)
+        real(dp), intent(in) :: initial_mass(ntracks), initial_Y(ntracks), initial_Z(ntracks)
+        real(dp), intent(in) :: Fe_div_H(ntracks), alpha_div_Fe(ntracks), v_div_vcrit(ntracks)
         integer, intent(in) :: ntrack_arr(ntracks), neep_arr(ntracks), ncol_arr(ntracks)
-        logical, intent(in) :: is_he_arr(ntracks)
-        integer, intent(in) :: eep_data(max_neep, ntracks)
+        integer, intent(in) :: eep_data(max_neep,ntracks)
         real(8), intent(in) :: tr_data(max_ncol, max_points)
         character(len=*), intent(in) :: col_names(max_ncol, ntracks)
         logical, intent(in) :: is_he
     
-        integer :: i
-    
+        integer :: i,j
+
         if (is_he) then
             ! Store in He arrays
             ntracks_he_in = ntracks
             max_ncol_he_in = max_ncol
             max_neep_he_in = max_neep
             max_points_he_in = max_points
-            is_he_in = is_he
-    
+
             if (allocated(filenames_he_in)) deallocate(filenames_he_in)
             allocate(filenames_he_in(ntracks)); filenames_he_in = filenames
             if (allocated(initial_mass_he_in)) deallocate(initial_mass_he_in)
@@ -276,23 +272,22 @@ contains
             allocate(neep_arr_he_in(ntracks)); neep_arr_he_in = neep_arr
             if (allocated(ncol_arr_he_in)) deallocate(ncol_arr_he_in)
             allocate(ncol_arr_he_in(ntracks)); ncol_arr_he_in = ncol_arr
-            if (allocated(is_he_arr_he_in)) deallocate(is_he_arr_he_in)
-            allocate(is_he_arr_he_in(ntracks)); is_he_arr_he_in = is_he_arr
-            if (allocated(eep_data_he_in)) deallocate(eep_data_he_in)
-            allocate(eep_data_he_in(max_neep, ntracks)); eep_data_he_in = eep_data
             if (allocated(tr_data_he_in)) deallocate(tr_data_he_in)
             allocate(tr_data_he_in(max_ncol, max_points)); tr_data_he_in = tr_data
             if (allocated(col_names_he_in)) deallocate(col_names_he_in)
             allocate(col_names_he_in(max_ncol, ntracks)); col_names_he_in = col_names
-    
+            if (allocated(eep_data_he_in)) deallocate(eep_data_he_in)
+            if (max_neep>0) then
+                allocate(eep_data_he_in(max_neep, ntracks)); eep_data_he_in = eep_data
+            endif
+
         else
             ! Store in H arrays
             ntracks_h_in = ntracks
             max_ncol_h_in = max_ncol
             max_neep_h_in = max_neep
             max_points_h_in = max_points
-            is_he_in = is_he
-    
+
             if (allocated(filenames_h_in)) deallocate(filenames_h_in)
             allocate(filenames_h_in(ntracks)); filenames_h_in = filenames
             if (allocated(initial_mass_h_in)) deallocate(initial_mass_h_in)
@@ -313,19 +308,18 @@ contains
             allocate(neep_arr_h_in(ntracks)); neep_arr_h_in = neep_arr
             if (allocated(ncol_arr_h_in)) deallocate(ncol_arr_h_in)
             allocate(ncol_arr_h_in(ntracks)); ncol_arr_h_in = ncol_arr
-            if (allocated(is_he_arr_h_in)) deallocate(is_he_arr_h_in)
-            allocate(is_he_arr_h_in(ntracks)); is_he_arr_h_in = is_he_arr
-            if (allocated(eep_data_h_in)) deallocate(eep_data_h_in)
-            allocate(eep_data_h_in(max_neep, ntracks)); eep_data_h_in = eep_data
             if (allocated(tr_data_h_in)) deallocate(tr_data_h_in)
-            allocate(tr_data_h_in(max_ncol, max_points)); tr_data_h_in = tr_data
+            allocate(tr_data_h_in(max_ncol, max_points)) 
+            tr_data_h_in = 0.d0
+            tr_data_h_in = tr_data
             if (allocated(col_names_h_in)) deallocate(col_names_h_in)
             allocate(col_names_h_in(max_ncol, ntracks)); col_names_h_in = col_names
+            if (allocated(eep_data_h_in)) deallocate(eep_data_h_in)
+            if (max_neep>0) then
+                allocate(eep_data_h_in(max_neep, ntracks)); eep_data_h_in = eep_data
+            endif
         end if
 
     end subroutine set_tracks_from_python
-
-
-
 
 end module c_m_interface
