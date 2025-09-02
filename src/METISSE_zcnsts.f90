@@ -12,7 +12,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
     integer:: i, j, nloop, num_tracks
     logical:: load_tracks, debug
     
-    debug = .true.
+    debug = .false.
     ierr = 0
     ! At this point in the code front_end might not be assigned
     ! So we return ierr and let zcnsts.f of the overlying code
