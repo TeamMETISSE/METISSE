@@ -24,89 +24,70 @@
     integer :: wd_flag = 0
     integer :: ec_flag = 0
     integer :: if_flag = 0
-
-    logical :: end_of_file
     logical :: debug_rem = .false.
 
     contains
-    
-    logical function check_remnant_phase(pars)
-        type(star_parameters) :: pars
 
-        check_remnant_phase = .true.
+    subroutine check_early_end(t,dt_hold,id)
+        real(dp) :: dt_hold
+        type(track), pointer :: t
+        integer :: id
 
-        pars% core_mass = pars% McCO
-        if ((pars% phase >0) .and. (pars% core_mass<tiny)) then
-            write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",pars% core_mass
-            if (front_end/=COSMIC) code_error = .true.
-            !assigning an ad-hoc non-zero core mass so the code doesn't break
-            pars% core_mass = 0.75*pars% McHe
-        endif
-        pars% age_old = pars% age
-        if (debug_rem) print*, 'Remnant: mass, core_mass ', pars% mass, pars% McHe, pars% McCO
-        
-        end function check_remnant_phase
-        
-        subroutine check_early_end(t,dt_hold,id)
-            real(dp) :: dt_hold
-            type(track), pointer :: t
-            integer :: id
+        if (t% ierr/=0) return
 
-            if (t% ierr/=0) return
-
-            if ((t% initial_mass.gt.very_low_mass_limit).and. (dt_hold.le.t% pars% dt).and.(t% reju.eqv. .false.)) then
-                write(UNIT=err_unit,fmt=*) 'WARNING: Early end of file at phase, mass and id',&
-                t% pars% phase,t% initial_mass,id,t% reju
-                t% ierr = -1
+        if ((t% initial_mass.gt.very_low_mass_limit).and. (dt_hold.le.t% pars% dt).and.(t% reju.eqv. .false.)) then
+            write(UNIT=err_unit,fmt=*) 'WARNING: Early end of file at phase, mass and id',&
+            t% pars% phase,t% initial_mass,id,t% reju
+            t% ierr = -1
 !                    call stop_code
-            endif
-                
-        end subroutine check_early_end
-                
-        
-        subroutine assign_remnant_METISSE(pars, mcbagb)
-            implicit none
-            type(star_parameters) :: pars
-            real(dp) :: Mcbagb
+        endif
+            
+    end subroutine check_early_end
+            
+    
+    subroutine assign_remnant_METISSE(pars, mcbagb)
+        implicit none
+        type(star_parameters) :: pars
+        real(dp) :: Mcbagb
 
-            !Mup_core, Mec_core are calculated in set_zparmeters routine of zfuncs
-            if(pars% core_mass < M_ch)then
-                if(mcbagb< Mup_core)then
-                    pars% phase = CO_WD        !Zero-age Carbon/Oxygen White Dwarf
+        !Mup_core, Mec_core are calculated in set_zparmeters routine of zfuncs
+        if(pars% core_mass < M_ch)then
+            if(mcbagb< Mup_core)then
+                pars% phase = CO_WD        !Zero-age Carbon/Oxygen White Dwarf
+            else
+                if (ec_flag>0 .and. pars% McCO >= 1.372)then
+                    !electron-capture collapse of an ONe core
+                    !1.372<= mc< 1.44
+                    pars% phase = NS
+                    call initialize_ECSNe(pars)
+                    if (debug_rem) print*,"ECSNe I: Mc< Mch, Mcbagb>Mup"
                 else
-                    if (ec_flag>0 .and. pars% McCO >= 1.372)then
-                     !electron-capture collapse of an ONe core
-                     !1.372<= mc< 1.44
-                        pars% phase = NS
-                        call initialize_ECSNe(pars)
-                        if (debug_rem) print*,"ECSNe I: Mc< Mch, Mcbagb>Mup"
-                    else
-                        pars% phase = ONeWD    !Zero-age Oxygen/Neon White Dwarf
-                    endif
+                    pars% phase = ONeWD    !Zero-age Oxygen/Neon White Dwarf
                 endif
-            else !(mc>mch)
-                !supernova 
-                if(Mcbagb < Mup_core)then
-                    ! Star is not massive enough to ignite C burning.
-                    ! so no remnant is left after the SN
-                    pars% phase = Massless_REM
-                    call initialize_massless_rem(pars)
+            endif
+        else !(mc>mch)
+            !supernova 
+            if(Mcbagb < Mup_core)then
+                ! Star is not massive enough to ignite C burning.
+                ! so no remnant is left after the SN
+                pars% phase = Massless_REM
+                call initialize_massless_rem(pars)
 
-                else if(Mcbagb>= Mup_core .and. Mcbagb<= Mec_core)then
-                    !Check for an electron-capture collapse of an ONe core.
-                    if(ec_flag>0) then
-                        pars% phase = NS
-                        call initialize_ECSNe(pars)
-                        if (debug_rem) print*,"ECSNe II: Mc> Mch, Mup< Mbagb< Mec"
-                    else
-                        call check_ns_bh(pars)
-                    endif
+            else if(Mcbagb>= Mup_core .and. Mcbagb<= Mec_core)then
+                !Check for an electron-capture collapse of an ONe core.
+                if(ec_flag>0) then
+                    pars% phase = NS
+                    call initialize_ECSNe(pars)
+                    if (debug_rem) print*,"ECSNe II: Mc> Mch, Mup< Mbagb< Mec"
                 else
                     call check_ns_bh(pars)
                 endif
+            else
+                call check_ns_bh(pars)
             endif
+        endif
         if (debug_rem .and. pars% phase>9) print*,"Assigned remnant phase ", phase_label(pars% phase+1)
-        
+    
     end subroutine assign_remnant_METISSE
 
     subroutine post_agb_parameters(t,old_phase)
