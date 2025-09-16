@@ -42,7 +42,6 @@
     if (debug) print*, '-----------HRDIAG-------------'
     if (debug) print*,"started hrdiag",mt,mc,aj,tn,kw,id,t% post_agb
 
-    end_of_file = .false. !this is just the end of eep track
     has_become_remnant = .false.
     mc_max= 0.d0
         
@@ -85,15 +84,19 @@
                 !check if have reached the end of the eep track
                 if (debug)print*,"end of file:aj,tn ",t% pars% age,t% times(11),t% times(max(kw,1))
                 if (kw<5) call check_early_end(t,dt_hold,id)
-
-                end_of_file = .true.
                 
                 j_bagb = min(t% ntrack, TA_cHeB_EEP)
                 Mcbagb = t% tr(i_he_core, j_bagb)
                 ! mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
 
-                 has_become_remnant  = check_remnant_phase(t% pars)
-            
+                t% pars% core_mass = t% pars% McCO
+                if ((t% initial_mass.gt.very_low_mass_limit) .and. (t% pars% core_mass<tiny)) then
+                    write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",t% pars% core_mass
+                    code_error = .true.
+                    !assigning an ad-hoc non-zero core mass so the code doesn't break
+                    t% pars% core_mass = 0.75*t% pars% McHe
+                endif
+                has_become_remnant = .true.
             
             ELSEIF (check_ge(t% pars% core_mass,t% pars% mass)) THEN
                 !check if envelope has been lost
@@ -150,10 +153,11 @@
             Mcbagb = t% zams_mass
             mc_max = max_core_mass_he(t% pars% mass, Mcbagb)
             
+            ! check for remnant formation for post He-MS stars
             if(t% pars% phase >He_MS) then
                 if ((t% pars% core_mass >=mc_max) .or. (abs(mc_max-t% pars% core_mass)<tiny)) then
                     t% pars% core_mass = mc_max
-                    has_become_remnant  = check_remnant_phase(t% pars)
+                    has_become_remnant = .true.
                 endif
             endif
             
@@ -186,12 +190,12 @@
             if (check_ge(t% pars% age,t% times(11)) .or. (t% pars% core_mass.ge.t% pars% mass)) then
                 !have reached the end of the eep track; self explanatory
                 if (debug) print*,"end of file:aj,tn ",t% pars% age,t% tr(i_he_age,t% ntrack),t% times(kw)
-                end_of_file = .true.
                 
                 j_bagb = min(t% ntrack, TAMS_HE_EEP)
                 Mcbagb = t% tr(i_mass, j_bagb)
                 ! mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
-                has_become_remnant  = check_remnant_phase(t% pars)
+                t% pars% core_mass = t% pars% McCO
+                has_become_remnant = .true.
             else
                 ! Calculate mass and radius of convective envelope, and envelope gyration radius.
                 if (t% pars% core_radius<0) CALL calculate_rc(t,tscls,zpars,t% pars% core_radius)
@@ -205,6 +209,7 @@
     ! remnants phases 10:15
     IF(has_become_remnant) THEN
 !        print*, 'star',id,'is remnant',t% pars% mass,mcbagb,t% pars% core_mass
+        t% pars% age_old = t% pars% age
         t% star_type = remnant
         if (front_end <= main .or. front_end == BSE .or. front_end ==AMUSE) then
             if(t% pars% phase /= HeWD) then
