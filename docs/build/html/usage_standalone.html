@@ -60,7 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guidelines.html">Community guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guidelines.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -169,19 +169,20 @@ If verbose is False, then these details are saved in the <code class="docutils l
 <section id="evolving-a-stellar-population">
 <h2>2.&nbsp;&nbsp;Evolving a stellar population<a class="headerlink" href="#evolving-a-stellar-population" title="Permalink to this heading"></a></h2>
 <p>To compute the evolution of a single stellar population containing, for example, 10,000 stars with initial masses uniformly distributed between 1 and 100 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub>, we modify the <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> from the single star case as shown below.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&amp;SSE_input_controls</span>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">SSE_input_controls</span>
 
-<span class="go">initial_Z = 0.02</span>
+<span class="n">initial_Z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.02</span>
 
-<span class="go">max_age = 1.2d4   </span>
+<span class="n">max_age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.2d4</span><span class="w">   </span>
 
-<span class="go">number_of_tracks = 1d+4</span>
-<span class="go">min_mass = 1.d0</span>
+<span class="n">number_of_tracks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="n">d</span><span class="o">+</span><span class="mi">4</span>
+<span class="n">min_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.d0</span>
 
-<span class="go">max_mass = 100.d0</span>
+<span class="n">max_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="mf">0.d0</span>
 
-<span class="go">write_track_to_file = .true.   </span>
-<span class="go">/</span>
+<span class="n">write_track_to_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w">   </span>
+<span class="o">/</span>
+<span class="w"> </span>
 </pre></div>
 </div>
 <p>We also set <code class="docutils literal notranslate"><span class="pre">verbose</span> <span class="pre">=</span> <span class="pre">.false.</span></code> in metisse.input to avoid flooding our screen with evolution details of 10,000 stars.</p>
@@ -192,21 +193,22 @@ If verbose is False, then these details are saved in the <code class="docutils l
 <p>We also kept <code class="docutils literal notranslate"><span class="pre">write_track_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>. Therefore, the <code class="docutils literal notranslate"><span class="pre">output</span></code> directory will now contain the evolutionary histories of all 10,000 stars.</p>
 <p>To compute a population of single stars with any other distribution of initial masses, we can list initial masses in a file provide masses in a text file (one per line) and provide the location of that file through <code class="docutils literal notranslate"><span class="pre">input_mass_file</span></code>.
 If the masses are listed in a file called <code class="docutils literal notranslate"><span class="pre">my_custom_distribution.txt</span></code>, then <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> will look like this:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&amp;SSE_input_controls</span>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">SSE_input_controls</span>
 
-<span class="go">initial_Z = 0.02</span>
+<span class="n">initial_Z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.02</span>
 
-<span class="go">max_age = 1.2d4   </span>
+<span class="n">max_age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.2d4</span><span class="w">   </span>
 
-<span class="go">number_of_tracks = 1d+4</span>
+<span class="n">number_of_tracks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="n">d</span><span class="o">+</span><span class="mi">4</span>
 
-<span class="go">read_mass_from_file = .true.  </span>
+<span class="n">read_mass_from_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w">  </span>
 
-<span class="go">input_mass_file = &#39;my_custom_distribution.txt&#39;</span>
+<span class="n">input_mass_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;my_custom_distribution.txt&#39;</span>
 
-<span class="go">write_track_to_file = .true.  </span>
+<span class="n">write_track_to_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w">  </span>
 
-<span class="go">/</span>
+<span class="o">/</span>
+<span class="w"> </span>
 </pre></div>
 </div>
 <p>Note that we still need to define <code class="docutils literal notranslate"><span class="pre">number_of_tracks</span></code> as METISSE will read <code class="docutils literal notranslate"><span class="pre">input_mass_file</span></code> for that many stars and will raise errors if the file contains fewer stars.</p>
@@ -231,7 +233,7 @@ Running METISSE now gives an error, as the metallicity value is not present in t
 <p>Another option is that we can ask METISSE to use nearby metallicity values.
 This is achieved by increasing <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 METISSE lists available metallicity values in the grid, whenever it cannot find the input value.</p>
-<p>In the sample set, we have tracks for only one metallicity.
+<p>In the example set, we have tracks for only one metallicity.
 However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1</sup>, we could increase <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> to <code class="docutils literal notranslate"><span class="pre">8d-2</span></code>. This would allow METISSE to run using the closest metallicity in the list, which is <code class="docutils literal notranslate"><span class="pre">0.0148</span></code>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./metisse
 <span class="go"> Input Z is :  1.60000E-02</span>
