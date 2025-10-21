@@ -2,3 +2,16 @@ pre {
     white-space: pre-wrap !important; 
     word-break: break-all;            
 }
+
+/* make copy buttons always visible */
+.copybtn {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* ensure it stays on top and clickable */
+.copybtn {
+  z-index: 50;
+  pointer-events: auto !important;
+}

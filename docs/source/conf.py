@@ -34,7 +34,10 @@ release = '0.1'
 extensions = ['myst_parser',
 		'sphinx.ext.autosectionlabel',
 		'sphinx.ext.imgmath',
-		'sphinx.ext.mathjax',]
+		'sphinx.ext.mathjax',
+        'sphinx.ext.autodoc',
+        'sphinx_copybutton'
+    ]
 
 # -- MyST settings ---------------------------------------------------
 
@@ -95,7 +98,7 @@ html_css_files = [
 ]
 
 # set default highlighting language
-highlight_language = 'fortran'
+highlight_language = 'console'
 
 
 # Use LaTeX to generate PDF output (optional)
@@ -111,6 +114,15 @@ highlight_language = 'fortran'
 #    ''',
 #}
 
+# Strip common prompts from copied code
+# i.e, ignore any leading >>> , $ , In [n]: , or Out[n]: 
+# copybutton_prompt_text = r">>> |\$ |In \[\d*\]: |Out\[\d*\]: "
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
+
+# Optional: only show button on code blocks
+copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
+copybutton_exclude = '.linenos, .gp, .go'
 # -- Local Sphinx extensions -------------------------------------------------
 
 
@@ -140,3 +152,4 @@ def setup(app: Sphinx):
     app.add_post_transform(NumberSections)
 #    app.connect("html-page-context", add_version_to_css)
     app.add_lexer("myst", MystLexer)
+

@@ -7,6 +7,7 @@
   <title>Using METISSE to evolve binaries &mdash; METISSE 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
@@ -19,6 +20,8 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -135,10 +138,11 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 <ol class="arabic simple" start="4">
 <li><p>Pass <code class="docutils literal notranslate"><span class="pre">SSEDict</span></code> along with other arguments to the <code class="docutils literal notranslate"><span class="pre">evolve</span></code> function of COSMIC and you are all set. For instance, if you are calculating the evolution of a single binary, the evolve function should look like this:</p></li>
 </ol>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">bpp</span><span class="p">,</span> <span class="n">bcm</span><span class="p">,</span> <span class="n">initC</span><span class="p">,</span> <span class="n">kick_info</span> <span class="o">=</span> <span class="n">Evolve</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span><span class="n">initialbinarytable</span><span class="o">=</span><span class="n">single_binary</span><span class="p">,</span>
-                                          <span class="n">BSEDict</span><span class="o">=</span><span class="n">BSEDict</span><span class="p">,</span> 
-                                          <span class="n">SSEDict</span><span class="o">=</span><span class="n">SSEDict</span>
-                                          <span class="p">)</span> 
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">bpp</span><span class="p">,</span> <span class="n">bcm</span><span class="p">,</span> <span class="n">initC</span><span class="p">,</span> <span class="n">kick_info</span> <span class="o">=</span> <span class="n">Evolve</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span>
+                              <span class="n">initialbinarytable</span><span class="o">=</span><span class="n">single_binary</span><span class="p">,</span>
+                              <span class="n">BSEDict</span><span class="o">=</span><span class="n">BSEDict</span><span class="p">,</span> 
+                              <span class="n">SSEDict</span><span class="o">=</span><span class="n">SSEDict</span>
+                              <span class="p">)</span> 
 </pre></div>
 </div>
 <p>COSMIC will then evolve the system using the provided stellar tracks and store the output in its usual <code class="docutils literal notranslate"><span class="pre">bpp</span></code> and <code class="docutils literal notranslate"><span class="pre">bcm</span></code> arrays.</p>
@@ -164,7 +168,6 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 </ol>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
-
 <span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span>
 <span class="w">            </span>
 <span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span>
@@ -182,22 +185,22 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 <ol class="arabic simple" start="6">
 <li><p>BSE will produce the following terminal output.</p></li>
 </ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">      TIME      M1       M2   K1 K2        SEP    ECC  R1/ROL1 R2/ROL2  TYPE</span>
-<span class="go">     0.0000    2.500    1.000  1  1      137.607  0.00   0.028   0.022  INITIAL </span>
-<span class="go">   567.8636    2.499    1.000  2  1      137.649  0.00   0.063   0.022  KW CHNGE</span>
-<span class="go">   574.5686    2.499    1.000  3  1      137.652  0.00   0.120   0.022  KW CHNGE</span>
-<span class="go">   581.1684    2.499    1.000  4  1      136.123  0.00   0.525   0.022  KW CHNGE</span>
-<span class="go">   768.8467    2.496    1.000  5  1      136.210  0.00   0.293   0.022  KW CHNGE</span>
-<span class="go">   780.5401    2.495    1.000  5  1      125.450  0.00   1.001   0.024  BEG RCHE</span>
-<span class="go">   780.5401    0.523    1.000  8  1       11.851  0.00   1.001   0.024  COMENV  </span>
-<span class="go">   780.5401    0.523    1.000  8  1       11.851  0.00   0.018   0.177  END RCHE</span>
-<span class="go">   781.1571    0.468    1.000 11  1       11.883  0.00   0.004   0.172  KW CHNGE</span>
-<span class="go">  9470.1367    0.468    1.000 11  2       14.083  0.00   0.003   0.208  KW CHNGE</span>
-<span class="go"> 11192.3223    0.468    0.999 11  3       14.024  0.00   0.003   0.279  KW CHNGE</span>
-<span class="go"> 11950.0928    0.468    0.999 11  3       11.966  0.00   0.004   1.000  BEG RCHE</span>
-<span class="go"> 11950.0928    0.468    0.200 11 10        1.199  0.00   0.004   1.000  COMENV  </span>
-<span class="go"> 11950.0928    0.468    0.200 11 10        1.199  0.00   0.027   0.058  END RCHE</span>
-<span class="go"> 13700.0000    0.468    0.200 11 10        1.076  0.00   0.030   0.065  MAX TIME</span>
+<div class="no-copybutton highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">      TIME      M1       M2   K1 K2    SEP    ECC  R1/ROL1 R2/ROL2  TYPE</span>
+<span class="go">     0.0000    2.500    1.000  1  1  137.607  0.00   0.028   0.022  INITIAL </span>
+<span class="go">   567.8636    2.499    1.000  2  1  137.649  0.00   0.063   0.022  KW CHNGE</span>
+<span class="go">   574.5686    2.499    1.000  3  1  137.652  0.00   0.120   0.022  KW CHNGE</span>
+<span class="go">   581.1684    2.499    1.000  4  1  136.123  0.00   0.525   0.022  KW CHNGE</span>
+<span class="go">   768.8467    2.496    1.000  5  1  136.210  0.00   0.293   0.022  KW CHNGE</span>
+<span class="go">   780.5401    2.495    1.000  5  1  125.450  0.00   1.001   0.024  BEG RCHE</span>
+<span class="go">   780.5401    0.523    1.000  8  1   11.851  0.00   1.001   0.024  COMENV  </span>
+<span class="go">   780.5401    0.523    1.000  8  1   11.851  0.00   0.018   0.177  END RCHE</span>
+<span class="go">   781.1571    0.468    1.000 11  1   11.883  0.00   0.004   0.172  KW CHNGE</span>
+<span class="go">  9470.1367    0.468    1.000 11  2   14.083  0.00   0.003   0.208  KW CHNGE</span>
+<span class="go"> 11192.3223    0.468    0.999 11  3   14.024  0.00   0.003   0.279  KW CHNGE</span>
+<span class="go"> 11950.0928    0.468    0.999 11  3   11.966  0.00   0.004   1.000  BEG RCHE</span>
+<span class="go"> 11950.0928    0.468    0.200 11 10    1.199  0.00   0.004   1.000  COMENV  </span>
+<span class="go"> 11950.0928    0.468    0.200 11 10    1.199  0.00   0.027   0.058  END RCHE</span>
+<span class="go"> 13700.0000    0.468    0.200 11 10    1.076  0.00   0.030   0.065  MAX TIME</span>
 </pre></div>
 </div>
 <p>For more detailed output, check the output file in the <code class="docutils literal notranslate"><span class="pre">output_binary</span></code> folder.</p>

@@ -110,7 +110,7 @@ Since we had set, `write_output_to_file = .true.` in `SSE_input_controls`, a [SS
 To compute the evolution of a single stellar population containing, for example, 10,000 stars with initial masses uniformly distributed between 1 and 100 M<sub>$_\odot$</sub>, we modify the `SSE_input_controls` from the single star case as shown below. 
 
 
-```
+``` fortran
 &SSE_input_controls
 
 initial_Z = 0.02
@@ -124,7 +124,7 @@ max_mass = 100.d0
 
 write_track_to_file = .true.   
 /
-
+ 
 ```
 
 We also set `verbose = .false.` in metisse.input to avoid flooding our screen with evolution details of 10,000 stars. 
@@ -144,7 +144,7 @@ To compute a population of single stars with any other distribution of initial m
 If the masses are listed in a file called `my_custom_distribution.txt`, then `SSE_input_controls` will look like this:
 
 
-```
+``` fortran
 &SSE_input_controls
 
 initial_Z = 0.02
@@ -160,7 +160,7 @@ input_mass_file = 'my_custom_distribution.txt'
 write_track_to_file = .true.  
 
 /
-
+ 
 ```
 
 Note that we still need to define `number_of_tracks` as METISSE will read `input_mass_file` for that many stars and will raise errors if the file contains fewer stars.  
