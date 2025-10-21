@@ -125,10 +125,11 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 <li><p>METISSE is now ready to use with COSMIC.</p></li>
 </ol>
 <p>The usual input namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is not read when using COSMIC. Instead a Python dictionary, <code class="docutils literal notranslate"><span class="pre">SSEDict</span></code> is used to set the <code class="docutils literal notranslate"><span class="pre">stellar_engine</span></code> and provide the location of the folders containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for hydrogen and helium stars through variables <code class="docutils literal notranslate"><span class="pre">path_to_tracks</span></code> and <code class="docutils literal notranslate"><span class="pre">path_to_he_tracks</span></code>.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">SSEDict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;stellar_engine&#39;</span><span class="p">:</span> <span class="s1">&#39;metisse&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;path_to_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span><span class="p">,</span> 
-               <span class="s1">&#39;path_to_he_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span> 
-               <span class="p">}</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">SSEDict</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="s1">&#39;stellar_engine&#39;</span><span class="p">:</span> <span class="s1">&#39;metisse&#39;</span><span class="p">,</span> 
+          <span class="s1">&#39;path_to_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span><span class="p">,</span> 
+          <span class="s1">&#39;path_to_he_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span> 
+          <span class="p">}</span>
 </pre></div>
 </div>
 <div class="admonition important">

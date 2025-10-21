@@ -68,10 +68,11 @@ $ pip install .
 The usual input namelist `METISSE_input_controls` is not read when using COSMIC. Instead a Python dictionary, `SSEDict` is used to set the `stellar_engine` and provide the location of the folders containing [metallicity files](glossary.md#metallicity-file) for hydrogen and helium stars through variables `path_to_tracks` and `path_to_he_tracks`.
 
 ``` ipython
-SSEDict = {'stellar_engine': 'metisse', 
-               'path_to_tracks': '/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/', 
-               'path_to_he_tracks': '/Users/poojan/Downloads/sample_tracks_solarZ/Helium/' 
-               }
+SSEDict = {
+          'stellar_engine': 'metisse', 
+          'path_to_tracks': '/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/', 
+          'path_to_he_tracks': '/Users/poojan/Downloads/sample_tracks_solarZ/Helium/' 
+          }
 ```
 
 :::{Important}

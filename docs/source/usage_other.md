@@ -135,6 +135,8 @@ METALLICITY_DIR = '/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/'
             
 METALLICITY_DIR_HE = '/Users/poojan/Downloads/sample_tracks_solarZ/Helium/'
 
+verbose = .true.
+
 /
  
 ```
