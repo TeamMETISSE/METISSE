@@ -192,7 +192,7 @@ This is achieved by increasing `Z_accuracy_limit` in `METISSE_input_controls`.
 METISSE lists available metallicity values in the grid, whenever it cannot find the input value. 
 
 In the sample set, we have tracks for only one metallicity. 
-However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1</sup, we could increase `Z_accuracy_limit` to `8d-2`. This would allow METISSE to run using the closest metallicity in the list, which is `0.0148`. 
+However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1</sup>, we could increase `Z_accuracy_limit` to `8d-2`. This would allow METISSE to run using the closest metallicity in the list, which is `0.0148`. 
 
 ``` console
 $ ./metisse

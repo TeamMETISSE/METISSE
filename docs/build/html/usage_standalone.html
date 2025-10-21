@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Using METISSE to evolve single stars &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=2709fde1"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -86,7 +86,7 @@
            <div itemprop="articleBody">
              
   <section class="tex2jax_ignore mathjax_ignore" id="using-metisse-to-evolve-single-stars">
-<h1>Using METISSE to evolve single stars<a class="headerlink" href="#using-metisse-to-evolve-single-stars" title="Link to this heading"></a></h1>
+<h1>Using METISSE to evolve single stars<a class="headerlink" href="#using-metisse-to-evolve-single-stars" title="Permalink to this heading"></a></h1>
 <p>METISSE can be used independently to compute the evolution of one star or a population of single stars.
 Once you have downloaded the <a class="reference internal" href="installation.html#code"><span class="std std-ref">code package</span></a> for METISSE,
 you first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:</p>
@@ -99,7 +99,7 @@ you first need to compile it. To do so, open a command line shell and inside the
 <p>The code does not need to be re-compiled unless you make changes inside the source <code class="docutils literal notranslate"><span class="pre">src</span></code> directory.</p>
 </div>
 <section id="evolving-one-star">
-<h2>1.&nbsp;&nbsp;Evolving one star<a class="headerlink" href="#evolving-one-star" title="Link to this heading"></a></h2>
+<h2>1.&nbsp;&nbsp;Evolving one star<a class="headerlink" href="#evolving-one-star" title="Permalink to this heading"></a></h2>
 <p>Let us compute the evolution of a star with initial mass 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star, metallicity <code class="docutils literal notranslate"><span class="pre">Z</span> <span class="pre">=</span> <span class="pre">0.02</span></code> up to the age of 12 Gyr.
 Input to METISSE in the standalone mode is provided through two <a class="reference internal" href="glossary.html#fortran-namelists"><span class="std std-ref">Fortran namelists</span></a>: <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 See sections <a class="reference internal" href="input_files.html#sse-input-controls"><span class="std std-ref">SSE input controls</span></a> and <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options.</p>
@@ -164,7 +164,7 @@ If verbose is False, then these details are saved in the <code class="docutils l
 <p>Since we had set, <code class="docutils literal notranslate"><span class="pre">write_output_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>, a <a class="reference internal" href="glossary.html#sse-style-file"><span class="std std-ref">SSE-style</span></a> output file named ‘evolve_00100M.dat’ will also be generated in the <em>output</em> directory, containing a more detailed evolutionary history of the star.</p>
 </section>
 <section id="evolving-a-stellar-population">
-<h2>2.&nbsp;&nbsp;Evolving a stellar population<a class="headerlink" href="#evolving-a-stellar-population" title="Link to this heading"></a></h2>
+<h2>2.&nbsp;&nbsp;Evolving a stellar population<a class="headerlink" href="#evolving-a-stellar-population" title="Permalink to this heading"></a></h2>
 <p>To compute the evolution of a single stellar population containing, for example, 10,000 stars with initial masses uniformly distributed between 1 and 100 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub>, we modify the <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> from the single star case as shown below.</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">SSE_input_controls</span>
 
@@ -209,7 +209,7 @@ If the masses are listed in a file called <code class="docutils literal notransl
 <p>Note that we still need to define <code class="docutils literal notranslate"><span class="pre">number_of_tracks</span></code> as METISSE will read <code class="docutils literal notranslate"><span class="pre">input_mass_file</span></code> for that many stars and will raise errors if the file contains fewer stars.</p>
 </section>
 <section id="if-the-metallicity-value-is-not-present-in-the-input-grid">
-<h2>3.&nbsp;&nbsp;If the metallicity value is not present in the input grid<a class="headerlink" href="#if-the-metallicity-value-is-not-present-in-the-input-grid" title="Link to this heading"></a></h2>
+<h2>3.&nbsp;&nbsp;If the metallicity value is not present in the input grid<a class="headerlink" href="#if-the-metallicity-value-is-not-present-in-the-input-grid" title="Permalink to this heading"></a></h2>
 <p>Let’s say in the above example of a single star, we set <code class="docutils literal notranslate"><span class="pre">initial_Z</span> <span class="pre">=</span> <span class="pre">0.016</span></code>.
 Running METISSE now gives an error, as the metallicity value is not present in the grid of input tracks.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./metisse<span class="w"> </span>
@@ -229,7 +229,7 @@ Running METISSE now gives an error, as the metallicity value is not present in t
 This is achieved by increasing <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 METISSE lists available metallicity values in the grid, whenever it cannot find the input value.</p>
 <p>In the sample set, we have tracks for only one metallicity.
-However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1&lt;/sup, we could increase <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> to <code class="docutils literal notranslate"><span class="pre">8d-2</span></code>. This would allow METISSE to run using the closest metallicity in the list, which is <code class="docutils literal notranslate"><span class="pre">0.0148</span></code>.</p>
+However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1</sup>, we could increase <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code> to <code class="docutils literal notranslate"><span class="pre">8d-2</span></code>. This would allow METISSE to run using the closest metallicity in the list, which is <code class="docutils literal notranslate"><span class="pre">0.0148</span></code>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./metisse
 <span class="go"> Input Z is :  1.60000E-02</span>
 <span class="go"> Reading naked helium star tracks</span>

@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Using METISSE to evolve binaries &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=2709fde1"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -46,7 +46,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using METISSE to evolve binaries</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#cosmic">COSMIC</a></li>
@@ -56,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="citing_metisse.html">Community guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guidelines.html">Community guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -85,12 +85,12 @@
            <div itemprop="articleBody">
              
   <section class="tex2jax_ignore mathjax_ignore" id="using-metisse-to-evolve-binaries">
-<h1>Using METISSE to evolve binaries<a class="headerlink" href="#using-metisse-to-evolve-binaries" title="Link to this heading"></a></h1>
+<h1>Using METISSE to evolve binaries<a class="headerlink" href="#using-metisse-to-evolve-binaries" title="Permalink to this heading"></a></h1>
 <p>METISSE, by itself, is not capable of evolving stars in binary systems. However, it has been specifically designed to be integrated with binary evolution codes that can do so, enabling them to make use of modern stellar data for binary evolution computations.</p>
 <p>It can be seamlessly integrated with codes that currently use SSE fitting formulae <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> for single star evolution computations.
 It has already been added to the binary evolution codes BSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2002MNRAS.329..897H/abstract">(Hurley et al. 2002)</a> and COSMIC <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020ApJ...898...71B/abstract">(Breivik et al. 2020)</a>.</p>
 <section id="cosmic">
-<h2>1.&nbsp;&nbsp;COSMIC<a class="headerlink" href="#cosmic" title="Link to this heading"></a></h2>
+<h2>1.&nbsp;&nbsp;COSMIC<a class="headerlink" href="#cosmic" title="Permalink to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>To use METISSE with COSMIC one needs the GitHub repository for the latest version of COSMIC.</p></li>
 </ol>
@@ -98,12 +98,12 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/COSMIC-PopSynth/COSMIC
 </pre></div>
 </div>
-<p>Follow the COSMIC’s documentation to <a class="reference external" href="https://cosmic-popsynth.github.io/COSMIC/install/index.html#">load the cosmic environment</a></p>
+<p>Follow the COSMIC’s documentation to <a class="reference external" href="https://cosmic-popsynth.github.io/COSMIC/pages/install.html">load the cosmic environment</a></p>
 <p>Next, cd into the COSMIC’s directory and compile the library:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>.
 </pre></div>
 </div>
-<p>Try evolving an example binary following the instructions on <a class="reference external" href="https://cosmic-popsynth.github.io/COSMIC/examples/index.html#">this page</a>.</p>
+<p>Try evolving an example binary following the instructions on <a class="reference external" href="https://cosmic-popsynth.github.io/COSMIC/pages/examples.html">this page</a>.</p>
 <ol class="arabic simple" start="2">
 <li><p>Next checkout the METISSE-Integrate branch of COSMIC. In the COSMIC’s directory, do:</p></li>
 </ol>
@@ -144,7 +144,7 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 <p>COSMIC will then evolve the system using the provided stellar tracks and store the output in its usual <code class="docutils literal notranslate"><span class="pre">bpp</span></code> and <code class="docutils literal notranslate"><span class="pre">bcm</span></code> arrays.</p>
 </section>
 <section id="bse">
-<h2>2.&nbsp;&nbsp;BSE<a class="headerlink" href="#bse" title="Link to this heading"></a></h2>
+<h2>2.&nbsp;&nbsp;BSE<a class="headerlink" href="#bse" title="Permalink to this heading"></a></h2>
 <p>To run METISSE with BSE and compute the evolution of a single binary, say a 2.5 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star with a 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr.</p>
 <ol class="arabic simple">
 <li><p>Get the METISSE-enabled version of BSE through its <a class="reference external" href="https://github.com/poojanagrawal/BSE-METISSE">GitHub repository</a>.</p></li>

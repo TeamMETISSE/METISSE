@@ -21,7 +21,7 @@ $ git clone https://github.com/COSMIC-PopSynth/COSMIC
 
 ```
 
-Follow the COSMIC's documentation to [load the cosmic environment](https://cosmic-popsynth.github.io/COSMIC/install/index.html#)
+Follow the COSMIC's documentation to [load the cosmic environment](https://cosmic-popsynth.github.io/COSMIC/pages/install.html)
 
 Next, cd into the COSMIC's directory and compile the library: 
 
@@ -33,7 +33,7 @@ $ pip install .
 ```
 
 
-Try evolving an example binary following the instructions on [this page](https://cosmic-popsynth.github.io/COSMIC/examples/index.html#). 
+Try evolving an example binary following the instructions on [this page](https://cosmic-popsynth.github.io/COSMIC/pages/examples.html). 
 
 
 2. Next checkout the METISSE-Integrate branch of COSMIC. In the COSMIC's directory, do:

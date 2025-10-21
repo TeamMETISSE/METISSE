@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Code structure &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
 
   
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=2709fde1"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="next" title="Community guidelines" href="guidelines.html" />
     <link rel="prev" title="Using custom input tracks" href="using_custom_input_tracks.html" /> 
 </head>
 
@@ -46,6 +46,7 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
@@ -56,6 +57,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="guidelines.html">Community guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -84,11 +86,11 @@
            <div itemprop="articleBody">
              
   <section class="tex2jax_ignore mathjax_ignore" id="code-structure">
-<h1>Code structure<a class="headerlink" href="#code-structure" title="Link to this heading"></a></h1>
+<h1>Code structure<a class="headerlink" href="#code-structure" title="Permalink to this heading"></a></h1>
 <p>METISSE has been written completely using Modern Fortran.
 The source code contains two types of files located in the <em>src</em> directory:</p>
 <section id="sse-specific-subroutines">
-<h2>1.&nbsp;&nbsp;SSE specific subroutines<a class="headerlink" href="#sse-specific-subroutines" title="Link to this heading"></a></h2>
+<h2>1.&nbsp;&nbsp;SSE specific subroutines<a class="headerlink" href="#sse-specific-subroutines" title="Permalink to this heading"></a></h2>
 <p>METISSE has been developed as an alternative to SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> code and, therefore, contains similar subroutines as SSE. The following subroutines replicate the behaviour of the SSE subroutines externally, with similar names and input/output variables.</p>
 <table class="docutils align-default">
 <thead>
@@ -119,7 +121,7 @@ The source code contains two types of files located in the <em>src</em> director
 </table>
 </section>
 <section id="modules-and-other-files">
-<h2>2.&nbsp;&nbsp;Modules and other files<a class="headerlink" href="#modules-and-other-files" title="Link to this heading"></a></h2>
+<h2>2.&nbsp;&nbsp;Modules and other files<a class="headerlink" href="#modules-and-other-files" title="Permalink to this heading"></a></h2>
 <p>The following Fortran modules contain supporting data structures and utilities.</p>
 <table class="docutils align-default">
 <thead>
@@ -206,7 +208,7 @@ The source code contains two types of files located in the <em>src</em> director
 </table>
 </section>
 <section id="workflow">
-<h2>3.&nbsp;&nbsp;Workflow<a class="headerlink" href="#workflow" title="Link to this heading"></a></h2>
+<h2>3.&nbsp;&nbsp;Workflow<a class="headerlink" href="#workflow" title="Permalink to this heading"></a></h2>
 <p>Here is a flowchart describing the workflow of METISSE:</p>
 <p><img alt="METISSE's flowchart" src="_images/METISSE_flowchart.png" /></p>
 <!-- # module details
@@ -229,7 +231,7 @@ METISSE further interpolates within this mass-interpolated track to calculate st
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="using_custom_input_tracks.html" class="btn btn-neutral float-left" title="Using custom input tracks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="guidelines.html" class="btn btn-neutral float-right" title="Community guidelines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
