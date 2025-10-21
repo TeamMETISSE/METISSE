@@ -32,7 +32,7 @@ module track_support
     integer, parameter:: COSMIC = 3
     integer, parameter:: AMUSE = 4
     
-    ! mode > 0 enables read-only mode for files when multi-threading
+    ! mode > 0 enables read-only mode for files when multi-threading in CMC
     integer:: mode = 0
     
     character(len = strlen):: METISSE_DIR, METALLICITY_DIR, METALLICITY_DIR_HE
@@ -227,9 +227,9 @@ module track_support
     logical:: code_error
     
     !variable declaration-- for main
-    integer:: number_of_tracks
+    real(dp) :: number_of_tracks
     character(len = strlen):: input_mass_file
-    logical:: read_mass_from_file
+    logical :: read_mass_from_file
     
     !for z_support
     real(dp):: Mhook, Mhef, Mfgb, Mup, Mec, Mextra, Mup_core, Mec_core, Z04
