@@ -21,9 +21,10 @@ When METISSE is used with other codes, the input parameters from the overlying c
 | read_mass_from_file  | If `.true.`, use initial masses listed in the `input_mass_file`.<br> Default is `.false.`.                                                                                                                                                |
 | input_mass_file      | Path to the input mass file if `read_mass_from_file = .true.`. List one mass value per line of the file.                                                                                       |
 | number_of_tracks     | Number of stars to be evolved. If `read_mass_from_file = .true.`, <br>it denotes the number of mass values to be read from the `input_mass_file`.                                                                                                                            |
-| max_mass             | Upper limit of the uniform distribution if `read_mass_from_file = .false.` and `number_of_tracks > 1`                                                                                                                                                               |
+| max_mass             | Upper limit of the uniform distribution if `read_mass_from_file = .false.` and `number_of_tracks` > 1                                                                                                                                                              |
 | min_mass             | Lower limit of the uniform distribution if `read_mass_from_file = .false.`                                                                                              |
-| initial_Z            | Initial metallicity                                                                                                                                        |
+| sampling_scheme      | Sampling scheme for initial masses if `number_of_tracks` > 1. Options are:  <br> (1)"uniform" <br>(2)"Kroupa2001" - [Kroupa P. 2001](https://ui.adsabs.harvard.edu/link_gateway/2001MNRAS.322..231K/PUB_PDF)<br> Default is "uniform" 
+| initial_Z            | Initial metallicity               |
 | max_age              | Maximum age in Myrs    |
 
 
@@ -41,6 +42,7 @@ input_mass_file = ''
 number_of_tracks = 0
 max_mass = -1.0
 min_mass = -1.0
+sampling_scheme = 'uniform'
 initial_Z = -1.0
 max_age = -1.0   
 ```
@@ -56,7 +58,7 @@ max_age = -1.0
 | use_initial_final_mass_relation | If `.true.` use the initial final mass relation for white dwarfs <br> from [Han, Z, Podsiadlowski, P., Eggleton, P. P. 1995](https://ui.adsabs.harvard.edu/abs/1995MNRAS.272..800H/abstract). <br> Default is `.false.`                                                                                               |
 | BHNS_mass_scheme              | Neutron Star/Black Hole (NS/BH) type and mass calculation method:<br>(1) "original_SSE" - [Hurley et al. 2000](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract)<br>(2) "Belczynski2002" - [Belczynski et al. 2002](https://iopscience.iop.org/article/10.1086/340304)<br>(3) "Belczynski2008" - [Belczynski et al. 2008](https://iopscience.iop.org/article/10.1086/521026)<br>(4) "Eldridge_Tout2004" - [Eldridge J. J., Tout C. A., 2004](https://ui.adsabs.harvard.edu/abs/2004MNRAS.353...87E/abstract) <br> Default is "Belczynski2008"                                                                                            |
 | max_NS_mass | Maximum neutron star mass. Recommended 1.8 for <br> BHNS_mass_scheme = "original_SSE", 3.0 otherwise. Default is 3.0                                                                                             |
-| allow_electron_capture | Allow electron capture supernovae if `.true.`. <br> Default is `.true.`|        
+| allow_electron_capture | Allow electron capture supernovae if `.true.` <br> Default is `.true.`|        
 
 ```
 ! REMNANT CONTROLS 

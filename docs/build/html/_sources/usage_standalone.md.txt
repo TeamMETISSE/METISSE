@@ -114,14 +114,11 @@ To compute the evolution of a single stellar population containing, for example,
 &SSE_input_controls
 
 initial_Z = 0.02
-
 max_age = 1.2d4   
-
 number_of_tracks = 1d+4
 min_mass = 1.d0
-
 max_mass = 100.d0
-
+sampling_scheme = 'uniform'
 write_track_to_file = .true.   
 /
  
@@ -139,7 +136,7 @@ $ ./metisse
 
 We also kept `write_track_to_file = .true.` in `SSE_input_controls`. Therefore, the `output` directory will now contain the evolutionary histories of all 10,000 stars. 
 
-
+`sampling_scheme` can also be set to  `Kroupa2001` to compute a population of stars with initial masses distributed according to [Kroupa P., (2001)](https://ui.adsabs.harvard.edu/link_gateway/2001MNRAS.322..231K/PUB_PDF).
 To compute a population of single stars with any other distribution of initial masses, we can list initial masses in a file provide masses in a text file (one per line) and provide the location of that file through `input_mass_file`. 
 If the masses are listed in a file called `my_custom_distribution.txt`, then `SSE_input_controls` will look like this:
 
@@ -163,7 +160,7 @@ write_track_to_file = .true.
  
 ```
 
-Note that we still need to define `number_of_tracks` as METISSE will read `input_mass_file` for that many stars and will raise errors if the file contains fewer stars.  
+Note that we still need to define `number_of_tracks` as METISSE will read `input_mass_file` for that many stars and will raise error if the file contains fewer stars.  
 
 ## If the metallicity value is not present in the input grid
 

@@ -70,7 +70,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guidelines.html">Community guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -128,15 +128,18 @@ When METISSE is used with other codes, the input parameters from the overlying c
 <td><p>Number of stars to be evolved. If <code class="docutils literal notranslate"><span class="pre">read_mass_from_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code>, <br>it denotes the number of mass values to be read from the <code class="docutils literal notranslate"><span class="pre">input_mass_file</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p>max_mass</p></td>
-<td><p>Upper limit of the uniform distribution if <code class="docutils literal notranslate"><span class="pre">read_mass_from_file</span> <span class="pre">=</span> <span class="pre">.false.</span></code> and <code class="docutils literal notranslate"><span class="pre">number_of_tracks</span> <span class="pre">&gt;</span> <span class="pre">1</span></code></p></td>
+<td><p>Upper limit of the uniform distribution if <code class="docutils literal notranslate"><span class="pre">read_mass_from_file</span> <span class="pre">=</span> <span class="pre">.false.</span></code> and <code class="docutils literal notranslate"><span class="pre">number_of_tracks</span></code> &gt; 1</p></td>
 </tr>
 <tr class="row-even"><td><p>min_mass</p></td>
 <td><p>Lower limit of the uniform distribution if <code class="docutils literal notranslate"><span class="pre">read_mass_from_file</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>initial_Z</p></td>
+<tr class="row-odd"><td><p>sampling_scheme</p></td>
+<td><p>Sampling scheme for initial masses if <code class="docutils literal notranslate"><span class="pre">number_of_tracks</span></code> &gt; 1. Options are:  <br> (1)“uniform” <br>(2)“Kroupa2001” - <a class="reference external" href="https://ui.adsabs.harvard.edu/link_gateway/2001MNRAS.322..231K/PUB_PDF">Kroupa P. 2001</a><br> Default is “uniform”</p></td>
+</tr>
+<tr class="row-even"><td><p>initial_Z</p></td>
 <td><p>Initial metallicity</p></td>
 </tr>
-<tr class="row-even"><td><p>max_age</p></td>
+<tr class="row-odd"><td><p>max_age</p></td>
 <td><p>Maximum age in Myrs</p></td>
 </tr>
 </tbody>
@@ -154,6 +157,7 @@ When METISSE is used with other codes, the input parameters from the overlying c
 <span class="go">number_of_tracks = 0</span>
 <span class="go">max_mass = -1.0</span>
 <span class="go">min_mass = -1.0</span>
+<span class="go">sampling_scheme = &#39;uniform&#39;</span>
 <span class="go">initial_Z = -1.0</span>
 <span class="go">max_age = -1.0   </span>
 </pre></div>
@@ -181,7 +185,7 @@ When METISSE is used with other codes, the input parameters from the overlying c
 <td><p>Maximum neutron star mass. Recommended 1.8 for <br> BHNS_mass_scheme = “original_SSE”, 3.0 otherwise. Default is 3.0</p></td>
 </tr>
 <tr class="row-even"><td><p>allow_electron_capture</p></td>
-<td><p>Allow electron capture supernovae if <code class="docutils literal notranslate"><span class="pre">.true.</span></code>. <br> Default is <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></td>
+<td><p>Allow electron capture supernovae if <code class="docutils literal notranslate"><span class="pre">.true.</span></code> <br> Default is <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></td>
 </tr>
 </tbody>
 </table>

@@ -59,7 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guidelines.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -150,15 +150,16 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 </section>
 <section id="bse">
 <h2>2.&nbsp;&nbsp;BSE<a class="headerlink" href="#bse" title="Permalink to this heading"></a></h2>
-<p>To run METISSE with BSE and compute the evolution of a single binary, say a 2.5 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star with a 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr.</p>
 <ol class="arabic simple">
-<li><p>Get the METISSE-enabled version of BSE through its <a class="reference external" href="https://github.com/poojanagrawal/BSE-METISSE">GitHub repository</a>.</p></li>
+<li><p>To run METISSE with BSE:</p></li>
 </ol>
+<p>Get the METISSE-enabled version of BSE through its <a class="reference external" href="https://github.com/poojanagrawal/BSE-METISSE">GitHub repository</a>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/poojanagrawal/BSE-METISSE
+<span class="gp">$ </span>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
 </pre></div>
 </div>
-<p>Get the METISSE submodule.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+<p>Alternatively, you can clone BSE and METISSE together:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/poojanagrawal/BSE-METISSE.git
 </pre></div>
 </div>
 <ol class="arabic simple" start="2">
@@ -169,13 +170,17 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 </div>
 <!-- Make sure use_SSE is false in `bse.f` in the `src` folder before compiling. -->
 <ol class="arabic simple" start="3">
-<li><p>When using BSE, METISSE-specific inputs are read through the <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> inlist in the <em>evolve_metisse.in</em> file. We supply the location of the folders containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for hydrogen and helium stars through <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code>. (Make sure to provide relevant paths based on the location of these folders <strong>on your machine</strong> ).</p></li>
+<li><p>Let us compute the evolution of a single binary using BSE-METISSE, say a 2.5 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star with a 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr.</p></li>
 </ol>
+<p>When using BSE, METISSE-specific inputs are read through the <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> inlist in the <em>evolve_metisse.in</em> file. (See <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options).</p>
+<p>We supply the location of the folders containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for hydrogen and helium stars through <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code>. (Make sure to provide relevant paths based on the location of these folders <strong>on your machine</strong> ).</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
 <span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span>
 <span class="w">            </span>
 <span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span>
+
+<span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
 
 <span class="o">/</span>
 <span class="w"> </span>
@@ -216,7 +221,7 @@ where each value in every line is separated by space and corresponds to the foll
 
 ::: -->
 <ol class="arabic simple" start="4">
-<li><p>Finally, run BSE using:</p></li>
+<li><p>Run BSE using:</p></li>
 </ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./bse_metisse
 </pre></div>
@@ -256,6 +261,7 @@ where each value in every line is separated by space and corresponds to the foll
 </pre></div>
 </div>
 <p>For more detailed output, check the output file in the <code class="docutils literal notranslate"><span class="pre">output_binary</span></code> folder.</p>
+<p>Similar to the standalone mode, to <code class="docutils literal notranslate"><span class="pre">z_accuracy_limit</span></code> can be adjusted in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> to use nearby metallicity value if the required value is not present in the grid. See <a class="reference internal" href="usage_standalone.html#if-the-metallicity-value-is-not-present-in-the-input-grid"><span class="std std-ref">If the metallicity value is not present in the input grid</span></a> for details.</p>
  <!-- `popbin.f`.  -->
 </section>
 </section>

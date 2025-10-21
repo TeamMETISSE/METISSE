@@ -21,5 +21,5 @@ Check out the following sections for more information about METISSE and how to u
    input_files
    using_custom_input_tracks
    structure
-   guidelines
+   FAQ
    glossary

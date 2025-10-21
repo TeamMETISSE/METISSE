@@ -97,24 +97,27 @@ COSMIC will then evolve the system using the provided stellar tracks and store t
 
 
 ## BSE 
- 
-To run METISSE with BSE and compute the evolution of a single binary, say a 2.5 M<sub>$_\odot$</sub> star with a 1 M<sub>$_\odot$</sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr. 
 
-1. Get the METISSE-enabled version of BSE through its [GitHub repository](https://github.com/poojanagrawal/BSE-METISSE).
+
+1. To run METISSE with BSE:
+
+ Get the METISSE-enabled version of BSE through its [GitHub repository](https://github.com/poojanagrawal/BSE-METISSE).
 
 
 ``` console
 
 $ git clone https://github.com/poojanagrawal/BSE-METISSE
-
-```
-Get the METISSE submodule.
-
-``` console
-
 $ git submodule update --init --recursive
 
 ```
+ Alternatively, you can clone BSE and METISSE together: 
+
+``` console
+
+$ git clone --recurse-submodules https://github.com/poojanagrawal/BSE-METISSE.git
+
+```
+
 
 2. Compile the code using:
 
@@ -126,7 +129,11 @@ $ ./mk
 <!-- Make sure use_SSE is false in `bse.f` in the `src` folder before compiling. -->
 
 
-3. When using BSE, METISSE-specific inputs are read through the `METISSE_input_controls` inlist in the *evolve_metisse.in* file. We supply the location of the folders containing [metallicity files](glossary.md#metallicity-file) for hydrogen and helium stars through `METALLICITY_DIR` and `METALLICITY_DIR_HE`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
+3. Let us compute the evolution of a single binary using BSE-METISSE, say a 2.5 M<sub>$_\odot$</sub> star with a 1 M<sub>$_\odot$</sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr.
+
+When using BSE, METISSE-specific inputs are read through the `METISSE_input_controls` inlist in the *evolve_metisse.in* file. (See [](input_files.md#metisse-input-controls) for a complete list of input options). 
+
+We supply the location of the folders containing [metallicity files](glossary.md#metallicity-file) for hydrogen and helium stars through `METALLICITY_DIR` and `METALLICITY_DIR_HE`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
 
 ``` fortran
 &METISSE_input_controls
@@ -134,6 +141,8 @@ $ ./mk
 METALLICITY_DIR = '/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/'
             
 METALLICITY_DIR_HE = '/Users/poojan/Downloads/sample_tracks_solarZ/Helium/'
+
+verbose = .true.
 
 /
  
@@ -181,7 +190,7 @@ where each value in every line is separated by space and corresponds to the foll
 
 ::: -->
 
-4.  Finally, run BSE using:
+4.  Run BSE using:
 
 ``` console
 
@@ -226,6 +235,7 @@ Maximum initial mass  299.3
 
 For more detailed output, check the output file in the `output_binary` folder.
 
+Similar to the standalone mode, to `z_accuracy_limit` can be adjusted in `METISSE_input_controls` to use nearby metallicity value if the required value is not present in the grid. See [](usage_standalone.md#if-the-metallicity-value-is-not-present-in-the-input-grid) for details. 
 
  <!-- `popbin.f`.  -->
 
