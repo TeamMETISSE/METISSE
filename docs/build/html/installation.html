@@ -50,13 +50,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#prequisites">Prequisites</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fortran-compiler">Fortran compiler</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#input-tracks">Input tracks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-the-code">Get the code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#clone-the-repository">Clone the repository</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-as-a-zip-archive">Download as a ZIP archive</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#code">Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-metisse">Running METISSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#get-the-compiler">Get the compiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-tracks">Input tracks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-metisse">Run METISSE</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
@@ -94,32 +95,65 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
-<section id="prequisites">
-<h2>1.&nbsp;&nbsp;Prequisites<a class="headerlink" href="#prequisites" title="Permalink to this heading"></a></h2>
-<section id="fortran-compiler">
-<h3>1.1.&nbsp;&nbsp;Fortran compiler<a class="headerlink" href="#fortran-compiler" title="Permalink to this heading"></a></h3>
-<p>METISSE requires a Fortran installation specifically gfortran that comes with gcc/6.4.0 and more recent versions.
-Check out <a class="reference external" href="https://fortran-lang.org/learn/os_setup/install_gfortran/">this page</a> if you need help installing gfortran.</p>
+<p>METISSE can be used in two different ways:</p>
+<ol class="arabic simple">
+<li><p><strong>Directly as a standalone code</strong> for evolving populations of single stars.</p></li>
+<li><p><strong>In conjunction with binary evolution codes</strong> for evolving populations of single and binary stars.</p></li>
+</ol>
+<p>Depending on how you intend to use METISSE, the instructions for downloading and running it may vary.</p>
+<section id="get-the-code">
+<h2>1.&nbsp;&nbsp;Get the code<a class="headerlink" href="#get-the-code" title="Permalink to this heading"></a></h2>
+<p>The code package for METISSE is available at the <a class="reference external" href="https://github.com/TeamMETISSE/METISSE">GitHub Repository</a>.
+If you plan to run METISSE by itself (standalone mode), obtain the code using one of the following methods:</p>
+<section id="clone-the-repository">
+<h3>1.1.&nbsp;&nbsp;Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permalink to this heading"></a></h3>
+<p>If you have Git installed, open a terminal and run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/TeamMETISSE/METISSE.git</span>
+</pre></div>
+</div>
+<p>This will create a local copy of the METISSE source code in a folder named METISSE.</p>
+</section>
+<section id="download-as-a-zip-archive">
+<h3>1.2.&nbsp;&nbsp;Download as a ZIP archive<a class="headerlink" href="#download-as-a-zip-archive" title="Permalink to this heading"></a></h3>
+<p>If you prefer not to use Git:</p>
+<ul class="simple">
+<li><p>Go to the METISSE GitHub repository</p></li>
+<li><p>Click the green “Code” button.</p></li>
+<li><p>Select “Download ZIP”.</p></li>
+<li><p>Extract the downloaded archive to your desired location.</p></li>
+</ul>
+<p>To download METISSE with other codes, see code-specific instructions on <a class="reference internal" href="usage_other.html"><span class="std std-doc">this page</span></a></p>
+</section>
+</section>
+<section id="get-the-compiler">
+<h2>2.&nbsp;&nbsp;Get the compiler<a class="headerlink" href="#get-the-compiler" title="Permalink to this heading"></a></h2>
+<p>Regardless of how you use it, METISSE must be compiled before use.
+It requires a Fortran compiler — specifically gfortran, which comes with GCC 6.4.0 or newer version.</p>
+<p>Check your compiler version with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">gcc --version</span>
+</pre></div>
+</div>
+<p>Check out <a class="reference external" href="https://fortran-lang.org/learn/os_setup/install_gfortran/">this page</a> if you need help installing gfortran.</p>
 </section>
 <section id="input-tracks">
-<h3>1.2.&nbsp;&nbsp;Input tracks<a class="headerlink" href="#input-tracks" title="Permalink to this heading"></a></h3>
-<p>The user also needs to provide stellar tracks for METISSE to work.</p>
-<p>A set of sample tracks for testing METISSE can be downloaded from <a class="reference external" href="https://zenodo.org/records/14918163">zenodo</a>. The tracks have been computed using the stellar evolution code <a class="reference external" href="https://docs.mesastar.org/en/release-r24.03.1/">MESA</a> and are ready for use with METISSE.
-The folder <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> contains stellar tracks with initial masses between 0.1 and 300 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> for each metallicity. Similarly the folder <code class="docutils literal notranslate"><span class="pre">helium</span></code> contains tracks of naked helium stars in the mass range 0.3 and 150 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub>. The tracks are for non-rotating stars at solar metallicity (Z=0.02).</p>
+<h2>3.&nbsp;&nbsp;Input tracks<a class="headerlink" href="#input-tracks" title="Permalink to this heading"></a></h2>
+<p>METISSE also requires a set of stellar tracks to work.</p>
+<p>A set of sample tracks for testing METISSE can be downloaded from <a class="reference external" href="https://zenodo.org/records/14918163">zenodo</a>.
+The tracks have been computed using the stellar evolution code <a class="reference external" href="https://docs.mesastar.org/en/release-r24.03.1/">MESA</a> and are ready for use with METISSE.</p>
+<ul class="simple">
+<li><p>The folder <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> contains stellar tracks with initial masses between 0.1 and 300 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> for each metallicity.</p></li>
+<li><p>The folder <code class="docutils literal notranslate"><span class="pre">helium</span></code> contains tracks of naked helium stars in the mass range 0.3 and 150 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub>.</p></li>
+<li><p>The tracks are for non-rotating stars at solar metallicity (Z=0.02).</p></li>
+</ul>
 <!-- A pre-packaged grid of MESA tracks for hydrogen and helium stars with metallicity values ranging from 10<sup>-5</sup> to 10<sup>-1</sup> will be available soon (a future Zenodo entry).  -->
 <p>One can also use their custom set of hydrogen and helium stellar tracks, computed using different input parameters, or even different stellar evolution codes with METISSE. For instructions on how to use a custom set of input stellar tracks with METISSE, refer to <a class="reference internal" href="using_custom_input_tracks.html"><span class="std std-doc">Using custom input tracks</span></a>.</p>
 </section>
-</section>
-<section id="code">
-<h2>2.&nbsp;&nbsp;Code<a class="headerlink" href="#code" title="Permalink to this heading"></a></h2>
-<p>The code package for METISSE is available at this <a class="reference external" href="https://github.com/TeamMETISSE/METISSE">GitHub Repository</a>.</p>
-</section>
-<section id="running-metisse">
-<h2>3.&nbsp;&nbsp;Running METISSE<a class="headerlink" href="#running-metisse" title="Permalink to this heading"></a></h2>
-<p>METISSE can be run in two different ways:</p>
+<section id="run-metisse">
+<h2>4.&nbsp;&nbsp;Run METISSE<a class="headerlink" href="#run-metisse" title="Permalink to this heading"></a></h2>
+<p>Refer to the following pages for build instructions and examples for METISSE:</p>
 <ol class="arabic simple">
-<li><p><a class="reference internal" href="usage_standalone.html"><span class="std std-doc">Directly as a standalone code</span></a> for evolving populations of single stars.</p></li>
-<li><p><a class="reference internal" href="usage_other.html"><span class="std std-doc">In conjunction with binary evolution codes</span></a> for evolving populations of single and binary stars.</p></li>
+<li><p><a class="reference internal" href="usage_standalone.html"><span class="std std-doc">Using METISSE directly</span></a>.</p></li>
+<li><p><a class="reference internal" href="usage_other.html"><span class="std std-doc">Using METISSE with binary evolution codes</span></a>.</p></li>
 </ol>
 </section>
 </section>

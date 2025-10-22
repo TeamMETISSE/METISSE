@@ -133,6 +133,9 @@ $ ./mk
 
 When using BSE, METISSE-specific inputs are read through the `METISSE_input_controls` inlist in the *evolve_metisse.in* file. (See [](input_files.md#metisse-input-controls) for a complete list of input options). 
 
+<!-- **Important:** When using BSE, the file *evolve_metisse.in* should be located in the same directory as the bse executable.  -->
+
+
 We supply the location of the folders containing [metallicity files](glossary.md#metallicity-file) for hydrogen and helium stars through `METALLICITY_DIR` and `METALLICITY_DIR_HE`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
 
 ``` fortran

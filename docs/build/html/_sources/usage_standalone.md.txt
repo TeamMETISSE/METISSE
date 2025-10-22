@@ -2,7 +2,7 @@
 
  
 METISSE can be used independently to compute the evolution of one star or a population of single stars. 
-Once you have downloaded the [code package](installation.md#code) for METISSE,
+Once you have [downloaded](installation.md#get-the-code) the code package for METISSE,
 you first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:
 
 ```console
@@ -22,7 +22,7 @@ The code does not need to be re-compiled unless you make changes inside the sour
 
 ## Evolving one star 
 
-Let us compute the evolution of a star with initial mass 1 M<sub>$_\odot$</sub> star, metallicity `Z = 0.02` up to the age of 12 Gyr. 
+Let us compute the evolution of a star with initial mass 1 M<sub>$_\odot$</sub> star, metallicity `Z = 0.02` up to the age of 12 billion years. 
 Input to METISSE in the standalone mode is provided through two [Fortran namelists](glossary.md#fortran-namelists): `SSE_input_controls` and `METISSE_input_controls`. 
 See sections [](input_files.md#sse-input-controls) and [](input_files.md#metisse-input-controls) for a complete list of input options. 
 
@@ -30,7 +30,7 @@ See sections [](input_files.md#sse-input-controls) and [](input_files.md#metisse
 `SSE_input_controls` is contained in the file called *main.input* and
 is used to provide evolution details of the star.
  
-```
+``` fortran
 &SSE_input_controls
 
 initial_Z = 0.02
@@ -52,7 +52,7 @@ In the standalone mode of METISSE, `METISSE_input_controls` is contained in the 
 We use the variable `METALLICITY_DIR` to supply paths to the folder containing [metallicity files](glossary.md#metallicity-file) for normal hydrogen stars and the variable `METALLICITY_DIR_HE` for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the `hydrogen` and `helium` folders respectively.
 
 
-```
+``` fortran
 &METISSE_input_controls
 
 

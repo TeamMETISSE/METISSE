@@ -91,7 +91,7 @@
   <section class="tex2jax_ignore mathjax_ignore" id="using-metisse-to-evolve-single-stars">
 <h1>Using METISSE to evolve single stars<a class="headerlink" href="#using-metisse-to-evolve-single-stars" title="Permalink to this heading"></a></h1>
 <p>METISSE can be used independently to compute the evolution of one star or a population of single stars.
-Once you have downloaded the <a class="reference internal" href="installation.html#code"><span class="std std-ref">code package</span></a> for METISSE,
+Once you have <a class="reference internal" href="installation.html#get-the-code"><span class="std std-ref">downloaded</span></a> the code package for METISSE,
 you first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./mk
 </pre></div>
@@ -103,37 +103,37 @@ you first need to compile it. To do so, open a command line shell and inside the
 </div>
 <section id="evolving-one-star">
 <h2>1.&nbsp;&nbsp;Evolving one star<a class="headerlink" href="#evolving-one-star" title="Permalink to this heading"></a></h2>
-<p>Let us compute the evolution of a star with initial mass 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star, metallicity <code class="docutils literal notranslate"><span class="pre">Z</span> <span class="pre">=</span> <span class="pre">0.02</span></code> up to the age of 12 Gyr.
+<p>Let us compute the evolution of a star with initial mass 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star, metallicity <code class="docutils literal notranslate"><span class="pre">Z</span> <span class="pre">=</span> <span class="pre">0.02</span></code> up to the age of 12 billion years.
 Input to METISSE in the standalone mode is provided through two <a class="reference internal" href="glossary.html#fortran-namelists"><span class="std std-ref">Fortran namelists</span></a>: <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 See sections <a class="reference internal" href="input_files.html#sse-input-controls"><span class="std std-ref">SSE input controls</span></a> and <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options.</p>
 <p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> is contained in the file called <em>main.input</em> and
 is used to provide evolution details of the star.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&amp;SSE_input_controls</span>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">SSE_input_controls</span>
 
-<span class="go">initial_Z = 0.02</span>
+<span class="n">initial_Z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.02</span>
 
-<span class="go">max_age = 1.2d4   </span>
+<span class="n">max_age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.2d4</span><span class="w">   </span>
 
-<span class="go">number_of_tracks = 1</span>
-<span class="go">min_mass = 1.d0</span>
+<span class="n">number_of_tracks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="n">min_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.d0</span>
 
-<span class="go">write_output_to_file = .true.   </span>
-<span class="go">/</span>
+<span class="n">write_output_to_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w">   </span>
+<span class="o">/</span>
 </pre></div>
 </div>
 <p>We also need to provide the details of the input tracks to METISSE through the namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 In the standalone mode of METISSE, <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is contained in the file called <em>metisse.input</em>.</p>
 <p>We use the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> to supply paths to the folder containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for normal hydrogen stars and the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> and <code class="docutils literal notranslate"><span class="pre">helium</span></code> folders respectively.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&amp;METISSE_input_controls</span>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
 
-<span class="go">METALLICITY_DIR = &#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span>
-<span class="go">            </span>
-<span class="go">METALLICITY_DIR_HE = &#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span>
+<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span>
+<span class="w">            </span>
+<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span>
 
-<span class="go">verbose = .true.</span>
+<span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
 
-<span class="go">/</span>
+<span class="o">/</span>
 </pre></div>
 </div>
 <div class="admonition important">
