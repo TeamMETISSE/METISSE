@@ -23,7 +23,7 @@ The code does not need to be re-compiled unless you make changes inside the sour
 ## Evolving one star 
 
 Let us compute the evolution of a star with initial mass 1 M<sub>$_\odot$</sub> star, metallicity `Z = 0.02` up to the age of 12 billion years. 
-Input to METISSE in the standalone mode is provided through two [Fortran namelists](glossary.md#fortran-namelists): `SSE_input_controls` and `METISSE_input_controls`. 
+Input to METISSE in the standalone mode is provided through two {term}`Fortran namelists`: `SSE_input_controls` and `METISSE_input_controls`. 
 See sections [](input_files.md#sse-input-controls) and [](input_files.md#metisse-input-controls) for a complete list of input options. 
 
 
@@ -49,7 +49,7 @@ We also need to provide the details of the input tracks to METISSE through the n
 In the standalone mode of METISSE, `METISSE_input_controls` is contained in the file called *metisse.input*. 
 
 
-We use the variable `METALLICITY_DIR` to supply paths to the folder containing [metallicity files](glossary.md#metallicity-file) for normal hydrogen stars and the variable `METALLICITY_DIR_HE` for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the `hydrogen` and `helium` folders respectively.
+We use the variable `METALLICITY_DIR` to supply paths to the folder containing {term}`Metallicity File` for normal hydrogen stars and the variable `METALLICITY_DIR_HE` for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the `hydrogen` and `helium` folders respectively.
 
 
 ``` fortran
@@ -102,7 +102,7 @@ To run METISSE simply type `./metisse` on the command line and hit enter. METISS
 
 ```
 
-Since we had set, `write_output_to_file = .true.` in `SSE_input_controls`, a [SSE-style](glossary.md#sse-style-file) output file named 'evolve_00100M.dat' will also be generated in the *output* directory, containing a more detailed evolutionary history of the star.
+Since we had set, `write_output_to_file = .true.` in `SSE_input_controls`, a {term}`SSE-style file` output file named 'evolve_00100M.dat' will also be generated in the *output* directory, containing a more detailed evolutionary history of the star.
 
 
 ## Evolving a stellar population

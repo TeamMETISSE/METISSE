@@ -47,13 +47,15 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
@@ -84,21 +86,39 @@
              
   <section id="welcome-to-metisse-s-documentation">
 <h1>Welcome to METISSE’s documentation!<a class="headerlink" href="#welcome-to-metisse-s-documentation" title="Permalink to this heading"></a></h1>
-<p><strong>METISSE</strong> is an acronym for <strong>MET</strong>hod of <strong>I</strong>nterpolation for <strong>S</strong>ingle <strong>S</strong>tar <strong>E</strong>volution. It is a code package designed for rapidly computing the evolution of stellar populations by interpolating within a set of pre-computed stellar evolutionary tracks. These input tracks can be computed from various stellar structure and evolution codes.</p>
-<p>It can be used as a <a class="reference external" href="usage_standalone.html">standalone code</a> for evolving populations of single stars or in conjunction with <a class="reference external" href="usage_other.html">binary population synthesis codes</a> for evolving populations of single and binary stars.
-Check out the following sections for more information about METISSE and how to use it.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<p><strong>METISSE</strong> is an acronym for <strong>MET</strong>hod of <strong>I</strong>nterpolation for <strong>S</strong>ingle <strong>S</strong>tar <strong>E</strong>volution. It is an open-source stellar evolution tool designed to provide a fast and flexible alternative to traditional rapid stellar evolution prescriptions.</p>
+<p>At its core, METISSE interpolates between pre-computed stellar evolution tracks to determine stellar parameters such as luminosity, radius, and core mass at any evolutionary stage. This approach allows users to incorporate stellar models directly into large-scale stellar and binary population synthesis simulations.</p>
+<section id="what-metisse-is-for">
+<h2>1.&nbsp;&nbsp;What METISSE is for<a class="headerlink" href="#what-metisse-is-for" title="Permalink to this heading"></a></h2>
+<p>METISSE has been specifically designed to be integrated with binary evolution and population synthesis frameworks that currently rely on the Fortran 77 based SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> codes. METISSE enables such frameworks to:</p>
+<ul class="simple">
+<li><p>Incorporate the latest stellar models from codes like MESA or the BonnCode,</p></li>
+<li><p>Vary stellar physics assumptions systematically,</p></li>
+<li><p>Explore how uncertainties in stellar evolution impact populations of single and binary stars.</p></li>
 </ul>
+<p>Although METISSE can be run as a standalone program to evolve individual stars or simple stellar populations, its main strength lies in serving as an stellar engine within population synthesis environments.</p>
+</section>
+<section id="what-you-can-do-with-metisse">
+<h2>2.&nbsp;&nbsp;What you can do with METISSE<a class="headerlink" href="#what-you-can-do-with-metisse" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Run METISSE independently to evolve single stellar systems from pre-computed tracks</p></li>
+<li><p>Use METISSE with supported binary evolution codes to evolve stars in binaries</p></li>
+<li><p>Use your own custom stellar tracks to test different physical assumptions</p></li>
+<li><p>Combine METISSE with population synthesis tools to perform large-scale stellar evolution studies using modern stellar data</p></li>
+</ul>
+<div>
+<h3>Learn more</h3>
+
+<ul>
+  <li><a href="installation.html"><b>Installation and setup</b> — how to download METISSE</a></li>
+  <li><a href="usage_standalone.html"><b>Single star evolution</b> with METISSE</a></li>
+  <li><a href="usage_other.html"><b>Binary evolution and population synthesis</b> with METISSE as the stellar engine</a></li>
+  <li><a href="using_custom_input_tracks.html"><b>Input stellar tracks</b> — how to use your own models</a></li>
+  <li><a href="structure.html"><b>Structure and Integration</b> — how METISSE works under the hood</a></li>
+</ul>
+</div><div class="toctree-wrapper compound">
 </div>
+</section>
 </section>
 
 

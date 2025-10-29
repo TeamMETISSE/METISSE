@@ -48,7 +48,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
@@ -56,8 +57,17 @@
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Code structure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#sse-specific-subroutines">SSE specific subroutines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#modules-and-other-files">Modules and other files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fortran-modules">Fortran Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-files">Additional files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#workflow">Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#adding-metisse-to-your-code">Adding METISSE to your code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bridging-functions-for-sse-specific-subroutines">Bridging functions for SSE-specific subroutines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stellar-remnant-prescriptions">Stellar remnant prescriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-the-metisse-front-end">Setting Up the METISSE Front-End</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-the-compilation-instructions">Updating the compilation instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modify-additional-subroutines-as-needed">Modify additional subroutines as needed</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
@@ -90,11 +100,13 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="code-structure">
 <h1>Code structure<a class="headerlink" href="#code-structure" title="Permalink to this heading"></a></h1>
-<p>METISSE has been written completely using Modern Fortran.
-The source code contains two types of files located in the <em>src</em> directory:</p>
+<p>METISSE is designed as an modern alternative to Fortran 77 based SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> for use in population synthesis codes.</p>
+<p>Although METISSE is written entirely in <strong>Modern Fortran</strong>, it interfaces smoothly with Fortran 77 functions and subroutines. This enables users to leverage modern language features while preserving compatibility with legacy codes.</p>
+<p>To allow users to switch seamlessly between the two methods for stellar evolution, <strong>METISSE contains subroutines that replicate the behaviour of the SSE subroutines</strong> externally, with similar names and input/output variables. This design feature of METISSE allows direct integration of its interpolation-based stellar evolution routines into existing population synthesis codes without extensive refactoring.</p>
+<p>The source code for METISSE is organized into two main categories, located in the <em>src</em> directory:</p>
 <section id="sse-specific-subroutines">
 <h2>1.&nbsp;&nbsp;SSE specific subroutines<a class="headerlink" href="#sse-specific-subroutines" title="Permalink to this heading"></a></h2>
-<p>METISSE has been developed as an alternative to SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> code and, therefore, contains similar subroutines as SSE. The following subroutines replicate the behaviour of the SSE subroutines externally, with similar names and input/output variables.</p>
+<p>The following subroutines are analogous to SSE.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>File Name</p></th>
@@ -118,14 +130,14 @@ The source code contains two types of files located in the <em>src</em> director
 <td><p>Derive the mass loss through stellar winds.</p></td>
 </tr>
 <tr class="row-odd"><td><p>METISSE_gntage.f90</p></td>
-<td><p>Determine the age of a giant star after merger or rejuvenation.</p></td>
+<td><p>Determine the age of a giant star after merger  <br> or rejuvenation in a binary interaction.</p></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="modules-and-other-files">
-<h2>2.&nbsp;&nbsp;Modules and other files<a class="headerlink" href="#modules-and-other-files" title="Permalink to this heading"></a></h2>
-<p>The following Fortran modules contain supporting data structures and utilities.</p>
+<section id="fortran-modules">
+<h2>2.&nbsp;&nbsp;Fortran Modules<a class="headerlink" href="#fortran-modules" title="Permalink to this heading"></a></h2>
+<p>The following METISSE-specific modules provide functions and subroutines supporting the data structures and utilities used across METISSE.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>File Name</p></th>
@@ -150,8 +162,9 @@ The source code contains two types of files located in the <em>src</em> director
 </tr>
 </tbody>
 </table>
-<p>In addition to the above modules, there is an additional file called <em>METISSE_miscellaneous.f90</em>. This file contains miscellaneous subroutines that can be called by the binary codes. Ideally, these subroutines should also be organized into a module. However, this is not feasible because the overlying binary evolution codes often have segments written in Fortran 77, and Fortran 77 does not support the use of modules.</p>
-<p>It contains:</p>
+<p>In addition to the above modules, there is an additional file called <em>METISSE_miscellaneous.f90</em> which contains miscellaneous subroutines that can be called by the binary codes.
+Although these routines could be organized within a module, they are kept separate to ensure compatibility with legacy Fortran 77 codes, which does not support modules.
+It contains:</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>File Name</p></th>
@@ -159,22 +172,25 @@ The source code contains two types of files located in the <em>src</em> director
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>alloc_track.f90</p></td>
+<tr class="row-even"><td><p>alloc_track</p></td>
 <td><p>Allocate the track object.</p></td>
 </tr>
-<tr class="row-odd"><td><p>dealloc_track.f90</p></td>
+<tr class="row-odd"><td><p>dealloc_track</p></td>
 <td><p>Deallocate the track object and arrays within.</p></td>
 </tr>
 <tr class="row-even"><td><p>initialize_front_end</p></td>
 <td><p>Inform METISSE what code is using it.</p></td>
 </tr>
 <tr class="row-odd"><td><p>set_star_type</p></td>
-<td><p>Set star type to <code class="docutils literal notranslate"><span class="pre">rejuvenated</span></code> before calling star.</p></td>
+<td><p>Set star type to <code class="docutils literal notranslate"><span class="pre">rejuvenated</span></code> after merger or rejuvenation in a binary interaction.</p></td>
 </tr>
 </tbody>
 </table>
-<p>One of these sets of files is used depending on how METISSE is being used.</p>
-<p><strong>In the standalone mode:</strong></p>
+</section>
+<section id="additional-files">
+<h2>3.&nbsp;&nbsp;Additional files<a class="headerlink" href="#additional-files" title="Permalink to this heading"></a></h2>
+<p>The SSE-specific subroutines and Fortran modules form the core of METISSE and are indispensable for its operation.
+They must be called through a wrapper or main program, the exact form of which depends on how METISSE is being used. For example, the following files form the wrapper of METISSE in the standalone mode.</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>File Name</p></th>
@@ -193,27 +209,112 @@ The source code contains two types of files located in the <em>src</em> director
 </tr>
 </tbody>
 </table>
-<p><strong>As part of other codes:</strong></p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>File Name</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>assign_commons_xyz.f90</p></td>
-<td><p>To assign common variables when METISSE is used with other code say ‘xyz’.</p></td>
-</tr>
-<tr class="row-odd"><td><p>comenv_lambda.f90</p></td>
-<td><p>Get the appropriate ZAMS radius and calculate common envelope lambda.</p></td>
-</tr>
-</tbody>
-</table>
 </section>
 <section id="workflow">
-<h2>3.&nbsp;&nbsp;Workflow<a class="headerlink" href="#workflow" title="Permalink to this heading"></a></h2>
+<h2>4.&nbsp;&nbsp;Workflow<a class="headerlink" href="#workflow" title="Permalink to this heading"></a></h2>
 <p>Here is a flowchart describing the workflow of METISSE:</p>
 <p><img alt="METISSE's flowchart" src="_images/METISSE_flowchart.png" /></p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="adding-metisse-to-your-code">
+<h1>Adding METISSE to your code<a class="headerlink" href="#adding-metisse-to-your-code" title="Permalink to this heading"></a></h1>
+<p>If your code currently uses the Fortran 77–based subroutines from the SSE code, METISSE can be integrated through following steps:</p>
+<section id="bridging-functions-for-sse-specific-subroutines">
+<h2>1.&nbsp;&nbsp;Bridging functions for SSE-specific subroutines<a class="headerlink" href="#bridging-functions-for-sse-specific-subroutines" title="Permalink to this heading"></a></h2>
+<p>Replace the SSE-specific subroutines — namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f, and gntage.f — with bridging functions that redirect calls either to SSE or to METISSE, depending on the stellar engine selected by the user.
+For example, the SSE subroutine <code class="docutils literal notranslate"><span class="pre">hrdiag</span></code> can be renamed to <code class="docutils literal notranslate"><span class="pre">SSE_hrdiag</span></code>, and a bridging subroutine <code class="docutils literal notranslate"><span class="pre">hrdiag.f</span></code> can then be defined as follows:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">IF</span><span class="w"> </span><span class="p">(</span><span class="n">sse_flag</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="k">    CALL </span><span class="n">SSE_hrdiag</span><span class="p">(...)</span>
+<span class="k">ELSE</span>
+<span class="k">    CALL </span><span class="n">METISSE_hrdiag</span><span class="p">(...)</span>
+<span class="k">END IF</span>
+<span class="w">      </span>
+</pre></div>
+</div>
+<p>The variable <code class="docutils literal notranslate"><span class="pre">sse_flag</span></code> (or an equivalent control variable) should be defined and set outside the bridging functions.</p>
+<div class="summary-block admonition">
+<p class="admonition-title">Key Steps</p>
+<ol class="arabic simple">
+<li><p>Locate the Fortran 77 subroutines from SSE that your code currently uses:
+zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f, and gntage.f.</p></li>
+<li><p>For each SSE routine, rename it to include a prefix (e.g., SSE_).</p></li>
+<li><p>Write new subroutines with the original SSE names that act as bridges, redirecting calls to either SSE or METISSE based on a control variable (e.g., sse_flag).</p></li>
+</ol>
+</div>
+</section>
+<section id="stellar-remnant-prescriptions">
+<h2>2.&nbsp;&nbsp;Stellar remnant prescriptions<a class="headerlink" href="#stellar-remnant-prescriptions" title="Permalink to this heading"></a></h2>
+<p>METISSE includes built-in prescriptions to assign and calculate stellar remnant properties at the end of a star’s life. However, if you want to continue using the stellar remnant prescriptions from your version of SSE, the relevant code from SSE’s hrdiag—responsible for assigning remnant types and calculating remnant properties—should be extracted into two separate subroutines, for example assign_remnant.f and hrdiag_remnant.f. This ensures that the same remnant prescriptions are applied consistently, regardless of whether SSE or METISSE is used as the stellar engine.</p>
+<div class="summary-block admonition">
+<p class="admonition-title">Key Steps</p>
+<ol class="arabic">
+<li><p>Identify remnant-related code in <code class="docutils literal notranslate"><span class="pre">SSE_hrdiag.f</span></code> that assigns remnant types and calculates remnant properties.</p></li>
+<li><p>Extract the remnant assignment code into a separate subroutine.</p></li>
+<li><p>Extract remnant property calculations into another subroutine.</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">SSE_hrdiag.f</span></code> to call the two new subroutines in place of the original remnant-related code:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">CALL </span><span class="n">assign_remnant</span><span class="p">(...)</span>
+<span class="k">CALL </span><span class="n">hrdiag_remnant</span><span class="p">(...)</span>
+</pre></div>
+</div>
+<p>If done correctly, SSE should produce no difference in output.</p>
+</li>
+</ol>
+</div>
+</section>
+<section id="setting-up-the-metisse-front-end">
+<h2>3.&nbsp;&nbsp;Setting Up the METISSE Front-End<a class="headerlink" href="#setting-up-the-metisse-front-end" title="Permalink to this heading"></a></h2>
+<p>METISSE requires knowledge of which external code is calling it so that it can execute code-specific instructions—for example, redirecting remnant calculations to the appropriate subroutines defined in that code.
+This is achieved through a unique integer identifier called the <code class="docutils literal notranslate"><span class="pre">front_end</span></code>.
+Each supported code is assigned a distinct front_end value, which is defined as an integer parameter in the track_support module.
+To integrate a new code, you can add a corresponding front_end variable and assign it a unique integer value.</p>
+<p>For example, the binary evolution code BSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2002MNRAS.329..897H/abstract">(Hurley et al. 2002)</a> uses the identifier:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="kd">::</span><span class="w"> </span><span class="n">BSE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>This allows METISSE to recognize when it is being called from BSE and apply the appropriate internal logic.</p>
+<!-- Currently, the following front_end are available: 
+
+| Front-End | Integer Value | Description        |
+| --------- | ------------- | ------------------ |
+| MAIN      | 1             | Standalone METISSE |
+| BSE       | 2             | BSE code           |
+| COSMIC    | 3             | COSMIC code        |
+| AMUSE     | 4             | AMUSE framework    | -->
+<div class="summary-block admonition">
+<p class="admonition-title">Key Steps</p>
+<ol class="arabic">
+<li><p>Define a <code class="docutils literal notranslate"><span class="pre">front_end</span></code> for your code in <code class="docutils literal notranslate"><span class="pre">track_support</span></code> module.</p></li>
+<li><p>Check all occurrences of the variable <code class="docutils literal notranslate"><span class="pre">front_end</span></code> in METISSE.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">grep &#39;-inR&#39; &#39;front_end&#39; $METISSE_DIR/src </span>
+</pre></div>
+</div>
+<p>Add instructions specific to you code where necessary.</p>
+</li>
+<li><p>Variables specific to your code can be assigned in a file like <code class="docutils literal notranslate"><span class="pre">assign_commons_xyz.f90</span></code> where ‘xyz’ is the name of your code.</p></li>
+<li><p>Make sure to set the front-end in your code before any calls to METISSE:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">CALL </span><span class="n">initialize_front_end</span><span class="p">(</span><span class="n">front_end_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</section>
+<section id="updating-the-compilation-instructions">
+<h2>4.&nbsp;&nbsp;Updating the compilation instructions<a class="headerlink" href="#updating-the-compilation-instructions" title="Permalink to this heading"></a></h2>
+<p>Update your Makefile or compilation instructions to:</p>
+<ol class="arabic simple">
+<li><p>Include the METISSE source files.</p></li>
+<li><p>Include the renamed SSE files (e.g., SSE_hrdiag.f).</p></li>
+<li><p>Compile and link new remnant subroutines (assign_remnant.f, hrdiag_remnant.f).</p></li>
+<li><p>Ensure linking order reflects module dependencies (e.g., track_support before METISSE_hrdiag).</p></li>
+</ol>
+</section>
+<section id="modify-additional-subroutines-as-needed">
+<h2>5.&nbsp;&nbsp;Modify additional subroutines as needed<a class="headerlink" href="#modify-additional-subroutines-as-needed" title="Permalink to this heading"></a></h2>
+<p>Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv*.f and comenv.f) may require minor modifications to work with METISSE.</p>
+<!-- | comenv_lambda.f90   | Get the appropriate ZAMS radius and calculate common envelope lambda (only for binaries).       -->
+<p>In case of doubts, you can refer to how METISSE has been added to COSMIC and BSE.
+For details, please get in touch through GitHub <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/discussions">discussions</a>.</p>
 <!-- # module details
 
 All kinds tracks in METISSE are stored in Fortran's derived data type (think class in python/c++) called track  which is defined in track_support. It mostly has two components : a header part (e.g. initial_mass, ntrack etc.)  and an array tr which stores file data as an array.  xa, sa, sa_he and tarr  all belong to this type.

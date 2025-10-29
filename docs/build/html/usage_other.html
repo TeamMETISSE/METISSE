@@ -48,7 +48,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using METISSE to evolve binaries</a><ul>
@@ -124,7 +125,7 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 <ol class="arabic simple" start="3">
 <li><p>METISSE is now ready to use with COSMIC.</p></li>
 </ol>
-<p>The usual input namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is not read when using COSMIC. Instead a Python dictionary, <code class="docutils literal notranslate"><span class="pre">SSEDict</span></code> is used to set the <code class="docutils literal notranslate"><span class="pre">stellar_engine</span></code> and provide the location of the folders containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for hydrogen and helium stars through variables <code class="docutils literal notranslate"><span class="pre">path_to_tracks</span></code> and <code class="docutils literal notranslate"><span class="pre">path_to_he_tracks</span></code>.</p>
+<p>The usual input namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is not read when using COSMIC. Instead a Python dictionary, <code class="docutils literal notranslate"><span class="pre">SSEDict</span></code> is used to set the <code class="docutils literal notranslate"><span class="pre">stellar_engine</span></code> and provide the location of the folders containing <a class="reference internal" href="glossary.html#term-Metallicity-File"><span class="xref std std-term">Metallicity File</span></a> for hydrogen and helium stars through variables <code class="docutils literal notranslate"><span class="pre">path_to_tracks</span></code> and <code class="docutils literal notranslate"><span class="pre">path_to_he_tracks</span></code>.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">SSEDict</span> <span class="o">=</span> <span class="p">{</span>
           <span class="s1">&#39;stellar_engine&#39;</span><span class="p">:</span> <span class="s1">&#39;metisse&#39;</span><span class="p">,</span> 
           <span class="s1">&#39;path_to_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span><span class="p">,</span> 
@@ -174,7 +175,7 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 </ol>
 <p>When using BSE, METISSE-specific inputs are read through the <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> inlist in the <em>evolve_metisse.in</em> file. (See <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options).</p>
 <!-- **Important:** When using BSE, the file *evolve_metisse.in* should be located in the same directory as the bse executable.  -->
-<p>We supply the location of the folders containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for hydrogen and helium stars through <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code>. (Make sure to provide relevant paths based on the location of these folders <strong>on your machine</strong> ).</p>
+<p>We supply the location of the folders containing <a class="reference internal" href="glossary.html#term-Metallicity-File"><span class="xref std std-term">Metallicity File</span></a> for hydrogen and helium stars through <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code>. (Make sure to provide relevant paths based on the location of these folders <strong>on your machine</strong> ).</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
 <span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span>

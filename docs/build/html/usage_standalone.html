@@ -48,7 +48,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using METISSE to evolve single stars</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#evolving-one-star">Evolving one star</a></li>
@@ -104,7 +105,7 @@ you first need to compile it. To do so, open a command line shell and inside the
 <section id="evolving-one-star">
 <h2>1.&nbsp;&nbsp;Evolving one star<a class="headerlink" href="#evolving-one-star" title="Permalink to this heading"></a></h2>
 <p>Let us compute the evolution of a star with initial mass 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star, metallicity <code class="docutils literal notranslate"><span class="pre">Z</span> <span class="pre">=</span> <span class="pre">0.02</span></code> up to the age of 12 billion years.
-Input to METISSE in the standalone mode is provided through two <a class="reference internal" href="glossary.html#fortran-namelists"><span class="std std-ref">Fortran namelists</span></a>: <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
+Input to METISSE in the standalone mode is provided through two <a class="reference internal" href="glossary.html#term-Fortran-namelists"><span class="xref std std-term">Fortran namelists</span></a>: <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 See sections <a class="reference internal" href="input_files.html#sse-input-controls"><span class="std std-ref">SSE input controls</span></a> and <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options.</p>
 <p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> is contained in the file called <em>main.input</em> and
 is used to provide evolution details of the star.</p>
@@ -123,7 +124,7 @@ is used to provide evolution details of the star.</p>
 </div>
 <p>We also need to provide the details of the input tracks to METISSE through the namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 In the standalone mode of METISSE, <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is contained in the file called <em>metisse.input</em>.</p>
-<p>We use the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> to supply paths to the folder containing <a class="reference internal" href="glossary.html#metallicity-file"><span class="std std-ref">metallicity files</span></a> for normal hydrogen stars and the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> and <code class="docutils literal notranslate"><span class="pre">helium</span></code> folders respectively.</p>
+<p>We use the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> to supply paths to the folder containing <a class="reference internal" href="glossary.html#term-Metallicity-File"><span class="xref std std-term">Metallicity File</span></a> for normal hydrogen stars and the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> and <code class="docutils literal notranslate"><span class="pre">helium</span></code> folders respectively.</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
 
@@ -164,7 +165,7 @@ If verbose is False, then these details are saved in the <code class="docutils l
 <span class="go"> Reached the end of the program</span>
 </pre></div>
 </div>
-<p>Since we had set, <code class="docutils literal notranslate"><span class="pre">write_output_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>, a <a class="reference internal" href="glossary.html#sse-style-file"><span class="std std-ref">SSE-style</span></a> output file named ‘evolve_00100M.dat’ will also be generated in the <em>output</em> directory, containing a more detailed evolutionary history of the star.</p>
+<p>Since we had set, <code class="docutils literal notranslate"><span class="pre">write_output_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>, a <a class="reference internal" href="glossary.html#term-SSE-style-file"><span class="xref std std-term">SSE-style file</span></a> output file named ‘evolve_00100M.dat’ will also be generated in the <em>output</em> directory, containing a more detailed evolutionary history of the star.</p>
 </section>
 <section id="evolving-a-stellar-population">
 <h2>2.&nbsp;&nbsp;Evolving a stellar population<a class="headerlink" href="#evolving-a-stellar-population" title="Permalink to this heading"></a></h2>

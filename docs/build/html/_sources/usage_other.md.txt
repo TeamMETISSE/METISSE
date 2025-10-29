@@ -65,7 +65,7 @@ $ pip install .
 
 3. METISSE is now ready to use with COSMIC. 
 
-The usual input namelist `METISSE_input_controls` is not read when using COSMIC. Instead a Python dictionary, `SSEDict` is used to set the `stellar_engine` and provide the location of the folders containing [metallicity files](glossary.md#metallicity-file) for hydrogen and helium stars through variables `path_to_tracks` and `path_to_he_tracks`.
+The usual input namelist `METISSE_input_controls` is not read when using COSMIC. Instead a Python dictionary, `SSEDict` is used to set the `stellar_engine` and provide the location of the folders containing {term}`Metallicity File` for hydrogen and helium stars through variables `path_to_tracks` and `path_to_he_tracks`.
 
 ``` ipython
 SSEDict = {
@@ -136,7 +136,7 @@ When using BSE, METISSE-specific inputs are read through the `METISSE_input_cont
 <!-- **Important:** When using BSE, the file *evolve_metisse.in* should be located in the same directory as the bse executable.  -->
 
 
-We supply the location of the folders containing [metallicity files](glossary.md#metallicity-file) for hydrogen and helium stars through `METALLICITY_DIR` and `METALLICITY_DIR_HE`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
+We supply the location of the folders containing {term}`Metallicity File` for hydrogen and helium stars through `METALLICITY_DIR` and `METALLICITY_DIR_HE`. (Make sure to provide relevant paths based on the location of these folders **on your machine** ). 
 
 ``` fortran
 &METISSE_input_controls

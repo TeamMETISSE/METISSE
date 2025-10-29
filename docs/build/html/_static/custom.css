@@ -15,3 +15,26 @@ pre {
   z-index: 50;
   pointer-events: auto !important;
 }
+
+/* Customize only the summary-block admonition */
+.admonition.summary-block {
+    background-color: #fff8dc;       /* main box background */
+    border-left: 4px solid #f1c40f;  /* colored border */
+}
+
+/* Title bar of the summary-block */
+.admonition.summary-block .admonition-title {
+    background-color: #fff3b0;       /* title background */
+    color: #333;                     /* title text color */
+    font-weight: bold;
+    /* border-bottom: none;             remove underline */
+}
+
+/* Icon for summary-block */
+.admonition.summary-block .admonition-title::before {
+    content: " ";          
+    font-weight: normal;
+    /* margin-right: 0.5em; */
+    color: #f1c40f; /* match border/bulb color */
+}
+
