@@ -1,16 +1,8 @@
 # Code structure
 
-METISSE is designed as an modern alternative to Fortran 77 based SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) for use in population synthesis codes. 
+METISSE is designed as an modern alternative to Fortran 77 based SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) for use in population synthesis codes. Its source code, located in the *src* directory, can be broadly divided into two categories: **subroutines analogous to SSE** and **Fortran modules** that provide supporting functions and utilities for METISSE’s data structures and operations.
 
-Although METISSE is written entirely in **Modern Fortran**, it interfaces smoothly with Fortran 77 functions and subroutines. This enables users to leverage modern language features while preserving compatibility with legacy codes.
-
-To allow users to switch seamlessly between the two methods for stellar evolution, **METISSE contains subroutines that replicate the behaviour of the SSE subroutines** externally, with similar names and input/output variables. This design feature of METISSE allows direct integration of its interpolation-based stellar evolution routines into existing population synthesis codes without extensive refactoring.
-
- The source code for METISSE is organized into two main categories, located in the *src* directory:
-
-## SSE specific subroutines 
-
-The following subroutines are analogous to SSE. 
+## SSE-like subroutines 
 
 | File Name           | Description                                                                                             |
 |---------------------|---------------------------------------------------------------------------------------------------|
@@ -23,9 +15,6 @@ The following subroutines are analogous to SSE.
 
 
 ## Fortran Modules
-
-The following METISSE-specific modules provide functions and subroutines supporting the data structures and utilities used across METISSE.
-
 
 | File Name           | Description                                                                                             |
 |---------------------|---------------------------------------------------------------------------------------------------|
@@ -50,8 +39,8 @@ It contains:
 
 ## Additional files
 
-The SSE-specific subroutines and Fortran modules form the core of METISSE and are indispensable for its operation.
-They must be called through a wrapper or main program, the exact form of which depends on how METISSE is being used. For example, the following files form the wrapper of METISSE in the standalone mode. 
+The SSE-like subroutines and Fortran modules form the core of METISSE and are indispensable for its operation.
+However, they cannot function by themselves. They must be called through a wrapper or main program, the exact form of which depends on how METISSE is being used. For example, the following files form the wrapper of METISSE in the standalone mode. 
 
 | File Name           | Description                                                                                             |
 |---------------------|---------------------------------------------------------------------------------------------------------|
@@ -63,9 +52,13 @@ They must be called through a wrapper or main program, the exact form of which d
 
 Here is a flowchart describing the workflow of METISSE:
 
-![METISSE's flowchart](METISSE_flowchart.png)
+![METISSE's flowchart](images/METISSE_flowchart.png)
 
 # Adding METISSE to your code
+
+Although METISSE is written entirely in **Modern Fortran**, it interfaces smoothly with Fortran 77 functions and subroutines. This enables users to leverage modern language features while preserving compatibility with legacy codes.
+
+To allow users to switch seamlessly between the two methods for stellar evolution, **METISSE contains subroutines that replicate the behaviour of the SSE subroutines** externally, with similar names and input/output variables. This design feature of METISSE allows direct integration of its interpolation-based stellar evolution routines into existing population synthesis codes without extensive refactoring.
 
 If your code currently uses the Fortran 77–based subroutines from the SSE code, METISSE can be integrated through following steps:
 
@@ -190,6 +183,7 @@ Update your Makefile or compilation instructions to:
 
 ## Modify additional subroutines as needed
 
+Calls to allocate and dellocate the track structure. 
 Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv*.f and comenv.f) may require minor modifications to work with METISSE. 
 
 <!-- | comenv_lambda.f90   | Get the appropriate ZAMS radius and calculate common envelope lambda (only for binaries).       -->

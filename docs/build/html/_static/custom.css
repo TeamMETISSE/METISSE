@@ -38,3 +38,6 @@ pre {
     color: #f1c40f; /* match border/bulb color */
 }
 
+.largepadding {
+  margin-bottom: 20px; /* space after the image/figure */
+}

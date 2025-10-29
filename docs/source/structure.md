@@ -52,7 +52,7 @@ However, they cannot function by themselves. They must be called through a wrapp
 
 Here is a flowchart describing the workflow of METISSE:
 
-![METISSE's flowchart](METISSE_flowchart.png)
+![METISSE's flowchart](images/METISSE_flowchart.png)
 
 # Adding METISSE to your code
 

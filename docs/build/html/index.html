@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to METISSE’s documentation! &mdash; METISSE 0.1 documentation</title>
+  <title>What METISSE is for ? &mdash; METISSE 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -36,8 +36,9 @@
 
           
           
-          <a href="#" class="icon icon-home">
-            METISSE
+          <a href="#">
+            
+              <img src="_static/metisse_sidebar.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -74,9 +75,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to METISSE’s documentation!</li>
+      <li class="breadcrumb-item active">What METISSE is for ?</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -84,22 +84,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="welcome-to-metisse-s-documentation">
-<h1>Welcome to METISSE’s documentation!<a class="headerlink" href="#welcome-to-metisse-s-documentation" title="Permalink to this heading"></a></h1>
-<p><strong>METISSE</strong> is an acronym for <strong>MET</strong>hod of <strong>I</strong>nterpolation for <strong>S</strong>ingle <strong>S</strong>tar <strong>E</strong>volution. It is an open-source stellar evolution tool designed to provide a fast and flexible alternative to traditional rapid stellar evolution prescriptions.</p>
+  <h1 style="text-align:center;">Welcome to METISSE's documentation!</h1><figure class="align-center">
+<a class="largepadding reference internal image-reference" href="_images/metisse_logo_rect.png"><img alt="_images/metisse_logo_rect.png" class="largepadding" src="_images/metisse_logo_rect.png" style="width: 60%;" /></a>
+</figure>
+<p><strong>METISSE</strong> stands for <strong>MET</strong>hod of <strong>I</strong>nterpolation for <strong>S</strong>ingle <strong>S</strong>tar <strong>E</strong>volution. It is an open-source stellar evolution tool designed to provide a fast and flexible alternative to traditional rapid stellar evolution prescriptions.</p>
 <p>At its core, METISSE interpolates between pre-computed stellar evolution tracks to determine stellar parameters such as luminosity, radius, and core mass at any evolutionary stage. This approach allows users to incorporate stellar models directly into large-scale stellar and binary population synthesis simulations.</p>
 <section id="what-metisse-is-for">
-<h2>1.&nbsp;&nbsp;What METISSE is for<a class="headerlink" href="#what-metisse-is-for" title="Permalink to this heading"></a></h2>
+<h1>What METISSE is for ?<a class="headerlink" href="#what-metisse-is-for" title="Permalink to this heading"></a></h1>
 <p>METISSE has been specifically designed to be integrated with binary evolution and population synthesis frameworks that currently rely on the Fortran 77 based SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> codes. METISSE enables such frameworks to:</p>
 <ul class="simple">
-<li><p>Incorporate the latest stellar models from codes like MESA or the BonnCode,</p></li>
+<li><p>Incorporate the latest stellar models,</p></li>
 <li><p>Vary stellar physics assumptions systematically,</p></li>
-<li><p>Explore how uncertainties in stellar evolution impact populations of single and binary stars.</p></li>
+<li><p>Explore how uncertainties in stellar evolution impact binary populations.</p></li>
 </ul>
 <p>Although METISSE can be run as a standalone program to evolve individual stars or simple stellar populations, its main strength lies in serving as an stellar engine within population synthesis environments.</p>
 </section>
 <section id="what-you-can-do-with-metisse">
-<h2>2.&nbsp;&nbsp;What you can do with METISSE<a class="headerlink" href="#what-you-can-do-with-metisse" title="Permalink to this heading"></a></h2>
+<h1>What you can do with METISSE ?<a class="headerlink" href="#what-you-can-do-with-metisse" title="Permalink to this heading"></a></h1>
 <ul class="simple">
 <li><p>Run METISSE independently to evolve single stellar systems from pre-computed tracks</p></li>
 <li><p>Use METISSE with supported binary evolution codes to evolve stars in binaries</p></li>
@@ -110,15 +111,14 @@
 <h3>Learn more</h3>
 
 <ul>
-  <li><a href="installation.html"><b>Installation and setup</b> — how to download METISSE</a></li>
-  <li><a href="usage_standalone.html"><b>Single star evolution</b> with METISSE</a></li>
-  <li><a href="usage_other.html"><b>Binary evolution and population synthesis</b> with METISSE as the stellar engine</a></li>
-  <li><a href="using_custom_input_tracks.html"><b>Input stellar tracks</b> — how to use your own models</a></li>
-  <li><a href="structure.html"><b>Structure and Integration</b> — how METISSE works under the hood</a></li>
+  <li><a href="installation.html"><b>Installation</b> — how to download METISSE</a></li>
+  <li><a href="usage_standalone.html">Use METISSE to <b>evolve single stars </b></a></li>
+  <li><a href="usage_other.html">Use METISSE as the stellar engine to <b>evolve binaries </b></a></li>
+  <li><a href="using_custom_input_tracks.html"><b>Use custom tracks</b> — how to use your own tracks with METISSE</a></li>
+  <li><a href="structure.html"><b>Structure and integration</b> — how METISSE works under the hood</a></li>
 </ul>
 </div><div class="toctree-wrapper compound">
 </div>
-</section>
 </section>
 
 
@@ -131,7 +131,9 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+    <p>&#169; Copyright 2024, Poojan Agrawal.
+      <span class="lastupdated">Last updated on 2025 Oct 29 at 16:43:34 UTC.
+      </span></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
