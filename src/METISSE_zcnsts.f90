@@ -62,9 +62,9 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
 
         load_tracks = .true.
         
-        !path is relative to the executable
-        METISSE_DIR = '.'
-
+        !paths are relative to the executable
+        call getcwd(METISSE_DIR, ierr) 
+        
         !read default options first
         include 'defaults/metisse_defaults.inc'
 
