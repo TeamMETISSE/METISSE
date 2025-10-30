@@ -1,18 +1,7 @@
 # FAQ
 
-## How can I contribute to METISSE?
-We are always working on improving METISSE. 
-If you would like to contribute by adding a new feature or creating with a bug fix, please 
-1. [fork](https://github.com/TeamMETISSE/METISSE/fork) the METISSE repository from GitHub. 
-2. Make your changes in a feature branch.
-3. Create a [pull request](https://github.com/TeamMETISSE/METISSE/pulls) with your proposed changes.
 
-## I seek support or have to report problems with METISSE
-For bug reports or issues, create an [issue](https://github.com/TeamMETISSE/METISSE/issues/new) on GitHub.
-For general questions or discussion, use GitHub [discussions](https://github.com/TeamMETISSE/METISSE/discussions).
-
-
-## How to cite METISSE
+## How to cite METISSE?
 Please cite the following papers if you are using METISSE in your work. 
 
 
@@ -23,6 +12,20 @@ More details about METISSE including code capabilities are described in the foll
 
 - [Modelling stellar evolution in mass-transferring binaries and gravitational-wave progenitors with METISSE](https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract)
 - [The fates of massive stars: exploring uncertainties in stellar evolution with METISSE](https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract)
+
+
+## What input stellar tracks can be used with METISSE?
+
+METISSE supports a range of pre-published tracks, for example: 
+
+1. To use MIST [(Choi et al. 2016)]() models at solar metallicity, the tracks can be downloaded from the [website](), while the metallicity and format files can be downloaded from [this page](). 
+
+2. BoOST stellar model grids for the Galactic metallicity, computed with the Bonn Code, are available [here](http://galaxy.asu.cas.cz/files/BoOST/BoOST-stellarmodels-MW.zip). The files to help METISSE read them are available [here](). 
+
+For other metallicities, modify a copy of the metallicity file accordingly. 
+
+You can any use set of tracks with METISSE (including your custom generted one), given they are in EEP-format and contain essential column as described in [](using_custom_input_tracks.md). 
+
 
 ## Can I add METISSE to my code?
 Yes, if it uses Fortran based fitting formulae from SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) to compute stellar parameters. Your code must contain Fortran77 subroutines - namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f that come with the SSE code. For details refer to [](structure.md#adding-metisse-to-your-code).
@@ -42,3 +45,13 @@ METISSE uses monotonic interpolation with a piece-wise cubic from [Steffen 1990]
 
 <!-- The interpolation method is is fixed; changing it requires modifying the source code. -->
 
+## How can I contribute to METISSE?
+We are always working on improving METISSE. 
+If you would like to contribute by adding a new feature or creating with a bug fix, please 
+1. [fork](https://github.com/TeamMETISSE/METISSE/fork) the METISSE repository from GitHub. 
+2. Make your changes in a feature branch.
+3. Create a [pull request](https://github.com/TeamMETISSE/METISSE/pulls) with your proposed changes.
+
+## I seek support or have to report problems with METISSE
+For bug reports or issues, create an [issue](https://github.com/TeamMETISSE/METISSE/issues/new) on GitHub.
+For general questions or discussion, use GitHub [discussions](https://github.com/TeamMETISSE/METISSE/discussions).

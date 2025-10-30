@@ -1,7 +1,11 @@
 # Using custom input tracks
 
 
-METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirement is that these tracks should converted to the equivalent evolutionary point (EEP) format before use in METISSE. In EEP format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal-age main sequence (TAMS) occur at the same line number across each file. 
+METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirements are:
+1. The tracks should be converted to the equivalent evolutionary point (EEP) format before use in METISSE. 
+2. The tracks should contain the columns listed in [](#essential-columns). 
+
+In EEP format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal-age main sequence (TAMS) occur at the same line number across each file. 
 Stellar tracks can be easily converted to EEP format using code packages such as [ISO](https://github.com/aarondotter/iso). Important details about these tracks, such as their metallicity value, file structure, and names of certain major columns should also be provided through the inlists `metallicity_controls` and `format_controls`.
 
 

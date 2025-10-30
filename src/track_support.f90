@@ -36,9 +36,6 @@ module track_support
     integer:: mode = 0
     
     character(len = strlen):: METISSE_DIR, METALLICITY_DIR, METALLICITY_DIR_HE
-
-    character(len = strlen):: amuse_metisse_dir, amuse_metallicity_dir, amuse_metallicity_dir_he
-
     character(len = strlen):: amuse_metisse_dir, amuse_metallicity_dir, amuse_metallicity_dir_he
 
     ! for use when constructing EEP distance
