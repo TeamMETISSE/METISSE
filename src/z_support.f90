@@ -1852,4 +1852,21 @@ module z_support
         y = abs(z1-z2)/MIN(z1,z2)
     end function
 
+    subroutine check_folder(name,ierr)
+        character(LEN=*), intent(in) :: name
+        integer, intent(out) :: ierr
+        character(LEN=512) :: cmd, filename
+        logical :: exists
+
+        ierr = 0
+        filename = trim(METISSE_DIR)//'/'//trim(name)
+        inquire(file=trim(filename), exist=exists) 
+        if (exists) return
+                
+        cmd = 'mkdir '//trim(filename)
+        call system(cmd,ierr)
+        if (ierr/=0) return
+    end subroutine
+
+
 end module z_support
