@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Using METISSE to evolve binaries &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=48bd8eb9" />
 
   
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -62,6 +63,7 @@
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples: Running METISSE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
@@ -90,12 +92,12 @@
            <div itemprop="articleBody">
              
   <section class="tex2jax_ignore mathjax_ignore" id="using-metisse-to-evolve-binaries">
-<h1>Using METISSE to evolve binaries<a class="headerlink" href="#using-metisse-to-evolve-binaries" title="Permalink to this heading"></a></h1>
+<h1>Using METISSE to evolve binaries<a class="headerlink" href="#using-metisse-to-evolve-binaries" title="Link to this heading"></a></h1>
 <p>METISSE, by itself, is not capable of evolving stars in binary systems. However, it has been specifically designed to be integrated with binary evolution codes that can do so, enabling them to make use of modern stellar data for binary evolution computations.</p>
 <p>It can be seamlessly integrated with codes that currently use SSE fitting formulae <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> for single star evolution computations.
 It has already been added to the binary evolution codes BSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2002MNRAS.329..897H/abstract">(Hurley et al. 2002)</a> and COSMIC <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020ApJ...898...71B/abstract">(Breivik et al. 2020)</a>.</p>
 <section id="cosmic">
-<h2>1.&nbsp;&nbsp;COSMIC<a class="headerlink" href="#cosmic" title="Permalink to this heading"></a></h2>
+<h2>1.&nbsp;&nbsp;COSMIC<a class="headerlink" href="#cosmic" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>To use METISSE with COSMIC one needs the GitHub repository for the latest version of COSMIC.</p></li>
 </ol>
@@ -151,7 +153,7 @@ It has already been added to the binary evolution codes BSE <a class="reference 
 <p>COSMIC will then evolve the system using the provided stellar tracks and store the output in its usual <code class="docutils literal notranslate"><span class="pre">bpp</span></code> and <code class="docutils literal notranslate"><span class="pre">bcm</span></code> arrays.</p>
 </section>
 <section id="bse">
-<h2>2.&nbsp;&nbsp;BSE<a class="headerlink" href="#bse" title="Permalink to this heading"></a></h2>
+<h2>2.&nbsp;&nbsp;BSE<a class="headerlink" href="#bse" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>To run METISSE with BSE:</p></li>
 </ol>
@@ -281,7 +283,7 @@ where each value in every line is separated by space and corresponds to the foll
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, Poojan Agrawal.
-      <span class="lastupdated">Last updated on 2025 Oct 29 at 16:31:14 UTC.
+      <span class="lastupdated">Last updated on 2025 Nov 01 at 23:41:26 UTC.
       </span></p>
   </div>
 

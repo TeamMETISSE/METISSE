@@ -5,7 +5,7 @@ Inputs to METISSE are provided using the following namelists:
 
 ## SSE input controls
 
-`SSE_input_controls` holds input parameters describing the initial conditions of the star and stellar populations. For the most up-to-date variable names and their default values refer to [main_defaults](https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/main_defaults.inc).
+`SSE_input_controls` holds input parameters describing the initial conditions of the star and stellar populations. For the most up-to-date variable names and their default values refer to [main_defaults](https://github.com/TeamMETISSE/METISSE/tree/develop/src/defaults/main_defaults.inc).
 
 :::{Note}
 *main.input* is **only** read in METISSE's standalone mode. 
@@ -121,7 +121,7 @@ extra_columns_file = ''
 
 `METISSE_input_controls` contains input parameters specific to METISSE. 
 
-For the most up-to-date variable names and their default values refer to [metisse_defaults](https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/metisse_defaults.inc). 
+For the most up-to-date variable names and their default values refer to [metisse_defaults](https://github.com/TeamMETISSE/METISSE/tree/develop/src/defaults/metisse_defaults.inc). 
 
 
 ### TRACK CONTROLS

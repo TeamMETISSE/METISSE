@@ -39,7 +39,7 @@ What you can do with METISSE ?
 - Run METISSE independently to evolve single stellar systems from pre-computed tracks
 - Use METISSE with supported binary evolution codes to evolve stars in binaries 
 - Use your own custom stellar tracks to test different physical assumptions
-- Combine METISSE with population synthesis tools to perform large-scale stellar evolution studies using modern stellar data
+- Combine METISSE with your code to perform population studies using modern stellar data
 
 
 .. Learn more
@@ -78,8 +78,11 @@ What you can do with METISSE ?
    input_files
    using_custom_input_tracks
    structure
+   demo
    FAQ
    glossary
+
+
 
    
 

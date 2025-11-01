@@ -8,7 +8,7 @@ import shutil
 
 METISSE_EXE = "./metisse"
 
-def compile_metisse(METISSE_DIR,run_dir):
+def compile_metisse(METISSE_DIR,run_dir,clean=True):
     """
     Compile METISSE by running the local 'mk' build script in METISSE_DIR,
     copy the produced 'metisse' executable into run_dir, then run './clean'.
@@ -19,7 +19,8 @@ def compile_metisse(METISSE_DIR,run_dir):
         Directory containing the METISSE source and the 'mk' build script.
     run_dir : str or Path
         Directory where the compiled 'metisse' executable will be copied.
-
+    clean: boolean
+        Clean up the executables in the source directory 
     """
     
     # Run the mk build script using the shell. cwd sets the working directory.
@@ -37,7 +38,8 @@ def compile_metisse(METISSE_DIR,run_dir):
     shutil.copy2(os.path.join(METISSE_DIR, "metisse"), run_dir)
 
     # Run a clean step in the source directory 
-    subprocess.run("./clean",
+    if clean:
+        subprocess.run("./clean",
                             cwd=METISSE_DIR,
                             stdout=subprocess.PIPE,
                             shell=True, text=True)

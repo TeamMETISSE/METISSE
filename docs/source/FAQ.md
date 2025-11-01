@@ -18,9 +18,9 @@ More details about METISSE including code capabilities are described in the foll
 
 METISSE supports a range of pre-published tracks, for example: 
 
-1. To use MIST [(Choi et al. 2016)]() models at solar metallicity, the tracks can be downloaded from the [website](), while the metallicity and format files can be downloaded from [this page](). 
+1. **MIST** – to use MIST [(Choi et al., 2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C/abstract) models at solar metallicity, the tracks can be downloaded from the [website](https://waps.cfa.harvard.edu/MIST/data/tarballs_v1.2/MIST_v1.2_feh_p0.00_afe_p0.0_vvcrit0.0_EEPS.txz), while the corresponding metallicity and format files needed by METISSE are available from [this page](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/MIST).  
 
-2. BoOST stellar model grids for the Galactic metallicity, computed with the Bonn Code, are available [here](http://galaxy.asu.cas.cz/files/BoOST/BoOST-stellarmodels-MW.zip). The files to help METISSE read them are available [here](). 
+2. **BoOST** – stellar model grids for Galactic metallicity [(Szécsi et al. 2022)](https://ui.adsabs.harvard.edu/abs/2022A%26A...658A.125S/abstract), computed with the Bonn Code, are available [here](http://galaxy.asu.cas.cz/files/BoOST/BoOST-stellarmodels-MW.zip). The helper files required for METISSE are available [here](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/BoOST).
 
 For other metallicities, modify a copy of the metallicity file accordingly. 
 

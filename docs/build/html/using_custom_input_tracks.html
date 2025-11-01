@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Using custom input tracks &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=48bd8eb9" />
 
   
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -69,6 +70,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples: Running METISSE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
@@ -97,11 +99,16 @@
            <div itemprop="articleBody">
              
   <section class="tex2jax_ignore mathjax_ignore" id="using-custom-input-tracks">
-<h1>Using custom input tracks<a class="headerlink" href="#using-custom-input-tracks" title="Permalink to this heading"></a></h1>
-<p>METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirement is that these tracks should converted to the equivalent evolutionary point (EEP) format before use in METISSE. In EEP format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal-age main sequence (TAMS) occur at the same line number across each file.
+<h1>Using custom input tracks<a class="headerlink" href="#using-custom-input-tracks" title="Link to this heading"></a></h1>
+<p>METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirements are:</p>
+<ol class="arabic simple">
+<li><p>The tracks should be converted to the equivalent evolutionary point (EEP) format before use in METISSE.</p></li>
+<li><p>The tracks should contain the columns listed in <a class="reference internal" href="#essential-columns"><span class="std std-ref"></span></a>.</p></li>
+</ol>
+<p>In EEP format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal-age main sequence (TAMS) occur at the same line number across each file.
 Stellar tracks can be easily converted to EEP format using code packages such as <a class="reference external" href="https://github.com/aarondotter/iso">ISO</a>. Important details about these tracks, such as their metallicity value, file structure, and names of certain major columns should also be provided through the inlists <code class="docutils literal notranslate"><span class="pre">metallicity_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">format_controls</span></code>.</p>
 <section id="metallicity-controls">
-<h2>1.&nbsp;&nbsp;Metallicity controls<a class="headerlink" href="#metallicity-controls" title="Permalink to this heading"></a></h2>
+<h2>1.&nbsp;&nbsp;Metallicity controls<a class="headerlink" href="#metallicity-controls" title="Link to this heading"></a></h2>
 <p>Details pertaining to the metallicity value of the EEP tracks and location of the files are provided through the <code class="docutils literal notranslate"><span class="pre">metallicity_controls</span></code> inlist, found in the relevant <em>metallicity file</em>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -191,12 +198,12 @@ However, if certain columns are missing from the input tracks or if the Z-parame
 </div>
 </section>
 <section id="format-controls">
-<h2>2.&nbsp;&nbsp;Format controls<a class="headerlink" href="#format-controls" title="Permalink to this heading"></a></h2>
+<h2>2.&nbsp;&nbsp;Format controls<a class="headerlink" href="#format-controls" title="Link to this heading"></a></h2>
 <p>Apart from the metallicity files, users should also specify the format of the files containing input EEP tracks through the <code class="docutils literal notranslate"><span class="pre">&amp;format_controls</span></code> inlist contained in what we call a <em>format file</em>.
 While different sets of EEP tracks can share the same format file, users should provide at least two format files: one for usual hydrogen stars and the other for helium star tracks.</p>
 <p>For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/format_defaults.inc">format_defaults</a>.</p>
 <section id="file-details">
-<h3>2.1.&nbsp;&nbsp;File details<a class="headerlink" href="#file-details" title="Permalink to this heading"></a></h3>
+<h3>2.1.&nbsp;&nbsp;File details<a class="headerlink" href="#file-details" title="Link to this heading"></a></h3>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
@@ -234,7 +241,7 @@ While different sets of EEP tracks can share the same format file, users should 
 </div>
 </section>
 <section id="essential-columns">
-<h3>2.2.&nbsp;&nbsp;Essential columns<a class="headerlink" href="#essential-columns" title="Permalink to this heading"></a></h3>
+<h3>2.2.&nbsp;&nbsp;Essential columns<a class="headerlink" href="#essential-columns" title="Link to this heading"></a></h3>
 <p>As columns can be named differently by different stellar codes, METISSE needs to know certain important column names. In the case of the luminosity and the radius columns, at least one of the absolute or log column names should be provided.
 Make sure that the units are correct.
 <strong>METISSE will stop and raise an error if these columns can not be located.</strong></p>
@@ -283,7 +290,7 @@ Make sure that the units are correct.
 </div>
 </section>
 <section id="additional-columns">
-<h3>2.3.&nbsp;&nbsp;Additional columns<a class="headerlink" href="#additional-columns" title="Permalink to this heading"></a></h3>
+<h3>2.3.&nbsp;&nbsp;Additional columns<a class="headerlink" href="#additional-columns" title="Link to this heading"></a></h3>
 <p>The following columns are useful in binary evolution calculations.
 METISSE will raise an error but not stop if these column names are not provided. However, it will revert to using SSE formulae where needed.</p>
 <table class="docutils align-default">
@@ -356,7 +363,7 @@ If these are not provided, then user-defined values for Z-parameters (through th
 </div>
 </section>
 <section id="eep-details">
-<h3>2.4.&nbsp;&nbsp;EEP details<a class="headerlink" href="#eep-details" title="Permalink to this heading"></a></h3>
+<h3>2.4.&nbsp;&nbsp;EEP details<a class="headerlink" href="#eep-details" title="Link to this heading"></a></h3>
 <p>the
 From a set of input models, METISSE needs to know the locations of key EEPs in order to assign stellar phases to the interpolated tracks. These phases are identical to those used by the SSE code (See Table 1. of <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract">Agrawal et al. 2020</a>) and are important for certain decision-making processes in the code, particularly for binary evolution.</p>
 <table class="docutils align-default">
@@ -473,7 +480,7 @@ From a set of input models, METISSE needs to know the locations of key EEPs in o
 <p>Once read, these EEPs get stored with the appropriate (helium files specific) variable name inside METISSE. Other EEPs (such as ZAMS_EEP and TAMS_EEP) are ignored as they don’t have an equivalent in helium star evolution.</p>
 </section>
 <section id="how-to-deal-with-incomplete-tracks">
-<h3>2.5.&nbsp;&nbsp;How to deal with incomplete tracks<a class="headerlink" href="#how-to-deal-with-incomplete-tracks" title="Permalink to this heading"></a></h3>
+<h3>2.5.&nbsp;&nbsp;How to deal with incomplete tracks<a class="headerlink" href="#how-to-deal-with-incomplete-tracks" title="Link to this heading"></a></h3>
 <div class="docutils">
 <blockquote>
 <div><p><em>“In an ideal world, we wouldn’t need this section, but unfortunately, the world is not ideal, and incomplete or incorrect data is more common in datasets than we’d like to believe.”</em></p>
@@ -526,7 +533,7 @@ The options <code class="docutils literal notranslate"><span class="pre">fix_tra
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, Poojan Agrawal.
-      <span class="lastupdated">Last updated on 2025 Oct 29 at 16:31:14 UTC.
+      <span class="lastupdated">Last updated on 2025 Nov 01 at 23:41:26 UTC.
       </span></p>
   </div>
 

@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Input files &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=48bd8eb9" />
 
   
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script src="_static/clipboard.min.js"></script>
-        <script src="_static/copybutton.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -73,6 +74,7 @@
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples: Running METISSE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
@@ -101,18 +103,18 @@
            <div itemprop="articleBody">
              
   <section class="tex2jax_ignore mathjax_ignore" id="input-files">
-<h1>Input files<a class="headerlink" href="#input-files" title="Permalink to this heading"></a></h1>
+<h1>Input files<a class="headerlink" href="#input-files" title="Link to this heading"></a></h1>
 <p>Inputs to METISSE are provided using the following namelists:</p>
 <section id="sse-input-controls">
-<h2>1.&nbsp;&nbsp;SSE input controls<a class="headerlink" href="#sse-input-controls" title="Permalink to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> holds input parameters describing the initial conditions of the star and stellar populations. For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/main_defaults.inc">main_defaults</a>.</p>
+<h2>1.&nbsp;&nbsp;SSE input controls<a class="headerlink" href="#sse-input-controls" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> holds input parameters describing the initial conditions of the star and stellar populations. For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/tree/develop/src/defaults/main_defaults.inc">main_defaults</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><em>main.input</em> is <strong>only</strong> read in METISSE’s standalone mode.
 When METISSE is used with other codes, the input parameters from the overlying code are used.</p>
 </div>
 <section id="evolution-controls">
-<h3>1.1.&nbsp;&nbsp;EVOLUTION CONTROLS<a class="headerlink" href="#evolution-controls" title="Permalink to this heading"></a></h3>
+<h3>1.1.&nbsp;&nbsp;EVOLUTION CONTROLS<a class="headerlink" href="#evolution-controls" title="Link to this heading"></a></h3>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Variable name</p></th>
@@ -166,7 +168,7 @@ When METISSE is used with other codes, the input parameters from the overlying c
 </div>
 </section>
 <section id="remnant-controls">
-<h3>1.2.&nbsp;&nbsp;REMNANT CONTROLS<a class="headerlink" href="#remnant-controls" title="Permalink to this heading"></a></h3>
+<h3>1.2.&nbsp;&nbsp;REMNANT CONTROLS<a class="headerlink" href="#remnant-controls" title="Link to this heading"></a></h3>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Variable name</p></th>
@@ -201,7 +203,7 @@ When METISSE is used with other codes, the input parameters from the overlying c
 </div>
 </section>
 <section id="timestep-controls">
-<h3>1.3.&nbsp;&nbsp;TIMESTEP CONTROLS<a class="headerlink" href="#timestep-controls" title="Permalink to this heading"></a></h3>
+<h3>1.3.&nbsp;&nbsp;TIMESTEP CONTROLS<a class="headerlink" href="#timestep-controls" title="Link to this heading"></a></h3>
 <p>Like SSE, METISSE  uses <code class="docutils literal notranslate"><span class="pre">pts</span></code> variables to determine the timestep as the decimal fractions of the time spent in a phase.</p>
 <table class="docutils align-default">
 <thead>
@@ -229,7 +231,7 @@ When METISSE is used with other codes, the input parameters from the overlying c
 </div>
 </section>
 <section id="output-controls">
-<h3>1.4.&nbsp;&nbsp;OUTPUT CONTROLS<a class="headerlink" href="#output-controls" title="Permalink to this heading"></a></h3>
+<h3>1.4.&nbsp;&nbsp;OUTPUT CONTROLS<a class="headerlink" href="#output-controls" title="Link to this heading"></a></h3>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Variable name</p></th>
@@ -248,7 +250,7 @@ When METISSE is used with other codes, the input parameters from the overlying c
 </div>
 </section>
 <section id="column-controls">
-<h3>1.5.&nbsp;&nbsp;COLUMN CONTROLS<a class="headerlink" href="#column-controls" title="Permalink to this heading"></a></h3>
+<h3>1.5.&nbsp;&nbsp;COLUMN CONTROLS<a class="headerlink" href="#column-controls" title="Link to this heading"></a></h3>
 <p>By default, METISSE only uses the essential columns and the additional columns specified in <code class="docutils literal notranslate"><span class="pre">format_file</span></code> for interpolation. However, when using METISSE in its standalone mode, there exists an option for interpolating in all the columns or certain extra columns of the input tracks. The interpolated quantities are printed in a <a class="reference internal" href="glossary.html#term-MIST-style-file"><span class="xref std std-term">MIST-style file</span></a> file if <code class="docutils literal notranslate"><span class="pre">write_eep_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">METISSE_controls</span></code>.</p>
 <table class="docutils align-default">
 <thead>
@@ -277,11 +279,11 @@ When METISSE is used with other codes, the input parameters from the overlying c
 </section>
 </section>
 <section id="metisse-input-controls">
-<h2>2.&nbsp;&nbsp;METISSE input controls<a class="headerlink" href="#metisse-input-controls" title="Permalink to this heading"></a></h2>
+<h2>2.&nbsp;&nbsp;METISSE input controls<a class="headerlink" href="#metisse-input-controls" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> contains input parameters specific to METISSE.</p>
-<p>For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/blob/develop/src/defaults/metisse_defaults.inc">metisse_defaults</a>.</p>
+<p>For the most up-to-date variable names and their default values refer to <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/tree/develop/src/defaults/metisse_defaults.inc">metisse_defaults</a>.</p>
 <section id="track-controls">
-<h3>2.1.&nbsp;&nbsp;TRACK CONTROLS<a class="headerlink" href="#track-controls" title="Permalink to this heading"></a></h3>
+<h3>2.1.&nbsp;&nbsp;TRACK CONTROLS<a class="headerlink" href="#track-controls" title="Link to this heading"></a></h3>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Variable name</p></th>
@@ -312,7 +314,7 @@ When METISSE is used with other codes, the input parameters from the overlying c
 </div>
 </section>
 <section id="miscellaneous-controls">
-<h3>2.2.&nbsp;&nbsp;MISCELLANEOUS CONTROLS<a class="headerlink" href="#miscellaneous-controls" title="Permalink to this heading"></a></h3>
+<h3>2.2.&nbsp;&nbsp;MISCELLANEOUS CONTROLS<a class="headerlink" href="#miscellaneous-controls" title="Link to this heading"></a></h3>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Variable name</p></th>
@@ -358,7 +360,7 @@ When METISSE is used with other codes, the input parameters from the overlying c
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, Poojan Agrawal.
-      <span class="lastupdated">Last updated on 2025 Oct 29 at 16:31:14 UTC.
+      <span class="lastupdated">Last updated on 2025 Nov 01 at 23:41:26 UTC.
       </span></p>
   </div>
 

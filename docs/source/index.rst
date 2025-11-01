@@ -78,8 +78,11 @@ What you can do with METISSE ?
    input_files
    using_custom_input_tracks
    structure
+   demo
    FAQ
    glossary
+
+
 
    
 

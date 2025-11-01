@@ -36,7 +36,8 @@ extensions = ['myst_parser',
 		'sphinx.ext.imgmath',
 		'sphinx.ext.mathjax',
         'sphinx.ext.autodoc',
-        'sphinx_copybutton'
+        'sphinx_copybutton',
+        'nbsphinx'
     ]
 
 # -- MyST settings ---------------------------------------------------
@@ -98,7 +99,6 @@ html_logo = "images/metisse_sidebar.png"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-
 html_css_files = [
     'custom.css',
 ]
@@ -106,6 +106,9 @@ html_css_files = [
 # set default highlighting language
 highlight_language = 'console'
 
+nbsphinx_execute = 'always' 
+nbsphinx_allow_errors = True
+exclude_patterns = ['**.ipynb_checkpoints']
 
 # Use LaTeX to generate PDF output (optional)
 #latex_engine = 'pdflatex'
