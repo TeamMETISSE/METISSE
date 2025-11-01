@@ -594,15 +594,6 @@ module track_support
         deallocate(Lum, Teff, core_mass)
         
     end function
-    
-    subroutine write_dat_track(tphys, pars, io)
-        real(dp), intent(in):: tphys
-        type(star_parameters), intent(in):: pars
-        integer, intent(in):: io
-        
-        write(io, '(1p9e15.6, 2i10)') tphys, pars% age, pars% mass, pars% core_mass, pars% McHe, pars% McCO &
-                    ,pars% log_L, pars% log_Teff, pars% log_R, pars% phase
-    end subroutine write_dat_track
 
     subroutine distance_along_track(t)
       type(track), intent(inout):: t
