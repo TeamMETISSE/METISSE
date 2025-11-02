@@ -16,9 +16,6 @@ dependencies:
   - nbconvert
   - myst_parser==3.0.1
   - sphinx_rtd_theme==2.0.0
-  - readthedocs-sphinx-search==0.3.2
-  - sphinx_copybutton
-  - lxml_html_clean
   - ipykernel
   
   # Pandoc for notebook conversion
@@ -30,3 +27,9 @@ dependencies:
 
   # pip included for any pip-only packages
   - pip
+
+  # pip-only packages
+  - pip:
+      - readthedocs-sphinx-search==0.3.2
+      - sphinx_copybutton
+      - lxml_html_clean
