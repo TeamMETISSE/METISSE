@@ -6,6 +6,6 @@ sphinx_copybutton
 nbsphinx>=0.8.6
 lxml_html_clean
 pandoc<3.0.0
-ipython
+ipykernel 
 
 
