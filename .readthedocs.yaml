@@ -13,9 +13,12 @@ build:
     # nodejs: "20"
     # rust: "1.70"
     # golang: "1.20"
-  # commands:
-  # - sphinx-build -b html docs/source docs/_build/html
-
+  skip_virtualenv: true
+  commands:
+    - echo "===== Build environment info ====="
+    - python --version
+    - which sphinx-build
+    - sphinx-build -b html docs/source docs/_build/html
     
 conda:
   environment: environment.yml
