@@ -11,10 +11,7 @@ build:
     python: "miniconda3-3.12-24.9"
   jobs:
     post_install:
-      - echo "===== Build environment info ====="
-      - python --version
-      - /home/docs/conda/latest/bin/sphinx-build -b html docs/source docs/_build/html
-
+      - make -C docs html
     
 conda:
   environment: environment.yml
