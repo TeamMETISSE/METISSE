@@ -24,6 +24,7 @@ dependencies:
   # Scientific stack
   - numpy
   - pandas
+  - matplotlib
 
   # pip included for any pip-only packages
   - pip
