@@ -126,7 +126,7 @@ If you plan to run METISSE by itself (standalone mode), obtain the code using on
 <li><p>Select “Download ZIP”.</p></li>
 <li><p>Extract the downloaded archive to your desired location.</p></li>
 </ul>
-<p>To download METISSE with other codes, see code-specific instructions on <a class="reference internal" href="usage_other.html"><span class="std std-doc">this page</span></a></p>
+<p>To download METISSE with other codes, see code-specific instructions on <a class="reference internal" href="usage_other.html"><span class="std std-doc">this page</span></a>.</p>
 </section>
 </section>
 <section id="get-the-compiler">
@@ -150,7 +150,13 @@ The tracks have been computed using the stellar evolution code <a class="referen
 <li><p>The tracks are for non-rotating stars at solar metallicity (Z=0.02).</p></li>
 </ul>
 <!-- A pre-packaged grid of MESA tracks for hydrogen and helium stars with metallicity values ranging from 10<sup>-5</sup> to 10<sup>-1</sup> will be available soon (a future Zenodo entry).  -->
-<p>One can also use their custom set of hydrogen and helium stellar tracks, computed using different input parameters, or even different stellar evolution codes with METISSE. For instructions on how to use a custom set of input stellar tracks with METISSE, refer to <a class="reference internal" href="using_custom_input_tracks.html"><span class="std std-doc">Using custom input tracks</span></a>.</p>
+<p>METISSE also supports a range of pre-published tracks, for example:</p>
+<ol class="arabic simple">
+<li><p><strong>MIST</strong> – to use MIST <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C/abstract">(Choi et al., 2016)</a> models at solar metallicity, the tracks can be downloaded from the <a class="reference external" href="https://waps.cfa.harvard.edu/MIST/data/tarballs_v1.2/MIST_v1.2_feh_p0.00_afe_p0.0_vvcrit0.0_EEPS.txz">website</a>, while the corresponding metallicity and format files needed by METISSE are available from <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/MIST">this page</a>.</p></li>
+<li><p><strong>BoOST</strong> – stellar model grids for Galactic metallicity <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2022A%26A...658A.125S/abstract">(Szécsi et al., 2022)</a>, computed with the Bonn Code, are available <a class="reference external" href="http://galaxy.asu.cas.cz/files/BoOST/BoOST-stellarmodels-MW.zip">here</a>. The helper files required for METISSE are available <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/BoOST">here</a>.</p></li>
+</ol>
+<p>For other metallicities, modify a copy of the metallicity file accordingly.</p>
+<p>One can also use their custom set of hydrogen and helium stellar tracks, computed using different input parameters, or even different stellar evolution codes with METISSE. For instructions on how to use a custom set of input stellar tracks with METISSE, refer to <a class="reference internal" href="using_custom_input_tracks.html"><span class="std std-doc">using custom input tracks</span></a>.</p>
 </section>
 <section id="run-metisse">
 <h2>4.&nbsp;&nbsp;Run METISSE<a class="headerlink" href="#run-metisse" title="Link to this heading"></a></h2>
@@ -174,7 +180,7 @@ The tracks have been computed using the stellar evolution code <a class="referen
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, Poojan Agrawal.
-      <span class="lastupdated">Last updated on 2025 Nov 01 at 23:41:26 UTC.
+      <span class="lastupdated">Last updated on 2025 Nov 02 at 11:37:34 UTC.
       </span></p>
   </div>
 

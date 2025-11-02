@@ -31,7 +31,7 @@ If you prefer not to use Git:
 - Select “Download ZIP”.
 - Extract the downloaded archive to your desired location.
 
-To download METISSE with other codes, see code-specific instructions on [this page](usage_other.md)
+To download METISSE with other codes, see code-specific instructions on [this page](usage_other.md).
 
 ## Get the compiler
 
@@ -59,7 +59,16 @@ The tracks have been computed using the stellar evolution code [MESA](https://do
 - The tracks are for non-rotating stars at solar metallicity (Z=0.02).
 <!-- A pre-packaged grid of MESA tracks for hydrogen and helium stars with metallicity values ranging from 10<sup>-5</sup> to 10<sup>-1</sup> will be available soon (a future Zenodo entry).  -->
 
-One can also use their custom set of hydrogen and helium stellar tracks, computed using different input parameters, or even different stellar evolution codes with METISSE. For instructions on how to use a custom set of input stellar tracks with METISSE, refer to [](using_custom_input_tracks.md).
+
+METISSE also supports a range of pre-published tracks, for example: 
+
+1. **MIST** – to use MIST [(Choi et al., 2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C/abstract) models at solar metallicity, the tracks can be downloaded from the [website](https://waps.cfa.harvard.edu/MIST/data/tarballs_v1.2/MIST_v1.2_feh_p0.00_afe_p0.0_vvcrit0.0_EEPS.txz), while the corresponding metallicity and format files needed by METISSE are available from [this page](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/MIST).  
+
+2. **BoOST** – stellar model grids for Galactic metallicity [(Szécsi et al., 2022)](https://ui.adsabs.harvard.edu/abs/2022A%26A...658A.125S/abstract), computed with the Bonn Code, are available [here](http://galaxy.asu.cas.cz/files/BoOST/BoOST-stellarmodels-MW.zip). The helper files required for METISSE are available [here](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/BoOST).
+
+For other metallicities, modify a copy of the metallicity file accordingly. 
+
+One can also use their custom set of hydrogen and helium stellar tracks, computed using different input parameters, or even different stellar evolution codes with METISSE. For instructions on how to use a custom set of input stellar tracks with METISSE, refer to [using custom input tracks](using_custom_input_tracks.md).
 
 
 ## Run METISSE

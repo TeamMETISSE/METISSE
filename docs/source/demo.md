@@ -1,7 +1,6 @@
-# Examples: Running METISSE
+# Examples
 
-This jupyter demonstrates how to run METISSE from a Jupyter notebook, generate Hertzsprung–Russell diagrams, maximum stellar radii, and remnant mass plots using different stellar track libraries (MESA, MIST, BoOST).
-
+This notebook demonstrates how to use METISSE right from a Jupyter notebook. You will be able to explore stellar evolution, generate Hertzsprung–Russell diagrams, examine maximum stellar radii, and create remnant mass plots using different stellar track libraries, all without leaving Python.
 
 ```{toctree}
 
