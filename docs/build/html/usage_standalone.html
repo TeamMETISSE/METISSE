@@ -64,7 +64,7 @@
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples: Running METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
@@ -107,11 +107,10 @@ you first need to compile it. To do so, open a command line shell and inside the
 </div>
 <section id="evolving-one-star">
 <h2>1.&nbsp;&nbsp;Evolving one star<a class="headerlink" href="#evolving-one-star" title="Link to this heading"></a></h2>
-<p>Let us compute the evolution of a star with initial mass 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star, metallicity <code class="docutils literal notranslate"><span class="pre">Z</span> <span class="pre">=</span> <span class="pre">0.02</span></code> up to the age of 12 billion years.
+<p>Let us compute the evolution of a star with initial mass 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star, metallicity Z = 0.02 up to the age of 12 billion years.
 Input to METISSE in the standalone mode is provided through two <a class="reference internal" href="glossary.html#term-Fortran-namelists"><span class="xref std std-term">Fortran namelists</span></a>: <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
 See sections <a class="reference internal" href="input_files.html#sse-input-controls"><span class="std std-ref">SSE input controls</span></a> and <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options.</p>
-<p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> is contained in the file called <em>main.input</em> and
-is used to provide evolution details of the star.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> is contained in the file called <code class="docutils literal notranslate"><span class="pre">main.input</span></code> and is used to provide evolution details of the star.</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">SSE_input_controls</span>
 
 <span class="n">initial_Z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.02</span>
@@ -126,7 +125,7 @@ is used to provide evolution details of the star.</p>
 </pre></div>
 </div>
 <p>We also need to provide the details of the input tracks to METISSE through the namelist <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code>.
-In the standalone mode of METISSE, <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is contained in the file called <em>metisse.input</em>.</p>
+In the standalone mode of METISSE, <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> is contained in the file called <code class="docutils literal notranslate"><span class="pre">metisse.input</span></code>.</p>
 <p>We use the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> to supply paths to the folder containing <a class="reference internal" href="glossary.html#term-Metallicity-File"><span class="xref std std-term">Metallicity File</span></a> for normal hydrogen stars and the variable <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code> for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the <code class="docutils literal notranslate"><span class="pre">hydrogen</span></code> and <code class="docutils literal notranslate"><span class="pre">helium</span></code> folders respectively.</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
@@ -168,7 +167,7 @@ If verbose is False, then these details are saved in the <code class="docutils l
 <span class="go"> Reached the end of the program</span>
 </pre></div>
 </div>
-<p>Since we had set, <code class="docutils literal notranslate"><span class="pre">write_output_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>, a <a class="reference internal" href="glossary.html#term-SSE-style-file"><span class="xref std std-term">SSE-style file</span></a> output file named ‘evolve_00100M.dat’ will also be generated in the <em>output</em> directory, containing a more detailed evolutionary history of the star.</p>
+<p>Since we had set <code class="docutils literal notranslate"><span class="pre">write_output_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>, a <a class="reference internal" href="glossary.html#term-SSE-style-file"><span class="xref std std-term">SSE-style file</span></a> output file named ‘evolve_00100M.dat’ will also be generated in the <em>output</em> directory, containing a more detailed evolutionary history of the star.</p>
 </section>
 <section id="evolving-a-stellar-population">
 <h2>2.&nbsp;&nbsp;Evolving a stellar population<a class="headerlink" href="#evolving-a-stellar-population" title="Link to this heading"></a></h2>
@@ -192,8 +191,8 @@ If verbose is False, then these details are saved in the <code class="docutils l
 </pre></div>
 </div>
 <p>We also kept <code class="docutils literal notranslate"><span class="pre">write_track_to_file</span> <span class="pre">=</span> <span class="pre">.true.</span></code> in <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code>. Therefore, the <code class="docutils literal notranslate"><span class="pre">output</span></code> directory will now contain the evolutionary histories of all 10,000 stars.</p>
-<p><code class="docutils literal notranslate"><span class="pre">sampling_scheme</span></code> can also be set to  <code class="docutils literal notranslate"><span class="pre">Kroupa2001</span></code> to compute a population of stars with initial masses distributed according to <a class="reference external" href="https://ui.adsabs.harvard.edu/link_gateway/2001MNRAS.322..231K/PUB_PDF">Kroupa P., (2001)</a>.
-To compute a population of single stars with any other distribution of initial masses, we can list initial masses in a file provide masses in a text file (one per line) and provide the location of that file through <code class="docutils literal notranslate"><span class="pre">input_mass_file</span></code>.
+<p><code class="docutils literal notranslate"><span class="pre">sampling_scheme</span></code> can also be set to <code class="docutils literal notranslate"><span class="pre">Kroupa2001</span></code> to compute a population of stars with initial masses distributed according to <a class="reference external" href="https://ui.adsabs.harvard.edu/link_gateway/2001MNRAS.322..231K/PUB_PDF">Kroupa P., (2001)</a>.
+To compute a population of single stars with any other distribution of initial masses, we can list initial masses in a text file (one per line) and provide the location of that file through <code class="docutils literal notranslate"><span class="pre">input_mass_file</span></code>.
 If the masses are listed in a file called <code class="docutils literal notranslate"><span class="pre">my_custom_distribution.txt</span></code>, then <code class="docutils literal notranslate"><span class="pre">SSE_input_controls</span></code> will look like this:</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">SSE_input_controls</span>
 
@@ -276,7 +275,7 @@ However, if we were working with a larger grid of stellar tracks, with metallici
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, Poojan Agrawal.
-      <span class="lastupdated">Last updated on 2025 Nov 01 at 23:55:44 UTC.
+      <span class="lastupdated">Last updated on 2025 Nov 02 at 14:15:56 UTC.
       </span></p>
   </div>
 

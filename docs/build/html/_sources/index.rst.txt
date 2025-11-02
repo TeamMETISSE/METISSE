@@ -22,19 +22,18 @@
 At its core, METISSE interpolates between pre-computed stellar evolution tracks to determine stellar parameters such as luminosity, radius, and core mass at any evolutionary stage. This approach allows users to incorporate stellar models directly into large-scale stellar and binary population synthesis simulations.
 
 
-What METISSE is for ?
---------------------- 
-
-METISSE has been specifically designed to be integrated with binary evolution and population synthesis frameworks that currently rely on the Fortran 77 based SSE `(Hurley et al. 2000) <https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract>`_ codes. METISSE enables such frameworks to:
-
-- Incorporate the latest stellar models,
-- Vary stellar physics assumptions systematically,
-- Explore how uncertainties in stellar evolution impact binary populations.
-
-Although METISSE can be run as a standalone program to evolve individual stars or simple stellar populations, its main strength lies in serving as an stellar engine within population synthesis environments.
-
-What you can do with METISSE ?
+What you can do with METISSE?
 ------------------------------ 
+
+METISSE has been specifically designed to be integrated with binary evolution and population synthesis frameworks that currently rely on the Fortran 77-based SSE `(Hurley et al. 2000) <https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract>`_ code.
+
+.. METISSE enables such frameworks to:
+
+.. - Incorporate the latest stellar models,
+.. - Vary stellar physics assumptions,
+.. - Explore how uncertainties in stellar evolution impact binary populations.
+
+Although METISSE can be run as a standalone program to evolve individual stars or simple stellar populations, its main strength lies in serving as an stellar engine within population synthesis environments. You can: 
 
 - Run METISSE independently to evolve single stellar systems from pre-computed tracks
 - Use METISSE with supported binary evolution codes to evolve stars in binaries 
@@ -50,14 +49,12 @@ What you can do with METISSE ?
 .. - **Examples** — example runs for single and binary stars
 .. - **API and structure** — how METISSE works under the hood
 
-.. Learn more
-.. ----------
+Learn more
+----------
 
 .. raw:: html
 
    <div>
-   <h3>Learn more</h3>
-
    <ul>
      <li><a href="installation.html"><b>Installation</b> — how to download METISSE</a></li>
      <li><a href="usage_standalone.html">Use METISSE to <b>evolve single stars </b></a></li>

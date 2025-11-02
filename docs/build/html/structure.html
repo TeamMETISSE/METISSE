@@ -26,7 +26,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Examples: Running METISSE" href="demo.html" />
+    <link rel="next" title="Examples" href="demo.html" />
     <link rel="prev" title="Using custom input tracks" href="using_custom_input_tracks.html" /> 
 </head>
 
@@ -72,7 +72,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#modify-additional-subroutines-as-needed">Modify additional subroutines as needed</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples: Running METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
@@ -102,7 +102,7 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="code-structure">
 <h1>Code structure<a class="headerlink" href="#code-structure" title="Link to this heading"></a></h1>
-<p>METISSE is designed as an modern alternative to Fortran 77 based SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> for use in population synthesis codes. Its source code, located in the <em>src</em> directory, can be broadly divided into two categories: <strong>subroutines analogous to SSE</strong> and <strong>Fortran modules</strong> that provide supporting functions and utilities for METISSE’s data structures and operations.</p>
+<p>METISSE is designed as an modern alternative to Fortran 77-based SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> for use in population synthesis codes. Its source code, located in the <em>src</em> directory, can be broadly divided into two categories: <strong>subroutines analogous to SSE</strong> and <strong>Fortran modules</strong> that provide supporting functions and utilities for METISSE’s data structures and operations.</p>
 <section id="sse-like-subroutines">
 <h2>1.&nbsp;&nbsp;SSE-like subroutines<a class="headerlink" href="#sse-like-subroutines" title="Link to this heading"></a></h2>
 <table class="docutils align-default">
@@ -215,12 +215,12 @@ However, they cannot function by themselves. They must be called through a wrapp
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="adding-metisse-to-your-code">
 <h1>Adding METISSE to your code<a class="headerlink" href="#adding-metisse-to-your-code" title="Link to this heading"></a></h1>
-<p>Although METISSE is written entirely in <strong>Modern Fortran</strong>, it interfaces smoothly with Fortran 77 functions and subroutines. This enables users to leverage modern language features while preserving compatibility with legacy codes.</p>
-<p>To allow users to switch seamlessly between the two methods for stellar evolution, <strong>METISSE contains subroutines that replicate the behaviour of the SSE subroutines</strong> externally, with similar names and input/output variables. This design feature of METISSE allows direct integration of its interpolation-based stellar evolution routines into existing population synthesis codes without extensive refactoring.</p>
+<p>Although METISSE is written entirely in <strong>Modern Fortran</strong>, it is backwards compatible with Fortran 77 functions and subroutines. This enables users to leverage modern language features while preserving compatibility with legacy codes.</p>
+<p>To allow users to easily switch between the two methods for stellar evolution, <strong>METISSE contains subroutines that replicate the behaviour of the SSE subroutines</strong> externally, with similar names and input/output variables. This design feature of METISSE allows direct integration of its interpolation-based stellar evolution routines into existing population synthesis codes without extensive modifications.</p>
 <p>If your code currently uses the Fortran 77–based subroutines from the SSE code, METISSE can be integrated through following steps:</p>
 <section id="bridging-functions-for-sse-specific-subroutines">
 <h2>1.&nbsp;&nbsp;Bridging functions for SSE-specific subroutines<a class="headerlink" href="#bridging-functions-for-sse-specific-subroutines" title="Link to this heading"></a></h2>
-<p>Replace the SSE-specific subroutines — namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f, and gntage.f — with bridging functions that redirect calls either to SSE or to METISSE, depending on the stellar engine selected by the user.
+<p>Replace the SSE-specific subroutines — namely <em>zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f, and gntage.f</em> — with bridging functions that redirect calls either to SSE or to METISSE, depending on the stellar engine selected by the user.
 For example, the SSE subroutine <code class="docutils literal notranslate"><span class="pre">hrdiag</span></code> can be renamed to <code class="docutils literal notranslate"><span class="pre">SSE_hrdiag</span></code>, and a bridging subroutine <code class="docutils literal notranslate"><span class="pre">hrdiag.f</span></code> can then be defined as follows:</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">IF</span><span class="w"> </span><span class="p">(</span><span class="n">sse_flag</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
 <span class="k">    CALL </span><span class="n">SSE_hrdiag</span><span class="p">(...)</span>
@@ -304,17 +304,16 @@ To integrate a new code, you can add a corresponding front_end variable and assi
 <ol class="arabic simple">
 <li><p>Include the METISSE source files.</p></li>
 <li><p>Include the renamed SSE files (e.g., SSE_hrdiag.f).</p></li>
-<li><p>Compile and link new remnant subroutines (assign_remnant.f, hrdiag_remnant.f).</p></li>
+<li><p>Add new remnant subroutines (assign_remnant.f, hrdiag_remnant.f).</p></li>
 <li><p>Ensure linking order reflects module dependencies (e.g., track_support before METISSE_hrdiag).</p></li>
 </ol>
 </section>
 <section id="modify-additional-subroutines-as-needed">
 <h2>5.&nbsp;&nbsp;Modify additional subroutines as needed<a class="headerlink" href="#modify-additional-subroutines-as-needed" title="Link to this heading"></a></h2>
-<p>Calls to allocate and dellocate the track structure.
-Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv*.f and comenv.f) may require minor modifications to work with METISSE.</p>
+<p>Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv2.f and comenv.f) may require minor modifications to work with METISSE.</p>
 <!-- | comenv_lambda.f90   | Get the appropriate ZAMS radius and calculate common envelope lambda (only for binaries).       -->
-<p>In case of doubts, you can refer to how METISSE has been added to COSMIC and BSE.
-For details, please get in touch through GitHub <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/discussions">discussions</a>.</p>
+<p>In case of any doubts, you can refer to how METISSE has been added to COSMIC and BSE.
+For help, please get in touch through GitHub <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/discussions">discussions</a>.</p>
 <!-- # module details
 
 All kinds tracks in METISSE are stored in Fortran's derived data type (think class in python/c++) called track  which is defined in track_support. It mostly has two components : a header part (e.g. initial_mass, ntrack etc.)  and an array tr which stores file data as an array.  xa, sa, sa_he and tarr  all belong to this type.
@@ -335,14 +334,14 @@ METISSE further interpolates within this mass-interpolated track to calculate st
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="using_custom_input_tracks.html" class="btn btn-neutral float-left" title="Using custom input tracks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="demo.html" class="btn btn-neutral float-right" title="Examples: Running METISSE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="demo.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, Poojan Agrawal.
-      <span class="lastupdated">Last updated on 2025 Nov 01 at 23:55:44 UTC.
+      <span class="lastupdated">Last updated on 2025 Nov 02 at 14:15:56 UTC.
       </span></p>
   </div>
 

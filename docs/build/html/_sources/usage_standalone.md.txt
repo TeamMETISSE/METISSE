@@ -22,13 +22,12 @@ The code does not need to be re-compiled unless you make changes inside the sour
 
 ## Evolving one star 
 
-Let us compute the evolution of a star with initial mass 1 M<sub>$_\odot$</sub> star, metallicity `Z = 0.02` up to the age of 12 billion years. 
+Let us compute the evolution of a star with initial mass 1 M<sub>$_\odot$</sub> star, metallicity Z = 0.02 up to the age of 12 billion years. 
 Input to METISSE in the standalone mode is provided through two {term}`Fortran namelists`: `SSE_input_controls` and `METISSE_input_controls`. 
 See sections [](input_files.md#sse-input-controls) and [](input_files.md#metisse-input-controls) for a complete list of input options. 
 
 
-`SSE_input_controls` is contained in the file called *main.input* and
-is used to provide evolution details of the star.
+`SSE_input_controls` is contained in the file called `main.input` and is used to provide evolution details of the star.
  
 ``` fortran
 &SSE_input_controls
@@ -46,7 +45,7 @@ write_output_to_file = .true.
 ```
 
 We also need to provide the details of the input tracks to METISSE through the namelist `METISSE_input_controls`. 
-In the standalone mode of METISSE, `METISSE_input_controls` is contained in the file called *metisse.input*. 
+In the standalone mode of METISSE, `METISSE_input_controls` is contained in the file called `metisse.input`. 
 
 
 We use the variable `METALLICITY_DIR` to supply paths to the folder containing {term}`Metallicity File` for normal hydrogen stars and the variable `METALLICITY_DIR_HE` for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the `hydrogen` and `helium` folders respectively.
@@ -102,7 +101,7 @@ To run METISSE simply type `./metisse` on the command line and hit enter. METISS
 
 ```
 
-Since we had set, `write_output_to_file = .true.` in `SSE_input_controls`, a {term}`SSE-style file` output file named 'evolve_00100M.dat' will also be generated in the *output* directory, containing a more detailed evolutionary history of the star.
+Since we had set `write_output_to_file = .true.` in `SSE_input_controls`, a {term}`SSE-style file` output file named 'evolve_00100M.dat' will also be generated in the *output* directory, containing a more detailed evolutionary history of the star.
 
 
 ## Evolving a stellar population
@@ -136,8 +135,8 @@ $ ./metisse
 
 We also kept `write_track_to_file = .true.` in `SSE_input_controls`. Therefore, the `output` directory will now contain the evolutionary histories of all 10,000 stars. 
 
-`sampling_scheme` can also be set to  `Kroupa2001` to compute a population of stars with initial masses distributed according to [Kroupa P., (2001)](https://ui.adsabs.harvard.edu/link_gateway/2001MNRAS.322..231K/PUB_PDF).
-To compute a population of single stars with any other distribution of initial masses, we can list initial masses in a file provide masses in a text file (one per line) and provide the location of that file through `input_mass_file`. 
+`sampling_scheme` can also be set to `Kroupa2001` to compute a population of stars with initial masses distributed according to [Kroupa P., (2001)](https://ui.adsabs.harvard.edu/link_gateway/2001MNRAS.322..231K/PUB_PDF).
+To compute a population of single stars with any other distribution of initial masses, we can list initial masses in a text file (one per line) and provide the location of that file through `input_mass_file`. 
 If the masses are listed in a file called `my_custom_distribution.txt`, then `SSE_input_controls` will look like this:
 
 

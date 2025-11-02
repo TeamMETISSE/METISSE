@@ -63,7 +63,7 @@
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples: Running METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
@@ -94,11 +94,10 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="metisse-with-bse">
 <h1>METISSE with BSE<a class="headerlink" href="#metisse-with-bse" title="Link to this heading"></a></h1>
-<p>BSE<a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2002MNRAS.329..897H/abstract">(Hurley et al. 2002)</a> is a rapid binary evolution code that models key binary interaction processes such as mass transfer, common-envelope evolution, and supernovae. The algorithms implemented in BSE have served as the foundation for many subsequent rapid and detailed binary evolution codes.</p>
+<p>BSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2002MNRAS.329..897H/abstract">(Hurley et al. 2002)</a> is a rapid binary evolution code that models key binary interaction processes such as mass transfer, common-envelope evolution, and supernovae. The algorithms implemented in BSE have served as the foundation for many subsequent rapid and detailed binary evolution codes.</p>
 <p>Folow these steps to use METISSE with BSE:</p>
-<ol class="arabic simple">
-<li><p>Get the METISSE-enabled version of BSE through its <a class="reference external" href="https://github.com/poojanagrawal/BSE-METISSE">GitHub repository</a>.</p></li>
-</ol>
+<ol class="arabic">
+<li><p>Get the METISSE-enabled version of BSE through its <a class="reference external" href="https://github.com/poojanagrawal/BSE-METISSE">GitHub repository</a>.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/poojanagrawal/BSE-METISSE
 <span class="gp">$ </span>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
 </pre></div>
@@ -107,17 +106,18 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/poojanagrawal/BSE-METISSE.git
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Compile the code using:</p></li>
-</ol>
+</li>
+<li><p>Compile the code using:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./mk
 </pre></div>
 </div>
-<ol class="arabic simple" start="3">
-<li><p>Let us compute the evolution of a single binary using BSE-METISSE, say a 2.5 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star with a 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr.</p></li>
-</ol>
+</li>
+<li><p>Let us compute the evolution of a single binary using BSE-METISSE, say a 2.5 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star with a 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr.</p>
 <p>When using BSE, METISSE-specific inputs are read through the <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> inlist in the <em>evolve_metisse.in</em> file. (See <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options).</p>
-<p><strong>Important:</strong> When using BSE, the file <em>evolve_metisse.in</em> should be located in the same directory as the bse executable.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When using BSE, the file <em>evolve_metisse.in</em> should be located in the same directory as the bse executable.</p>
+</div>
 <p>We supply the location of the folders containing <a class="reference internal" href="glossary.html#term-Metallicity-File"><span class="xref std std-term">Metallicity File</span></a> for hydrogen and helium stars through <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code>. (Make sure to provide relevant paths based on the location of these folders <strong>on your machine</strong> ).</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
 
@@ -128,7 +128,6 @@
 <span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
 
 <span class="o">/</span>
-<span class="w"> </span>
 </pre></div>
 </div>
 <p>All other inputs including the binary parameters as well as the values of mass and metallicity are read through the BSE input file <code class="docutils literal notranslate"><span class="pre">binary.in</span></code>.</p>
@@ -141,6 +140,8 @@
 <span class="mi">1</span><span class="w">                                      </span><span class="c">! sse_flag</span>
 </pre></div>
 </div>
+</li>
+</ol>
 <!-- ```{code-block}
 2.5  1.0 13700 100  1 1 0.02 0.0
 0.5 0.0 1.0 3.0 0.5
@@ -165,15 +166,13 @@ where each value in every line is separated by space and corresponds to the foll
 2. METISSE currently can not restart the evolution of binaries.
 
 ::: -->
-<ol class="arabic simple" start="4">
-<li><p>Run BSE using:</p></li>
-</ol>
+<ol class="arabic" start="4">
+<li><p>Run BSE using:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./bse_metisse
 </pre></div>
 </div>
-<ol class="arabic simple" start="5">
-<li><p>BSE will produce the following terminal output:</p></li>
-</ol>
+</li>
+<li><p>BSE will produce the following terminal output:</p>
 <div class="no-copybutton highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">METALLICITY_DIR: /Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen</span>
 
 <span class="go">METALLICITY_DIR_HE: /Users/poojan/Downloads/sample_tracks_solarZ/Helium</span>
@@ -191,12 +190,12 @@ where each value in every line is separated by space and corresponds to the foll
 <span class="go">Maximum initial mass  299.3</span>
 <span class="go">    TIME      M1       M2   K1 K2        SEP    ECC  R1/ROL1 R2/ROL2  TYPE</span>
 <span class="go">    0.0000    2.500    1.000  1  1      137.608  0.00   0.028   0.021  INITIAL </span>
-<span class="go">  567.7662    2.499    1.000  2  1      137.650  0.00   0.064   0.022  KW CHNGE</span>
-<span class="go">  574.3388    2.499    1.000  3  1      137.653  0.00   0.120   0.022  KW CHNGE</span>
-<span class="go">  580.8607    2.499    1.000  4  1      136.164  0.00   0.524   0.022  KW CHNGE</span>
-<span class="go">  773.6237    2.496    1.000  5  1      136.255  0.00   0.295   0.022  KW CHNGE</span>
-<span class="go">  782.8053    0.426    1.000 11  1      132.493  0.00   0.000   0.015  KW CHNGE</span>
-<span class="go"> 9515.7256    0.426    1.000 11  2     1856.760  0.00   0.000   0.002  KW CHNGE</span>
+<span class="go">567.7662    2.499    1.000  2  1      137.650  0.00   0.064   0.022  KW CHNGE</span>
+<span class="go">574.3388    2.499    1.000  3  1      137.653  0.00   0.120   0.022  KW CHNGE</span>
+<span class="go">580.8607    2.499    1.000  4  1      136.164  0.00   0.524   0.022  KW CHNGE</span>
+<span class="go">773.6237    2.496    1.000  5  1      136.255  0.00   0.295   0.022  KW CHNGE</span>
+<span class="go">782.8053    0.426    1.000 11  1      132.493  0.00   0.000   0.015  KW CHNGE</span>
+<span class="go">9515.7256    0.426    1.000 11  2     1856.760  0.00   0.000   0.002  KW CHNGE</span>
 <span class="go">11250.9990    0.426    0.999 11  3     1857.020  0.00   0.000   0.002  KW CHNGE</span>
 <span class="go">12178.6533    0.426    0.947 11  4     1927.083  0.00   0.000   0.149  KW CHNGE</span>
 <span class="go">12308.4219    0.426    0.935 11  5     1942.590  0.00   0.000   0.023  KW CHNGE</span>
@@ -206,8 +205,10 @@ where each value in every line is separated by space and corresponds to the foll
 </pre></div>
 </div>
 <p>For more detailed output, check the output file in the <code class="docutils literal notranslate"><span class="pre">output_binary</span></code> folder.</p>
-<p>Similar to the standalone mode, to <code class="docutils literal notranslate"><span class="pre">z_accuracy_limit</span></code> can be adjusted in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> to use nearby metallicity value if the required value is not present in the grid. See <a class="reference internal" href="usage_standalone.html#if-the-metallicity-value-is-not-present-in-the-input-grid"><span class="std std-ref">If the metallicity value is not present in the input grid</span></a> for details.</p>
+<p>As in the standalone mode, <code class="docutils literal notranslate"><span class="pre">z_accuracy_limit</span></code> can be adjusted in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> to use nearby metallicity value if the required value is not present in the grid. See <a class="reference internal" href="usage_standalone.html#if-the-metallicity-value-is-not-present-in-the-input-grid"><span class="std std-ref">If the metallicity value is not present in the input grid</span></a> for details.</p>
  <!-- `popbin.f`.  -->
+</li>
+</ol>
 </section>
 
 
@@ -222,7 +223,7 @@ where each value in every line is separated by space and corresponds to the foll
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, Poojan Agrawal.
-      <span class="lastupdated">Last updated on 2025 Nov 02 at 11:37:52 UTC.
+      <span class="lastupdated">Last updated on 2025 Nov 02 at 14:15:56 UTC.
       </span></p>
   </div>
 

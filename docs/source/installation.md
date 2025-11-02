@@ -2,10 +2,10 @@
 # Installation
 
 METISSE can be used in two different ways:
-1. **Directly as a standalone code** for evolving populations of single stars.
-2. **In conjunction with binary evolution codes** for evolving populations of single and binary stars. 
+1. **As a standalone code** for evolving populations of single stars.
+2. **Integrated within binary population synthesis codes** for evolving populations of binary stars. 
 
-Depending on how you intend to use METISSE, the instructions for downloading and running it may vary.
+<!-- Depending on how you intend to use METISSE, the instructions for downloading and running it vary. -->
 
 ## Get the code
 The code package for METISSE is available at the [GitHub Repository](https://github.com/TeamMETISSE/METISSE).
@@ -54,7 +54,7 @@ METISSE also requires a set of stellar tracks to work.
 
 A set of sample tracks for testing METISSE can be downloaded from [zenodo](https://zenodo.org/records/14918163).
 The tracks have been computed using the stellar evolution code [MESA](https://docs.mesastar.org/en/release-r24.03.1/) and are ready for use with METISSE. 
-- The folder `hydrogen` contains stellar tracks with initial masses between 0.1 and 300 M<sub>$_\odot$</sub> for each metallicity.
+- The folder `hydrogen` contains stellar tracks with initial masses between 0.1 and 300 M<sub>$_\odot$</sub>.
 - The folder `helium` contains tracks of naked helium stars in the mass range 0.3 and 150 M<sub>$_\odot$</sub>. 
 - The tracks are for non-rotating stars at solar metallicity (Z=0.02).
 <!-- A pre-packaged grid of MESA tracks for hydrogen and helium stars with metallicity values ranging from 10<sup>-5</sup> to 10<sup>-1</sup> will be available soon (a future Zenodo entry).  -->
@@ -62,11 +62,15 @@ The tracks have been computed using the stellar evolution code [MESA](https://do
 
 METISSE also supports a range of pre-published tracks, for example: 
 
-1. **MIST** – to use MIST [(Choi et al., 2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C/abstract) models at solar metallicity, the tracks can be downloaded from the [website](https://waps.cfa.harvard.edu/MIST/data/tarballs_v1.2/MIST_v1.2_feh_p0.00_afe_p0.0_vvcrit0.0_EEPS.txz), while the corresponding metallicity and format files needed by METISSE are available from [this page](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/MIST).  
+1. **MIST** [(Choi et al., 2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C/abstract) models-
 
-2. **BoOST** – stellar model grids for Galactic metallicity [(Szécsi et al., 2022)](https://ui.adsabs.harvard.edu/abs/2022A%26A...658A.125S/abstract), computed with the Bonn Code, are available [here](http://galaxy.asu.cas.cz/files/BoOST/BoOST-stellarmodels-MW.zip). The helper files required for METISSE are available [here](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/BoOST).
+ EEP Tracks from MIST dataset can be downloaded from the [website](https://waps.cfa.harvard.edu/MIST/model_grids.html), while the corresponding metallicity and format files needed by METISSE are available from [this page](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/MIST).  
 
-For other metallicities, modify a copy of the metallicity file accordingly. 
+2. **BoOST** [(Szécsi et al., 2022)](https://ui.adsabs.harvard.edu/abs/2022A%26A...658A.125S/abstract)-
+
+Stellar model grids for the BoOST dataset, computed with the Bonn Code and coverted to EEP-format, are available [here](http://galaxy.asu.cas.cz/page/boost). The helper files required for METISSE are available [here](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/BoOST).
+
+The provided metallicity file examples are configured for solar metallicity, but can be easily modified to work with eep tracks of other metallicities from the corresponding set. For more details, see [metallicity controls](using_custom_input_tracks.md#metallicity-controls). 
 
 One can also use their custom set of hydrogen and helium stellar tracks, computed using different input parameters, or even different stellar evolution codes with METISSE. For instructions on how to use a custom set of input stellar tracks with METISSE, refer to [using custom input tracks](using_custom_input_tracks.md).
 

@@ -1,6 +1,6 @@
 # Code structure
 
-METISSE is designed as an modern alternative to Fortran 77 based SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) for use in population synthesis codes. Its source code, located in the *src* directory, can be broadly divided into two categories: **subroutines analogous to SSE** and **Fortran modules** that provide supporting functions and utilities for METISSE’s data structures and operations.
+METISSE is designed as an modern alternative to Fortran 77-based SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) for use in population synthesis codes. Its source code, located in the *src* directory, can be broadly divided into two categories: **subroutines analogous to SSE** and **Fortran modules** that provide supporting functions and utilities for METISSE’s data structures and operations.
 
 ## SSE-like subroutines 
 
@@ -56,15 +56,15 @@ Here is a flowchart describing the workflow of METISSE:
 
 # Adding METISSE to your code
 
-Although METISSE is written entirely in **Modern Fortran**, it interfaces smoothly with Fortran 77 functions and subroutines. This enables users to leverage modern language features while preserving compatibility with legacy codes.
+Although METISSE is written entirely in **Modern Fortran**, it is backwards compatible with Fortran 77 functions and subroutines. This enables users to leverage modern language features while preserving compatibility with legacy codes.
 
-To allow users to switch seamlessly between the two methods for stellar evolution, **METISSE contains subroutines that replicate the behaviour of the SSE subroutines** externally, with similar names and input/output variables. This design feature of METISSE allows direct integration of its interpolation-based stellar evolution routines into existing population synthesis codes without extensive refactoring.
+To allow users to easily switch between the two methods for stellar evolution, **METISSE contains subroutines that replicate the behaviour of the SSE subroutines** externally, with similar names and input/output variables. This design feature of METISSE allows direct integration of its interpolation-based stellar evolution routines into existing population synthesis codes without extensive modifications.
 
 If your code currently uses the Fortran 77–based subroutines from the SSE code, METISSE can be integrated through following steps:
 
 ## Bridging functions for SSE-specific subroutines
 
-Replace the SSE-specific subroutines — namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f, and gntage.f — with bridging functions that redirect calls either to SSE or to METISSE, depending on the stellar engine selected by the user.
+Replace the SSE-specific subroutines — namely *zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f, and gntage.f* — with bridging functions that redirect calls either to SSE or to METISSE, depending on the stellar engine selected by the user.
 For example, the SSE subroutine `hrdiag` can be renamed to `SSE_hrdiag`, and a bridging subroutine `hrdiag.f` can then be defined as follows:
 
 
@@ -176,24 +176,19 @@ Update your Makefile or compilation instructions to:
 
 1. Include the renamed SSE files (e.g., SSE_hrdiag.f).
 
-1. Compile and link new remnant subroutines (assign_remnant.f, hrdiag_remnant.f).
+1. Add new remnant subroutines (assign_remnant.f, hrdiag_remnant.f).
 
 1. Ensure linking order reflects module dependencies (e.g., track_support before METISSE_hrdiag).
 
 
 ## Modify additional subroutines as needed
 
-Calls to allocate and dellocate the track structure. 
-Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv*.f and comenv.f) may require minor modifications to work with METISSE. 
+Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv2.f and comenv.f) may require minor modifications to work with METISSE. 
 
 <!-- | comenv_lambda.f90   | Get the appropriate ZAMS radius and calculate common envelope lambda (only for binaries).       -->
 
-In case of doubts, you can refer to how METISSE has been added to COSMIC and BSE. 
-For details, please get in touch through GitHub [discussions](https://github.com/TeamMETISSE/METISSE/discussions).
-
-
-
-   
+In case of any doubts, you can refer to how METISSE has been added to COSMIC and BSE. 
+For help, please get in touch through GitHub [discussions](https://github.com/TeamMETISSE/METISSE/discussions).
 
 
 <!-- # module details
