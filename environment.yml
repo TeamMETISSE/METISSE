@@ -14,8 +14,6 @@ dependencies:
   - nbsphinx>=0.9
   - jinja2<3.1
   - nbconvert
-  - myst_parser==3.0.1
-  - sphinx_rtd_theme==2.0.0
   - ipykernel
   
   # Pandoc for notebook conversion
@@ -33,3 +31,6 @@ dependencies:
       - readthedocs-sphinx-search==0.3.2
       - sphinx_copybutton
       - lxml_html_clean
+      - sphinx_rtd_theme==2.0.0
+      - myst_parser==3.0.1
+
