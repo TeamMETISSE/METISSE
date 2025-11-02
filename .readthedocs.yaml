@@ -13,8 +13,8 @@ build:
     # nodejs: "20"
     # rust: "1.70"
     # golang: "1.20"
-  commands:
-  - sphinx-build -b html docs/source docs/_build/html
+  # commands:
+  # - sphinx-build -b html docs/source docs/_build/html
 
     
 conda:
@@ -36,6 +36,6 @@ sphinx:
 # Optional but recommended, declare the Python requirements required
 # to build your documentation
 # See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
-# python:
-#   install:
-#     - requirements: docs/requirements.txt
+python:
+  install:
+    - requirements: docs/requirements.txt
