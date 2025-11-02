@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>METISSE with BSE &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=48bd8eb9" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="METISSE with COSMIC" href="cosmic.html" />
+    <link rel="prev" title="Using METISSE to evolve binaries" href="usage_other.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/metisse_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">METISSE with BSE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cosmic.html">METISSE with COSMIC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METISSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="usage_other.html">Using METISSE to evolve binaries</a></li>
+      <li class="breadcrumb-item active">METISSE with BSE</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="metisse-with-bse">
+<h1>METISSE with BSE<a class="headerlink" href="#metisse-with-bse" title="Link to this heading"></a></h1>
+<p>BSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2002MNRAS.329..897H/abstract">(Hurley et al. 2002)</a> is a rapid binary evolution code that models key binary interaction processes such as mass transfer, common-envelope evolution, and supernovae. The algorithms implemented in BSE have served as the foundation for many subsequent rapid and detailed binary evolution codes.</p>
+<p>Folow these steps to use METISSE with BSE:</p>
+<ol class="arabic">
+<li><p>Get the METISSE-enabled version of BSE through its <a class="reference external" href="https://github.com/poojanagrawal/BSE-METISSE">GitHub repository</a>.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/poojanagrawal/BSE-METISSE
+<span class="gp">$ </span>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+</pre></div>
+</div>
+<p>Alternatively, you can clone BSE and METISSE together:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/poojanagrawal/BSE-METISSE.git
+</pre></div>
+</div>
+</li>
+<li><p>Compile the code using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./mk
+</pre></div>
+</div>
+</li>
+<li><p>Let us compute the evolution of a single binary using BSE-METISSE, say a 2.5 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> star with a 1 M<sub><img class="math" src="_images/math/41a9771b4457f5fbb7630929cfd92d5ea866bf4a.png" alt="_\odot"/></sub> companion, with an initial orbital period of 100 days in a circular orbit for the evolution time of 13.7 Gyr.</p>
+<p>When using BSE, METISSE-specific inputs are read through the <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> inlist in the <em>evolve_metisse.in</em> file. (See <a class="reference internal" href="input_files.html#metisse-input-controls"><span class="std std-ref">METISSE input controls</span></a> for a complete list of input options).</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When using BSE, the file <em>evolve_metisse.in</em> should be located in the same directory as the bse executable.</p>
+</div>
+<p>We supply the location of the folders containing <a class="reference internal" href="glossary.html#term-Metallicity-File"><span class="xref std std-term">Metallicity File</span></a> for hydrogen and helium stars through <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">METALLICITY_DIR_HE</span></code>. (Make sure to provide relevant paths based on the location of these folders <strong>on your machine</strong> ).</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="p">&amp;</span><span class="n">METISSE_input_controls</span>
+
+<span class="n">METALLICITY_DIR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen/&#39;</span>
+<span class="w">            </span>
+<span class="n">METALLICITY_DIR_HE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;/Users/poojan/Downloads/sample_tracks_solarZ/Helium/&#39;</span>
+
+<span class="n">verbose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+
+<span class="o">/</span>
+</pre></div>
+</div>
+<p>All other inputs including the binary parameters as well as the values of mass and metallicity are read through the BSE input file <code class="docutils literal notranslate"><span class="pre">binary.in</span></code>.</p>
+<p>A typical <code class="docutils literal notranslate"><span class="pre">binary.in</span></code> looks like:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="mf">2.5</span><span class="w">  </span><span class="mf">1.0</span><span class="w"> </span><span class="mi">13700</span><span class="w"> </span><span class="mi">100</span><span class="w">  </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mf">0.02</span><span class="w"> </span><span class="mf">0.0</span><span class="w">     </span><span class="c">! mass1 mass2 maximum_evolution_time orbital_period_in_days initial_type1 initial_type2 metallicity eccentricity</span>
+<span class="mf">0.5</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="mf">3.0</span><span class="w"> </span><span class="mf">0.5</span><span class="w">                   </span><span class="c">! reimers_eta binary_wind_enhancement helium_star_mass_loss_factor alpha_common_envelope lambda_common_envelope</span>
+<span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mf">3.0</span><span class="w"> </span><span class="mi">29769</span><span class="w">                 </span><span class="c">! common_envelope_flag tides_on_off white_dwarf_initial_final_mass_relation white_dwarf_cooling black_hole_kicks neutron_star_remnant_mass max_neutron_star_mass kick_random_seed</span>
+<span class="mf">0.001</span><span class="w"> </span><span class="mf">0.01</span><span class="w"> </span><span class="mf">0.02</span><span class="w">                        </span><span class="c">! timestep_pts1 timesteps_pts2 timestep_pts3</span>
+<span class="mf">0.0</span><span class="w"> </span><span class="mf">0.125</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="mf">1.5</span><span class="w"> </span><span class="mf">0.001</span><span class="w"> </span><span class="mi">1</span><span class="mf">0.0</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span><span class="w">     </span><span class="c">! kick_velocity_dispersion beta_wind_velocity xi_wind_accretion bondi_hoyle_wind_accretion_factor fraction_of_accreted_matter_retained_in_nova_eruption eddington_limit_factor gamma_angular_momentum_loss</span>
+<span class="mi">1</span><span class="w">                                      </span><span class="c">! sse_flag</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<!-- ```{code-block}
+2.5  1.0 13700 100  1 1 0.02 0.0
+0.5 0.0 1.0 3.0 0.5
+0 1 0 1 0 2 3.0 29769
+0.001 0.01 0.02
+0.0 0.125 1.0 1.5 0.001 10.0 -1.0
+1
+```
+where each value in every line is separated by space and corresponds to the following variables.  -->
+<!-- 
+| Line | Meaning |
+|------|---------|
+| 1 | `mass1` `mass2` `maximum_evolution_time` `orbital_period_in_days` `initial_type1` `initial_type2` `metallicity` `eccentricity` |
+| 2 | `reimers_eta` `binary_wind_enhancement` `helium_star_mass_loss_factor` `alpha_common_envelope` `lambda_common_envelope` |
+| 3 | `common_envelope_flag` `tides_flag` `white_dwarf_initial_final_mass_relation_flag` `white_dwarf_cooling_relation` `black_hole_kickflag` `remnant_mass_prescription` `max_neutron_star_mass` `kick_random_seed` |
+| 4 | `timestep_pts1` `timesteps_pts2` `timestep_pts3` |
+| 5 | `kick_velocity_dispersion` `beta_wind_velocity` `wind_accretion_efficiency` `bondi_hoyle_wind_accretion_factor` `fraction_of_accreted_matter_retained_in_nova_eruption` `eddington_limit_factor_for mass transfer` `gamma_angular_momentum_loss` |
+| 6 | `sse_flag: 0 for sse, 1 for metisse` | -->
+<!-- :::{Note}
+1. If you enter a negative kstar then parameters for an evolved star are required in the order of: current age, initial mass and spin rate, otherwise the star will start on the ZAMS.
+
+2. METISSE currently can not restart the evolution of binaries.
+
+::: -->
+<ol class="arabic" start="4">
+<li><p>Run BSE using:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./bse_metisse
+</pre></div>
+</div>
+</li>
+<li><p>BSE will produce the following terminal output:</p>
+<div class="no-copybutton highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">METALLICITY_DIR: /Users/poojan/Downloads/sample_tracks_solarZ/Hydrogen</span>
+
+<span class="go">METALLICITY_DIR_HE: /Users/poojan/Downloads/sample_tracks_solarZ/Helium</span>
+
+<span class="go">Input Z is :  2.00000E-02</span>
+<span class="go">Reading naked helium star tracks</span>
+<span class="go">Found matching Z_files   2.00000E-02</span>
+<span class="go">Found           33  tracks.</span>
+<span class="go">Minimum initial mass    0.4</span>
+<span class="go">Maximum initial mass  148.8</span>
+<span class="go">Reading main (hydrogen star) tracks</span>
+<span class="go">Found matching Z_files   2.00000E-02</span>
+<span class="go">Found           85  tracks.</span>
+<span class="go">Minimum initial mass    0.1</span>
+<span class="go">Maximum initial mass  299.3</span>
+<span class="go">    TIME      M1       M2   K1 K2        SEP    ECC  R1/ROL1 R2/ROL2  TYPE</span>
+<span class="go">    0.0000    2.500    1.000  1  1      137.608  0.00   0.028   0.021  INITIAL </span>
+<span class="go">567.7662    2.499    1.000  2  1      137.650  0.00   0.064   0.022  KW CHNGE</span>
+<span class="go">574.3388    2.499    1.000  3  1      137.653  0.00   0.120   0.022  KW CHNGE</span>
+<span class="go">580.8607    2.499    1.000  4  1      136.164  0.00   0.524   0.022  KW CHNGE</span>
+<span class="go">773.6237    2.496    1.000  5  1      136.255  0.00   0.295   0.022  KW CHNGE</span>
+<span class="go">782.8053    0.426    1.000 11  1      132.493  0.00   0.000   0.015  KW CHNGE</span>
+<span class="go">9515.7256    0.426    1.000 11  2     1856.760  0.00   0.000   0.002  KW CHNGE</span>
+<span class="go">11250.9990    0.426    0.999 11  3     1857.020  0.00   0.000   0.002  KW CHNGE</span>
+<span class="go">12178.6533    0.426    0.947 11  4     1927.083  0.00   0.000   0.149  KW CHNGE</span>
+<span class="go">12308.4219    0.426    0.935 11  5     1942.590  0.00   0.000   0.023  KW CHNGE</span>
+<span class="go">12317.3174    0.426    0.914 11  5     1973.257  0.00   0.000   0.059  BEG SYMB</span>
+<span class="go">12317.3223    0.427    0.425 11 11     2795.724  0.00   0.000   0.000  KW CHNGE</span>
+<span class="go">13700.0000    0.427    0.425 11 11     3755.136  0.00   0.000   0.000  MAX TIME</span>
+</pre></div>
+</div>
+<p>For more detailed output, check the output file in the <code class="docutils literal notranslate"><span class="pre">output_binary</span></code> folder.</p>
+<p>As in the standalone mode, <code class="docutils literal notranslate"><span class="pre">z_accuracy_limit</span></code> can be adjusted in <code class="docutils literal notranslate"><span class="pre">METISSE_input_controls</span></code> to use nearby metallicity value if the required value is not present in the grid. See <a class="reference internal" href="usage_standalone.html#if-the-metallicity-value-is-not-present-in-the-input-grid"><span class="std std-ref">If the metallicity value is not present in the input grid</span></a> for details.</p>
+ <!-- `popbin.f`.  -->
+</li>
+</ol>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage_other.html" class="btn btn-neutral float-left" title="Using METISSE to evolve binaries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cosmic.html" class="btn btn-neutral float-right" title="METISSE with COSMIC" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Poojan Agrawal.
+      <span class="lastupdated">Last updated on 2025 Nov 02 at 14:15:56 UTC.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

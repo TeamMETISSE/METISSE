@@ -1,0 +1,46 @@
+
+&format_controls
+
+    file_extension = '.dat'
+    read_eep_files = .false.
+
+    !the line number where column names are listed
+    header_location = -1
+
+    total_cols = 94 !number of columns
+    column_name_file = '/Users/poojan/stellar_tracks/Boost/boost_columns.txt'
+
+    !EEPS
+    ZAMS_EEP = 1
+    IAMS_EEP = 151
+    TAMS_EEP = 252
+    BGB_EEP = 403
+    cHeIgnition_EEP = 403
+    cHeBurn_EEP = 429
+    TA_cHeB_EEP = 608
+
+    Initial_EEP = 1       !files will be read from this line number
+    Final_EEP = 608        !to this line  
+
+    fix_track = .false.
+
+    !name of essential columns
+
+    age_colname = 't[yr]'        !age in years
+    mass_colname= 'M/Msun'            !mass of the star in solar units
+
+    log_L_colname = 'log(L/Lsun)'             	 !log of luminosity in solar units 
+
+    Radius_colname = 'R/Rsun'			!radius in solar units
+
+    he_core_mass = 'coreHe[Msun]'       	 !mass He enriched/H depleted core in solar units
+    co_core_mass = 'coreCO[Msun]'         	 !mass C enriched/He depleted core in solar units
+
+    Teff_colname = 'Teff[K]'			!surface temperature in K
+
+    !columns required for determining Mup and Mhook
+    he4_mass_frac = 'cHe4'
+    c12_mass_frac = 'cC12'               !c12 mass fraction at the centre
+    o16_mass_frac = 'cO16'               !o16 mass fraction at the centre
+
+/

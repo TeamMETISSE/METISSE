@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Community guidelines &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+  <title>Examples &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=48bd8eb9" />
 
   
   <!--[if lt IE 9]>
@@ -19,10 +20,13 @@
         <script src="_static/documentation_options.js?v=2709fde1"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="next" title="Running METISSE via Python (Optional)" href="notebook/demo.html" />
     <link rel="prev" title="Code structure" href="structure.html" /> 
 </head>
 
@@ -34,8 +38,9 @@
 
           
           
-          <a href="index.html" class="icon icon-home">
-            METISSE
+          <a href="index.html">
+            
+              <img src="_static/metisse_sidebar.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,19 +50,23 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Installation</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Community guidelines</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#contribute-to-metisse">Contribute to METISSE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#seek-support-or-report-problems-with-metisse">Seek support or report problems with METISSE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cite-metisse">Cite METISSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebook/demo.html">Running METISSE via Python (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebook/demo.html#Hertzsprung–Russell-Diagram">Hertzsprung–Russell Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebook/demo.html#Maximum-Stellar-Radius">Maximum Stellar Radius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebook/demo.html#Remnant-Mass-vs-Initial-Stellar-Mass">Remnant Mass vs Initial Stellar Mass</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -75,9 +84,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Community guidelines</li>
+      <li class="breadcrumb-item active">Examples</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/citing_metisse.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -85,28 +93,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="community-guidelines">
-<h1>Community guidelines<a class="headerlink" href="#community-guidelines" title="Link to this heading"></a></h1>
-<section id="contribute-to-metisse">
-<h2>1.&nbsp;&nbsp;Contribute to METISSE<a class="headerlink" href="#contribute-to-metisse" title="Link to this heading"></a></h2>
-<p>We are always working on improving the functionality of METISSE.
-If you would like to contribute by adding a new feature or creating with a bug fix, please <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/fork">fork</a> the METISSE repository from GitHub. Once you are ready, create a <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/pulls">pull request</a> with your proposed changes.</p>
-</section>
-<section id="seek-support-or-report-problems-with-metisse">
-<h2>2.&nbsp;&nbsp;Seek support or report problems with METISSE<a class="headerlink" href="#seek-support-or-report-problems-with-metisse" title="Link to this heading"></a></h2>
-<p>If you need help with METISSE or want to report any problems, you can create an <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/issues/new">issue</a> on Github. For any other request, use <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/discussions">discussions</a>.</p>
-</section>
-<section id="cite-metisse">
-<h2>3.&nbsp;&nbsp;Cite METISSE<a class="headerlink" href="#cite-metisse" title="Link to this heading"></a></h2>
-<p>Please cite the following paper if you are using METISSE in your work.</p>
-<!-- - TBA
-
-More details about METISSE including code capabilities are described in the following papers: -->
-<ul class="simple">
-<li><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract">Modelling stellar evolution in mass-transferring binaries and gravitational-wave progenitors with METISSE</a></p></li>
-<li><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract">The fates of massive stars: exploring uncertainties in stellar evolution with METISSE</a></p></li>
+  <section class="tex2jax_ignore mathjax_ignore" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<p>This section demonstrates how to use METISSE right from a Jupyter notebook. You will be able to explore stellar evolution, generate Hertzsprung–Russell diagrams, examine maximum stellar radii, and create remnant mass plots using different stellar track libraries, all without leaving Python.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebook/demo.html">Running METISSE via Python (Optional)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebook/demo.html#Hertzsprung–Russell-Diagram">Hertzsprung–Russell Diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebook/demo.html#Maximum-Stellar-Radius">Maximum Stellar Radius</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebook/demo.html#Remnant-Mass-vs-Initial-Stellar-Mass">Remnant Mass vs Initial Stellar Mass</a></li>
 </ul>
-</section>
+</div>
 </section>
 
 
@@ -114,13 +111,15 @@ More details about METISSE including code capabilities are described in the foll
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="structure.html" class="btn btn-neutral float-left" title="Code structure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="notebook/demo.html" class="btn btn-neutral float-right" title="Running METISSE via Python (Optional)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+    <p>&#169; Copyright 2024, Poojan Agrawal.
+      <span class="lastupdated">Last updated on 2025 Nov 02 at 14:15:56 UTC.
+      </span></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

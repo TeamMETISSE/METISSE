@@ -34,7 +34,11 @@ release = '0.1'
 extensions = ['myst_parser',
 		'sphinx.ext.autosectionlabel',
 		'sphinx.ext.imgmath',
-		'sphinx.ext.mathjax',]
+		'sphinx.ext.mathjax',
+        'sphinx.ext.autodoc',
+        'sphinx_copybutton',
+        'nbsphinx'
+    ]
 
 # -- MyST settings ---------------------------------------------------
 
@@ -85,6 +89,11 @@ html_theme = 'sphinx_rtd_theme'
 # html_theme = "nature"
 
 
+html_theme_options = {"display_version": True, "logo_only" : True}
+html_last_updated_fmt = "%Y %b %d at %H:%M:%S UTC"
+html_show_sourcelink = False
+html_logo = "images/metisse_sidebar.png"
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
@@ -95,8 +104,11 @@ html_css_files = [
 ]
 
 # set default highlighting language
-highlight_language = 'fortran'
+highlight_language = 'console'
 
+nbsphinx_execute = 'always' 
+nbsphinx_allow_errors = True
+exclude_patterns = ['**.ipynb_checkpoints']
 
 # Use LaTeX to generate PDF output (optional)
 #latex_engine = 'pdflatex'
@@ -111,6 +123,15 @@ highlight_language = 'fortran'
 #    ''',
 #}
 
+# Strip common prompts from copied code
+# i.e, ignore any leading >>> , $ , In [n]: , or Out[n]: 
+# copybutton_prompt_text = r">>> |\$ |In \[\d*\]: |Out\[\d*\]: "
+copybutton_prompt_text = r">>> |\.\.\. |\$ |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_is_regexp = True
+
+# Optional: only show button on code blocks
+copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
+copybutton_exclude = '.linenos, .gp, .go'
 # -- Local Sphinx extensions -------------------------------------------------
 
 
@@ -140,3 +161,4 @@ def setup(app: Sphinx):
     app.add_post_transform(NumberSections)
 #    app.connect("html-page-context", add_version_to_css)
     app.add_lexer("myst", MystLexer)
+

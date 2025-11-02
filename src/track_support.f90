@@ -32,11 +32,10 @@ module track_support
     integer, parameter:: COSMIC = 3
     integer, parameter:: AMUSE = 4
     
-    ! mode > 0 enables read-only mode for files when multi-threading
+    ! mode > 0 enables read-only mode for files when multi-threading in CMC
     integer:: mode = 0
     
     character(len = strlen):: METISSE_DIR, METALLICITY_DIR, METALLICITY_DIR_HE
-
     character(len = strlen):: amuse_metisse_dir, amuse_metallicity_dir, amuse_metallicity_dir_he
 
     ! for use when constructing EEP distance
@@ -225,9 +224,9 @@ module track_support
     logical:: code_error
     
     !variable declaration-- for main
-    integer:: number_of_tracks
+    real(dp) :: number_of_tracks
     character(len = strlen):: input_mass_file
-    logical:: read_mass_from_file
+    logical :: read_mass_from_file
     
     !for z_support
     real(dp):: Mhook, Mhef, Mfgb, Mup, Mec, Mextra, Mup_core, Mec_core, Z04
@@ -595,15 +594,6 @@ module track_support
         deallocate(Lum, Teff, core_mass)
         
     end function
-    
-    subroutine write_dat_track(tphys, pars, io)
-        real(dp), intent(in):: tphys
-        type(star_parameters), intent(in):: pars
-        integer, intent(in):: io
-        
-        write(io, '(1p9e15.6, 2i10)') tphys, pars% age, pars% mass, pars% core_mass, pars% McHe, pars% McCO &
-                    ,pars% log_L, pars% log_Teff, pars% log_R, pars% phase
-    end subroutine write_dat_track
 
     subroutine distance_along_track(t)
       type(track), intent(inout):: t

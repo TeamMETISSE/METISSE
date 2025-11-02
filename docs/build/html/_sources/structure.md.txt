@@ -1,14 +1,8 @@
 # Code structure
 
+METISSE is designed as an modern alternative to Fortran 77-based SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) for use in population synthesis codes. Its source code, located in the *src* directory, can be broadly divided into two categories: **subroutines analogous to SSE** and **Fortran modules** that provide supporting functions and utilities for METISSE’s data structures and operations.
 
-METISSE has been written completely using Modern Fortran. 
-The source code contains two types of files located in the *src* directory: 
-
-
-## SSE specific subroutines 
-
-
-METISSE has been developed as an alternative to SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) code and, therefore, contains similar subroutines as SSE. The following subroutines replicate the behaviour of the SSE subroutines externally, with similar names and input/output variables.
+## SSE-like subroutines 
 
 | File Name           | Description                                                                                             |
 |---------------------|---------------------------------------------------------------------------------------------------|
@@ -17,13 +11,10 @@ METISSE has been developed as an alternative to SSE [(Hurley et al. 2000)](https
 | METISSE_hrdiag.f90    | Interpolate within the new track to determine stellar parameters at a given age. <br>Also, compute the evolutionary phase of the star including the remnant phases and their properties. |
 | METISSE_deltat.f90    | Calculate the time steps depending on the stage of evolution.                                   |
 | METISSE_mlwind.f90    | Derive the mass loss through stellar winds.                                                    |
-| METISSE_gntage.f90    | Determine the age of a giant star after merger or rejuvenation.                                 |
+| METISSE_gntage.f90    | Determine the age of a giant star after merger  <br> or rejuvenation in a binary interaction.                                 |
 
 
-
-## Modules and other files
-
-The following Fortran modules contain supporting data structures and utilities. 
+## Fortran Modules
 
 | File Name           | Description                                                                                             |
 |---------------------|---------------------------------------------------------------------------------------------------|
@@ -34,39 +25,170 @@ The following Fortran modules contain supporting data structures and utilities.
 | sse_support.f90     | Contains subroutines to calculate SSE-specific quantities.                                         |
 
 
-
-In addition to the above modules, there is an additional file called *METISSE_miscellaneous.f90*. This file contains miscellaneous subroutines that can be called by the binary codes. Ideally, these subroutines should also be organized into a module. However, this is not feasible because the overlying binary evolution codes often have segments written in Fortran 77, and Fortran 77 does not support the use of modules.
-
+In addition to the above modules, there is an additional file called *METISSE_miscellaneous.f90* which contains miscellaneous subroutines that can be called by the binary codes. 
+Although these routines could be organized within a module, they are kept separate to ensure compatibility with legacy Fortran 77 codes, which does not support modules.
 It contains:  
+
 | File Name           | Description                                                                                             |
 |---------------------|---------------------------------------------------------------------------------------------------------|
-| alloc_track.f90     | Allocate the track object.                                                                              |
-| dealloc_track.f90   | Deallocate the track object and arrays within.                                                          |
+| alloc_track    | Allocate the track object.                                                                              |
+| dealloc_track   | Deallocate the track object and arrays within.                                                          |
 | initialize_front_end| Inform METISSE what code is using it.                                                                   |
-| set_star_type      | Set star type to `rejuvenated` before calling star.   
+| set_star_type      | Set star type to `rejuvenated` after merger or rejuvenation in a binary interaction.   
 
 
-One of these sets of files is used depending on how METISSE is being used.
+## Additional files
 
-**In the standalone mode:**
+The SSE-like subroutines and Fortran modules form the core of METISSE and are indispensable for its operation.
+However, they cannot function by themselves. They must be called through a wrapper or main program, the exact form of which depends on how METISSE is being used. For example, the following files form the wrapper of METISSE in the standalone mode. 
+
 | File Name           | Description                                                                                             |
 |---------------------|---------------------------------------------------------------------------------------------------------|
 | main_metisse.f90    | Main program for running METISSE. Can only evolve single stars. <br> Reads the input files and sets up relevant parameters and data structures <br>before evolving stars of given masses. |
 | evolv_metisse.f90   | Controls the evolution of each star and writes output to files.                                         |
-| assign_commons_main.f90 | Assign values for variables used in METISSE from SSE_input_controls.                                    |
-
-**As part of other codes:**
-| File Name           | Description                                                                                             |
-|---------------------|---------------------------------------------------------------------------------------------------------|
-| assign_commons_xyz.f90  | To assign common variables when METISSE is used with other code say 'xyz'.                               |
-| comenv_lambda.f90   | Get the appropriate ZAMS radius and calculate common envelope lambda.                                       |
+| assign_commons_main.f90 | Assign values for variables used in METISSE from SSE_input_controls.                                    |                                 |
 
 ## Workflow
 
 Here is a flowchart describing the workflow of METISSE:
 
-![METISSE's flowchart](METISSE_flowchart.png)
-   
+![METISSE's flowchart](images/METISSE_flowchart.png)
+
+# Adding METISSE to your code
+
+Although METISSE is written entirely in **Modern Fortran**, it is backwards compatible with Fortran 77 functions and subroutines. This enables users to leverage modern language features while preserving compatibility with legacy codes.
+
+To allow users to easily switch between the two methods for stellar evolution, **METISSE contains subroutines that replicate the behaviour of the SSE subroutines** externally, with similar names and input/output variables. This design feature of METISSE allows direct integration of its interpolation-based stellar evolution routines into existing population synthesis codes without extensive modifications.
+
+If your code currently uses the Fortran 77–based subroutines from the SSE code, METISSE can be integrated through following steps:
+
+## Bridging functions for SSE-specific subroutines
+
+Replace the SSE-specific subroutines — namely *zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f, and gntage.f* — with bridging functions that redirect calls either to SSE or to METISSE, depending on the stellar engine selected by the user.
+For example, the SSE subroutine `hrdiag` can be renamed to `SSE_hrdiag`, and a bridging subroutine `hrdiag.f` can then be defined as follows:
+
+
+``` fortran 
+
+IF (sse_flag) THEN
+    CALL SSE_hrdiag(...)
+ELSE
+    CALL METISSE_hrdiag(...)
+END IF
+      
+```
+
+The variable `sse_flag` (or an equivalent control variable) should be defined and set outside the bridging functions.
+
+::: {admonition} Key Steps
+:class: summary-block
+
+1. Locate the Fortran 77 subroutines from SSE that your code currently uses:
+zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f, and gntage.f.
+
+1. For each SSE routine, rename it to include a prefix (e.g., SSE_).
+
+1.  Write new subroutines with the original SSE names that act as bridges, redirecting calls to either SSE or METISSE based on a control variable (e.g., sse_flag).
+
+:::
+
+
+## Stellar remnant prescriptions
+
+METISSE includes built-in prescriptions to assign and calculate stellar remnant properties at the end of a star's life. However, if you want to continue using the stellar remnant prescriptions from your version of SSE, the relevant code from SSE’s hrdiag—responsible for assigning remnant types and calculating remnant properties—should be extracted into two separate subroutines, for example assign_remnant.f and hrdiag_remnant.f. This ensures that the same remnant prescriptions are applied consistently, regardless of whether SSE or METISSE is used as the stellar engine.
+
+::: {admonition} Key Steps
+:class: summary-block
+
+1. Identify remnant-related code in `SSE_hrdiag.f` that assigns remnant types and calculates remnant properties.
+
+1. Extract the remnant assignment code into a separate subroutine.
+
+1. Extract remnant property calculations into another subroutine.
+
+1. Update `SSE_hrdiag.f` to call the two new subroutines in place of the original remnant-related code:
+
+    ``` fortran
+    CALL assign_remnant(...)
+    CALL hrdiag_remnant(...)
+    ```
+
+    If done correctly, SSE should produce no difference in output. 
+
+:::
+
+
+## Setting Up the METISSE Front-End
+
+METISSE requires knowledge of which external code is calling it so that it can execute code-specific instructions—for example, redirecting remnant calculations to the appropriate subroutines defined in that code.
+This is achieved through a unique integer identifier called the `front_end`.
+Each supported code is assigned a distinct front_end value, which is defined as an integer parameter in the track_support module.
+To integrate a new code, you can add a corresponding front_end variable and assign it a unique integer value.
+
+For example, the binary evolution code BSE [(Hurley et al. 2002)](https://ui.adsabs.harvard.edu/abs/2002MNRAS.329..897H/abstract) uses the identifier:
+
+``` fortran 
+    integer, parameter:: BSE = 2
+
+```
+This allows METISSE to recognize when it is being called from BSE and apply the appropriate internal logic.
+
+<!-- Currently, the following front_end are available: 
+
+| Front-End | Integer Value | Description        |
+| --------- | ------------- | ------------------ |
+| MAIN      | 1             | Standalone METISSE |
+| BSE       | 2             | BSE code           |
+| COSMIC    | 3             | COSMIC code        |
+| AMUSE     | 4             | AMUSE framework    | -->
+
+
+
+::: {admonition} Key Steps
+:class: summary-block
+
+1. Define a `front_end` for your code in `track_support` module. 
+1. Check all occurrences of the variable `front_end` in METISSE. 
+
+    ``` console
+
+    grep '-inR' 'front_end' $METISSE_DIR/src 
+
+    ```
+    Add instructions specific to you code where necessary.
+
+2.  Variables specific to your code can be assigned in a file like `assign_commons_xyz.f90` where 'xyz' is the name of your code. 
+
+3. Make sure to set the front-end in your code before any calls to METISSE:
+
+    ``` fortran
+
+    CALL initialize_front_end(front_end_name)
+
+    ```
+:::
+
+## Updating the compilation instructions
+
+Update your Makefile or compilation instructions to:
+
+1. Include the METISSE source files.
+
+1. Include the renamed SSE files (e.g., SSE_hrdiag.f).
+
+1. Add new remnant subroutines (assign_remnant.f, hrdiag_remnant.f).
+
+1. Ensure linking order reflects module dependencies (e.g., track_support before METISSE_hrdiag).
+
+
+## Modify additional subroutines as needed
+
+Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv2.f and comenv.f) may require minor modifications to work with METISSE. 
+
+<!-- | comenv_lambda.f90   | Get the appropriate ZAMS radius and calculate common envelope lambda (only for binaries).       -->
+
+In case of any doubts, you can refer to how METISSE has been added to COSMIC and BSE. 
+For help, please get in touch through GitHub [discussions](https://github.com/TeamMETISSE/METISSE/discussions).
 
 
 <!-- # module details

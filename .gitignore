@@ -5,5 +5,7 @@
 .DS_Store
 fort.99
 metisse
+source/notebook/run/*
+source/notebook/__pycache__
 output/evolve*
 .gitignore

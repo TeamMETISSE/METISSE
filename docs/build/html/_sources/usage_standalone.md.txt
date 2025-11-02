@@ -2,7 +2,7 @@
 
  
 METISSE can be used independently to compute the evolution of one star or a population of single stars. 
-Once you have downloaded the [code package](installation.md#code) for METISSE,
+Once you have [downloaded](installation.md#get-the-code) the code package for METISSE,
 you first need to compile it. To do so, open a command line shell and inside the METISSE folder execute:
 
 ```console
@@ -22,15 +22,14 @@ The code does not need to be re-compiled unless you make changes inside the sour
 
 ## Evolving one star 
 
-Let us compute the evolution of a star with initial mass 1 M<sub>$_\odot$</sub> star, metallicity `Z = 0.02` up to the age of 12 Gyr. 
-Input to METISSE in the standalone mode is provided through two [Fortran namelists](glossary.md#fortran-namelists): `SSE_input_controls` and `METISSE_input_controls`. 
+Let us compute the evolution of a star with initial mass 1 M<sub>$_\odot$</sub> star, metallicity Z = 0.02 up to the age of 12 billion years. 
+Input to METISSE in the standalone mode is provided through two {term}`Fortran namelists`: `SSE_input_controls` and `METISSE_input_controls`. 
 See sections [](input_files.md#sse-input-controls) and [](input_files.md#metisse-input-controls) for a complete list of input options. 
 
 
-`SSE_input_controls` is contained in the file called *main.input* and
-is used to provide evolution details of the star.
+`SSE_input_controls` is contained in the file called `main.input` and is used to provide evolution details of the star.
  
-```
+``` fortran
 &SSE_input_controls
 
 initial_Z = 0.02
@@ -46,13 +45,13 @@ write_output_to_file = .true.
 ```
 
 We also need to provide the details of the input tracks to METISSE through the namelist `METISSE_input_controls`. 
-In the standalone mode of METISSE, `METISSE_input_controls` is contained in the file called *metisse.input*. 
+In the standalone mode of METISSE, `METISSE_input_controls` is contained in the file called `metisse.input`. 
 
 
-We use the variable `METALLICITY_DIR` to supply paths to the folder containing [metallicity files](glossary.md#metallicity-file) for normal hydrogen stars and the variable `METALLICITY_DIR_HE` for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the `hydrogen` and `helium` folders respectively.
+We use the variable `METALLICITY_DIR` to supply paths to the folder containing {term}`Metallicity File` for normal hydrogen stars and the variable `METALLICITY_DIR_HE` for naked helium stars. For the pre-packaged grid of stellar tracks available with METISSE, this is the path to the `hydrogen` and `helium` folders respectively.
 
 
-```
+``` fortran
 &METISSE_input_controls
 
 
@@ -102,7 +101,7 @@ To run METISSE simply type `./metisse` on the command line and hit enter. METISS
 
 ```
 
-Since we had set, `write_output_to_file = .true.` in `SSE_input_controls`, a [SSE-style](glossary.md#sse-style-file) output file named 'evolve_00100M.dat' will also be generated in the *output* directory, containing a more detailed evolutionary history of the star.
+Since we had set `write_output_to_file = .true.` in `SSE_input_controls`, a {term}`SSE-style file` output file named 'evolve_00100M.dat' will also be generated in the *output* directory, containing a more detailed evolutionary history of the star.
 
 
 ## Evolving a stellar population
@@ -110,21 +109,18 @@ Since we had set, `write_output_to_file = .true.` in `SSE_input_controls`, a [SS
 To compute the evolution of a single stellar population containing, for example, 10,000 stars with initial masses uniformly distributed between 1 and 100 M<sub>$_\odot$</sub>, we modify the `SSE_input_controls` from the single star case as shown below. 
 
 
-```
+``` fortran
 &SSE_input_controls
 
 initial_Z = 0.02
-
 max_age = 1.2d4   
-
 number_of_tracks = 1d+4
 min_mass = 1.d0
-
 max_mass = 100.d0
-
+sampling_scheme = 'uniform'
 write_track_to_file = .true.   
 /
-
+ 
 ```
 
 We also set `verbose = .false.` in metisse.input to avoid flooding our screen with evolution details of 10,000 stars. 
@@ -139,12 +135,12 @@ $ ./metisse
 
 We also kept `write_track_to_file = .true.` in `SSE_input_controls`. Therefore, the `output` directory will now contain the evolutionary histories of all 10,000 stars. 
 
-
-To compute a population of single stars with any other distribution of initial masses, we can list initial masses in a file provide masses in a text file (one per line) and provide the location of that file through `input_mass_file`. 
+`sampling_scheme` can also be set to `Kroupa2001` to compute a population of stars with initial masses distributed according to [Kroupa P., (2001)](https://ui.adsabs.harvard.edu/link_gateway/2001MNRAS.322..231K/PUB_PDF).
+To compute a population of single stars with any other distribution of initial masses, we can list initial masses in a text file (one per line) and provide the location of that file through `input_mass_file`. 
 If the masses are listed in a file called `my_custom_distribution.txt`, then `SSE_input_controls` will look like this:
 
 
-```
+``` fortran
 &SSE_input_controls
 
 initial_Z = 0.02
@@ -160,10 +156,10 @@ input_mass_file = 'my_custom_distribution.txt'
 write_track_to_file = .true.  
 
 /
-
+ 
 ```
 
-Note that we still need to define `number_of_tracks` as METISSE will read `input_mass_file` for that many stars and will raise errors if the file contains fewer stars.  
+Note that we still need to define `number_of_tracks` as METISSE will read `input_mass_file` for that many stars and will raise error if the file contains fewer stars.  
 
 ## If the metallicity value is not present in the input grid
 
@@ -191,8 +187,8 @@ Another option is that we can ask METISSE to use nearby metallicity values.
 This is achieved by increasing `Z_accuracy_limit` in `METISSE_input_controls`.
 METISSE lists available metallicity values in the grid, whenever it cannot find the input value. 
 
-In the sample set, we have tracks for only one metallicity. 
-However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1</sup, we could increase `Z_accuracy_limit` to `8d-2`. This would allow METISSE to run using the closest metallicity in the list, which is `0.0148`. 
+In the example set, we have tracks for only one metallicity. 
+However, if we were working with a larger grid of stellar tracks, with metallicity values normally distributed between 10<sup>-5</sup> to 10<sup>-1</sup>, we could increase `Z_accuracy_limit` to `8d-2`. This would allow METISSE to run using the closest metallicity in the list, which is `0.0148`. 
 
 ``` console
 $ ./metisse

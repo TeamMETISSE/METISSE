@@ -1470,7 +1470,6 @@ module z_support
         ! default is SSE
         Mup_core = 1.6d0
         Mec_core = 2.2d0
-
         if ((Mcrit(7)% loc >= 1) .and. (Mcrit(7)% loc <=size(xa))) then
             j_bagb = min(xa(Mcrit(7)% loc)% ntrack,TA_cHeB_EEP)
             Mec_core = xa(Mcrit(7)% loc)% tr(i_he_core,j_bagb)
@@ -1836,6 +1835,9 @@ module z_support
             endif
             call set_star_type_from_history(xa(i))
             
+            print*, xa(i)% initial_mass, i_mass, ZAMS_EEP, ZAMS_HE_EEP
+
+
             offset = offset + ntrack_arr(i)
 
         end do  
@@ -1849,5 +1851,22 @@ module z_support
         !while allowing for differences due to precision errors
         y = abs(z1-z2)/MIN(z1,z2)
     end function
+
+    subroutine check_folder(name,ierr)
+        character(LEN=*), intent(in) :: name
+        integer, intent(out) :: ierr
+        character(LEN=512) :: cmd, filename
+        logical :: exists
+
+        ierr = 0
+        filename = trim(METISSE_DIR)//'/'//trim(name)
+        inquire(file=trim(filename), exist=exists) 
+        if (exists) return
+                
+        cmd = 'mkdir '//trim(filename)
+        call system(cmd,ierr)
+        if (ierr/=0) return
+    end subroutine
+
 
 end module z_support

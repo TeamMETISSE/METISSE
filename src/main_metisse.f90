@@ -9,7 +9,7 @@ program metisse_main
     use imf_support
     
     implicit none
-    integer:: ierr,i, io
+    integer:: ierr,i, io, n
     real(dp):: zpars(20)
     real(dp), allocatable :: mass_array(:)
 
@@ -23,10 +23,14 @@ program metisse_main
     call METISSE_zcnsts(initial_Z,zpars,ierr)
     if (ierr/=0 .or. code_error) STOP 'Fatal error: terminating METISSE'
     
+    
     ! sets remnant schmeme from SSE_input_controls
     call assign_commons_main()
         
-    allocate(mass_array(number_of_tracks))
+    ! number_of_tracks is read as real for user's ease, convert it to integer
+    n = nint(number_of_tracks)
+
+    allocate(mass_array(n))
     mass_array = 0.0
 
     if (read_mass_from_file) then
@@ -40,21 +44,21 @@ program metisse_main
             STOP 'Fatal error: terminating METISSE'
         endif
         
-        do i=1,number_of_tracks
+        do i=1,n
             read(io,*) mass_array(i)
         end do
         close(io)
         call free_iounit(io)
     else
-        if (number_of_tracks>1) then
+        if (n>1) then
             if (sampling_scheme=='Uniform') then
             
-                call sample_uniform(number_of_tracks,min_mass,max_mass,mass_array)
+                call sample_uniform(n,min_mass,max_mass,mass_array)
             elseif(sampling_scheme=='Kroupa2001') then
-                call sample_kroupa_imf(mass_array, number_of_tracks, min_mass, 0.5d0, max_mass)
+                call sample_kroupa_imf(mass_array, n, min_mass, 0.5d0, max_mass)
             else
                 print*, 'Error generating mass function: '
-                print*, 'number_of_tracks>1 but sampling_scheme is invalid'
+                print*, 'n>1 but sampling_scheme is invalid'
                 print*, 'Choose between Uniform and Kroupa2001'
                 STOP 'Fatal error: terminating METISSE'
             endif
@@ -63,13 +67,13 @@ program metisse_main
         endif
     endif
     
-    allocate(t_incomplete(number_of_tracks), t_notfound(number_of_tracks))
+    allocate(t_incomplete(n), t_notfound(n))
     t_notfound = 0.d0
     t_incomplete = 0.d0
     
     
     !evolve stars
-    do i = 1,number_of_tracks
+    do i = 1,n
         mass = mass_array(i)
         if (mass > Mcrit(9)% mass .or. mass< Mcrit(1)% mass) then
             t_notfound(i) = mass

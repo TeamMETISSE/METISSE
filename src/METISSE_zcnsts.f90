@@ -62,9 +62,9 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
 
         load_tracks = .true.
         
-        !path is relative to the executable
-        METISSE_DIR = '.'
-
+        !paths are relative to the executable
+        call getcwd(METISSE_DIR, ierr) 
+        
         !read default options first
         include 'defaults/metisse_defaults.inc'
 
@@ -394,6 +394,17 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
     
     ! for main, commons are assigned within the METISSE_main
     if (front_end > main) call assign_commons()
+
+    ! create output folders if they do not exist already 
+    ! and output files are to be written
+    if (write_output_to_file .and. front_end <= main) call check_folder('output',ierr)
+    if (write_eep_file) call check_folder('output_eep',ierr)
+
+    if (ierr/=0) then
+        print*, 'METISSE error: cannot create output folder.'
+        return
+    endif
+
     if (debug) print*, 'Finished in zcsnts'
 
         
