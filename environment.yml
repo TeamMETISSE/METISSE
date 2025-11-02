@@ -1,6 +1,7 @@
 name: docs-env
 channels:
   - conda-forge
+  - defaults
 dependencies:
   # Python version
   - python=3.12.10
@@ -22,6 +23,7 @@ dependencies:
   
   # Scientific stack
   - numpy
+  - pandas
 
   # pip included for any pip-only packages
   - pip
