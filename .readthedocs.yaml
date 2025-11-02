@@ -14,10 +14,7 @@ build:
     # rust: "1.70"
     # golang: "1.20"
   commands:
-    - echo "Building docs with sphinx-build"
-    - python -m pip install --upgrade pip setuptools wheel
-    - python -m pip install -e . || true   # optional: install package if you want imports to work
-    - sphinx-build -b html docs/source _build/html
+    - make -C docs html
     
 conda:
   environment: environment.yml
