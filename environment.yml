@@ -1,0 +1,21 @@
+name: docs-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - gfortran
+  - sphinx>=5,<8
+  - nbsphinx>=0.9
+  - jinja2<3.1
+  - nbconvert
+  - pandocfilters
+  - myst_parser==3.0.1
+  - sphinx_rtd_theme==2.0.0
+  - readthedocs-sphinx-search==0.3.2
+  - sphinx_copybutton
+  - lxml_html_clean
+  - pandoc<3.0.0
+  - ipykernel 
+  - jinja2<3.1
+  - numpy
+
