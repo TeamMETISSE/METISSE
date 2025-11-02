@@ -8,4 +8,4 @@ lxml_html_clean
 pandoc<3.0.0
 ipykernel 
 numpy
-
+gfortran
