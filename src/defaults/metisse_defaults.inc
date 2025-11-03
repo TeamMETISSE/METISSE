@@ -62,5 +62,5 @@
     ! It is important if input tracks do not contain this phase
     ! but can be used regardless.
 
-    construct_postagb_track = .true.
+    construct_postagb_track = .false.
 

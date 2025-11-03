@@ -8,10 +8,16 @@
 
   ! EVOLUTION CONTROLS
    
+    ! Initial metallicity
+    initial_Z = -1.0
+
+    ! Maximum age in Myrs
+    max_age = -1.0
+    
     ! There are two ways stellar mass values can be provided to METISSE:
 
     !1. `read_mass_from_file = .false.`
-    !Use `min_mass` to specify the lower limit, `max_mass` for upper limit and `number_of_tracks` to be evolved uniformly distributed in mass between the two limits.
+    !Use `min_mass` to specify the lower limit, `max_mass` for upper limit and `number_of_tracks` to be evolved distributed in mass between the two limits according to the `sampling_scheme`
     !To evolve just one star, specify `number_of_tracks = 1` and input mass value in `min_mass`. Ignore max_mass.
     !OR
     !2. `read_mass_from_file = .true.`
@@ -29,11 +35,11 @@
 
     min_mass = -1.0
     
-    ! Initial metallicity
-    initial_Z = -1.0
-
-    ! Maximum age in Myrs
-    max_age = -1.0   
+    !IMF sampling scheme
+    ! (1) `Uniform` = uniform distribution
+    ! (2) `Kroupa2001` = Kroupa, P., 2001 distribution
+    sampling_scheme = 'Uniform'
+    
 
   ! REMNANT CONTROLS
 

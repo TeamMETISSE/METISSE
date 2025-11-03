@@ -1,0 +1,39 @@
+name: docs-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # Python version
+  - python=3.12.10
+  
+  # Compilers for Fortran extensions
+  - gfortran
+  - gcc
+  
+  # Sphinx and extensions
+  - sphinx>=5,<8
+  - nbsphinx>=0.9
+  - jinja2<3.1
+  - nbconvert
+  - ipykernel
+  
+  # Pandoc for notebook conversion
+  - pandoc<3.0.0
+  - pandocfilters
+  
+  # Scientific stack
+  - numpy
+  - pandas
+  - matplotlib
+
+  # pip included for any pip-only packages
+  - pip
+
+  # pip-only packages
+  - pip:
+      - readthedocs-sphinx-search==0.3.2
+      - sphinx_copybutton
+      - lxml_html_clean
+      - sphinx_rtd_theme==2.0.0
+      - myst_parser==3.0.1
+

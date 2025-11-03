@@ -7,7 +7,7 @@ METISSE_test_dir=$(BASE_dir)/src/test
 FC=gfortran
 
 WARN= -Wno-tabs -Wno-maybe-uninitialized -fimplicit-none  -Wsurprising  -Waliasing -pedantic
-DEBUG= -g3 -O2 -fbacktrace -fcheck=all -fbounds-check
+DEBUG= -g2 -O2 -fbacktrace -fcheck=all -fbounds-check
 #-ffpe-trap=zero,overflow,underflow
 
 FFLAGS1= -ffree-form -fimplicit-none $(WARN) $(DEBUG)
@@ -17,27 +17,80 @@ FFLAGS2= -ffixed-form -fimplicit-none $(DEBUG)
 METISSE=metisse
 
 SRCE_main = main_metisse.f90
+OBJT_main = $(SRCE_main:.f90=.o)
+
+TEST=test
 
 SRCE_test = test_metisse.f90
+OBJT_test = $(SRCE_test:.f90=.o)
+
+# metisse as a library
+LIBMETISSE=libmetisse
 
 SRCE0 = \
-evolv_metisse.f90 assign_commons_main.f90 assign_commons_other.f90 \
-track_support.f90 z_support.f90 sse_support.f90 \
-remnant_support.f90 interp_support.f90 \
-METISSE_miscellaneous.f90 METISSE_zcnsts.f90 METISSE_star.f90 \
-METISSE_hrdiag.f90 METISSE_deltat.f90
+		evolv_metisse.f90 \
+		assign_commons_main.f90 \
+		assign_commons_other.f90 \
+		c_m_interface.f90 \
+		track_support.f90 \
+		imf_support.f90 \
+		z_support.f90 \
+		sse_support.f90 \
+		remnant_support.f90 \
+		interp_support.f90 \
+		METISSE_miscellaneous.f90 \
+		METISSE_zcnsts.f90 \
+		METISSE_star.f90 \
+		METISSE_hrdiag.f90 \
+		METISSE_deltat.f90
 
 SRCE00 = \
-assign_remnant.f hrdiag_remnant.f mrenv.f \
+		assign_remnant.f \
+		hrdiag_remnant.f \
+		mrenv.f 
 
+LIBSRCE = \
+		evolv_metisse.f90 \
+		assign_commons_main.f90 \
+		assign_commons_other.f90 \
+		track_support.f90 \
+		z_support.f90 \
+		sse_support.f90 \
+		remnant_support.f90 \
+		interp_support.f90 \
+		METISSE_miscellaneous.f90 \
+		METISSE_zcnsts.f90 \
+		METISSE_star.f90 \
+		METISSE_hrdiag.f90 \
+		METISSE_deltat.f90
 
-OBJT_main = $(SRCE_main:.f90=.o)
-OBJT_test = $(SRCE_test:.f90=.o)
+LIBSRCE1 = \
+	   METISSE_gntage.f90 \
+       METISSE_deltat.f90 \
+       METISSE_mlwind.f90 \
+       METISSE_hrdiag.f90 \
+       METISSE_star.f90 \
+       METISSE_zcnsts.f90 \
+       track_support.f90 \
+       z_support.f90 \
+       sse_support.f90  \
+       remnant_support.f90 \
+       interp_support.f90 \
+       comenv_lambda.f90 \
+       METISSE_miscellaneous.f90 \
+	   evolv_metisse.f90 \
+	   assign_commons_other.f90
+	
 OBJT0 = $(SRCE0:.f90=.o)
 OBJT00 = $(SRCE00:.f=.o)
+LIBOBJ = $(LIBSRCE:.f90=.o)
 	
 track_support.o: $(METISSE_src_dir)/track_support.f90
-z_support.o: $(METISSE_src_dir)/z_support.f90 track_support.o
+
+c_m_interface.o: $(METISSE_src_dir)/c_m_interface.f90
+
+imf_support.o: $(METISSE_src_dir)/imf_support.f90 track_support.o
+z_support.o: $(METISSE_src_dir)/z_support.f90 track_support.o c_m_interface.o
 interp_support.o: $(METISSE_src_dir)/interp_support.f90 track_support.o
 sse_support.o: $(METISSE_src_dir)/sse_support.f90 track_support.o
 remnant_support.o: $(METISSE_src_dir)/remnant_support.f90 track_support.o sse_support.o
@@ -48,17 +101,16 @@ comenv_lambda.o: $(METISSE_src_dir)/comenv_lambda.f90 track_support.o
 
 METISSE_mlwind.o: $(METISSE_src_dir)/METISSE_mlwind.f90 track_support.o
 METISSE_deltat.o: $(METISSE_src_dir)/METISSE_deltat.f90 track_support.o
-METISSE_zcnsts.o: $(METISSE_src_dir)/METISSE_zcnsts.f90 track_support.o z_support.o
+METISSE_zcnsts.o: $(METISSE_src_dir)/METISSE_zcnsts.f90 track_support.o z_support.o c_m_interface.o
 METISSE_star.o: $(METISSE_src_dir)/METISSE_star.f90 track_support.o interp_support.o sse_support.o
 METISSE_hrdiag.o: $(METISSE_src_dir)/METISSE_hrdiag.f90 track_support.o interp_support.o sse_support.o remnant_support.o
 METISSE_gntage.o: $(METISSE_src_dir)/METISSE_gntage.f90 track_support.o interp_support.o
 
-evolv_metisse.o: $(METISSE_src_dir)/evolv_metisse.f90 track_support.o sse_support.o
-main_metisse.o: $(METISSE_src_dir)/main_metisse.f90 track_support.o z_support.o
 assign_commons_main.o: $(METISSE_src_dir)/assign_commons_main.f90 track_support.o remnant_support.o
+evolv_metisse.o: $(METISSE_src_dir)/evolv_metisse.f90 track_support.o sse_support.o
+main_metisse.o: $(METISSE_src_dir)/main_metisse.f90 track_support.o z_support.o imf_support.o
 
-test_metisse.o: $(METISSE_test_dir)/test_metisse.f90 track_support.o z_support.o
-
+test_metisse.o: $(METISSE_test_dir)/test_metisse.f90 track_support.o z_support.o imf_support.o
 
 
 %.o : $(METISSE_src_dir)/%.f90
@@ -70,18 +122,21 @@ test_metisse.o: $(METISSE_test_dir)/test_metisse.f90 track_support.o z_support.o
 %.o : $(METISSE_test_dir)/%.f90
 	$(FC) $(FFLAGS1) -c $<
 
-$(METISSE): $(OBJT_main) $(OBJT0) $(OBJT00)
-	$(FC) $(FFLAGS1) -o $(BASE_dir)/$(METISSE) $^
-	
 all: $(METISSE)
 
-TEST=test
+$(METISSE): $(OBJT_main) $(OBJT0) $(OBJT00)
+	$(FC) $(FFLAGS1) -o $(BASE_dir)/$(METISSE) $^
 
 $(TEST): $(OBJT_test) $(OBJT0) $(OBJT00)
 	$(FC) $(FFLAGS1) -o $(BASE_dir)/$(TEST) $^
+	
+$(LIBMETISSE): $(LIBOBJ) $(OBJT00)
+	# $(FC) $(FFLAGS1) -c $^
+	ar rc $(BASE_dir)/$(LIBMETISSE).a *.o
 
 clean:
 	rm -f $(BASE_dir)/$(METISSE)
 	rm -f $(BASE_dir)/$(TEST)
+	rm -f $(BASE_dir)/$(LIBMETISSE).a
 	rm -f *.mod *.o
 

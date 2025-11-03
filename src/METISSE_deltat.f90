@@ -14,8 +14,13 @@
     
         idd = 1
         if(present(id)) idd = id
-        t => tarr(idd)
-    
+        if(tarr(idd)% star_type == unknown)then
+            dt = 1.0d+10
+            dtr = 1.0d+10
+            return
+        else
+            t => tarr(idd)
+        endif
         dtr = -1.d0
         dt = -1.d0
         !Base new time scale for changes in radius & mass on stellar type.

@@ -7,7 +7,7 @@ subroutine assign_commons_main()
     REAL(dp) :: pts1,pts2,pts3
     COMMON /POINTS/ pts1,pts2,pts3
         
-    if (front_end <= main) then
+    if (front_end <= main .or. front_end == AMUSE) then
        if (WD_mass_scheme == 'Mestel') then
             wd_flag = Mestel
         elseif (WD_mass_scheme == 'Modified_mestel') then

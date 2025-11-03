@@ -6,9 +6,10 @@ program test_metisse
 
     use track_support
     use z_support
+    use imf_support
 
     implicit none
-    integer:: ierr,i, io
+    integer:: ierr,i, io, n
     real(dp):: zpars(20)
     real(dp), allocatable :: mass_array(:)
 
@@ -25,13 +26,14 @@ program test_metisse
     ! sets remnant schmeme from SSE_input_controls
     call assign_commons_main()
         
-    
-    allocate(mass_array(number_of_tracks))
-    call uniform_distribution(number_of_tracks,min_mass,max_mass,mass_array)
+    ! number_of_tracks is read as real for user's ease, convert it to integer
+    n = nint(number_of_tracks)
+    allocate(mass_array(n))
+    call sample_uniform(n,min_mass,max_mass,mass_array)
     
 
     !evolve stars
-    do i = 1,number_of_tracks
+    do i = 1,n
         mass = mass_array(i)
         if (verbose) write(*,'(a6, i9, a15,f7.3)') "count", i, "input mass = ", mass
         call allocate_track(1,mass)

@@ -3,8 +3,6 @@
     use sse_support
     implicit none
     
-    logical :: end_of_file, debug_rem
-
     !flags to be used while making decision for which method to use
     !for calculating properties of remnnants: neutron stars and black holes
     integer, parameter :: original_SSE = 0
@@ -26,110 +24,70 @@
     integer :: wd_flag = 0
     integer :: ec_flag = 0
     integer :: if_flag = 0
+    logical :: debug_rem = .false.
+
     contains
-    
-    logical function check_remnant_phase(pars,mc_max)
-        type(star_parameters) :: pars
-        real(dp) :: mc_max,mc_threshold
 
-        debug_rem = .false.
-        check_remnant_phase = .false.
-        
-        mc_threshold = pars% core_mass
-        
-        if (pars% phase <= TPAGB) then       !without envelope loss
-            !mc = MAX(mc_max,mc_threshold)
-            !mc_max = MIN(pars% mass,mc_max)
-            mc_threshold = pars% McCO
-        elseif (pars% phase >= He_MS) then
-            mc_threshold = pars% core_mass
-        else
-            return
-        endif
+    subroutine check_early_end(t,dt_hold,id)
+        real(dp) :: dt_hold
+        type(track), pointer :: t
+        integer :: id
 
-        if (mc_max<=0.d0 .or. mc_threshold<=0.d0) then
-            write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",mc_max, mc_threshold
-            code_error = .true.
-            !assigning an ad-hoc non-zero core mass so the code doesn't break
-            !TODO: fix very low-mass stars that form hewd and may get caught in this
-            mc_threshold = 0.7*pars% McHe
-            mc_max = mc_threshold
-        endif
-        
-        if(mc_threshold>=mc_max .or. abs(mc_max-mc_threshold)<tiny .or. end_of_file)then
-            !mc = MIN(mc_max,mc_threshold)
-            pars% core_mass = mc_threshold
-            pars% age_old = pars% age
-            check_remnant_phase = .true.
-            if (debug_rem) then
-                print*, "check_remnant_phase is true"
-                print*, "mass, core_mass, McCO, mc_max"
-                print*, pars% mass, pars% core_mass, pars% McCO, mc_max
-            end if
-        endif
-        
-        end function check_remnant_phase
-        
-        subroutine check_early_end(t,dt_hold,id)
-            real(dp) :: dt_hold
-            type(track), pointer :: t
-            integer :: id
+        if (t% ierr/=0) return
 
-            if (t% ierr/=0) return
-
-            if ((t% initial_mass.gt.very_low_mass_limit).and. (dt_hold.le.t% pars% dt).and.(t% reju.eqv. .false.)) then
-                write(UNIT=err_unit,fmt=*) 'WARNING: Early end of file at phase, mass and id',&
-                t% pars% phase,t% initial_mass,id,t% reju
-                t% ierr = -1
+        if ((t% initial_mass.gt.very_low_mass_limit).and. (dt_hold.le.t% pars% dt).and.(t% reju.eqv. .false.)) then
+            write(UNIT=err_unit,fmt=*) 'WARNING: Early end of file at phase, mass and id',&
+            t% pars% phase,t% initial_mass,id,t% reju
+            t% ierr = -1
 !                    call stop_code
-            endif
-                
-        end subroutine check_early_end
-                
-        
-        subroutine assign_remnant_METISSE(pars, mcbagb)
-            implicit none
-            type(star_parameters) :: pars
-            real(dp) :: Mcbagb
+        endif
+            
+    end subroutine check_early_end
+            
+    
+    subroutine assign_remnant_METISSE(pars, mcbagb)
+        implicit none
+        type(star_parameters) :: pars
+        real(dp) :: Mcbagb
 
-            !Mup_core, Mec_core are calculated in set_zparmeters routine of zfuncs
-            if(pars% core_mass < M_ch)then
-                if(mcbagb< Mup_core)then
-                    pars% phase = CO_WD        !Zero-age Carbon/Oxygen White Dwarf
+        !Mup_core, Mec_core are calculated in set_zparmeters routine of zfuncs
+        if(pars% core_mass < M_ch)then
+            if(mcbagb< Mup_core)then
+                pars% phase = CO_WD        !Zero-age Carbon/Oxygen White Dwarf
+            else
+                if (ec_flag>0 .and. pars% McCO >= 1.372)then
+                    !electron-capture collapse of an ONe core
+                    !1.372<= mc< 1.44
+                    pars% phase = NS
+                    call initialize_ECSNe(pars)
+                    if (debug_rem) print*,"ECSNe I: Mc< Mch, Mcbagb>Mup"
                 else
-                    if (ec_flag>0 .and. pars% McCO >= 1.372)then
-                     !electron-capture collapse of an ONe core
-                     !1.372<= mc< 1.44
-                        pars% phase = NS
-                        call initialize_ECSNe(pars)
-                        if (debug_rem) print*,"ECSNe I: Mc< Mch, Mcbagb>Mup"
-                    else
-                        pars% phase = ONeWD    !Zero-age Oxygen/Neon White Dwarf
-                    endif
+                    pars% phase = ONeWD    !Zero-age Oxygen/Neon White Dwarf
                 endif
-            else !(mc>mch)
-                !supernova 
-                if(Mcbagb < Mup_core)then
-                    ! Star is not massive enough to ignite C burning.
-                    ! so no remnant is left after the SN
-                    pars% phase = Massless_REM
-                    call initialize_massless_rem(pars)
+            endif
+        else !(mc>mch)
+            !supernova 
+            if(Mcbagb < Mup_core)then
+                ! Star is not massive enough to ignite C burning.
+                ! so no remnant is left after the SN
+                pars% phase = Massless_REM
+                call initialize_massless_rem(pars)
 
-                else if(Mcbagb>= Mup_core .and. Mcbagb<= Mec_core)then
-                    !Check for an electron-capture collapse of an ONe core.
-                    if(ec_flag>0) then
-                        pars% phase = NS
-                        call initialize_ECSNe(pars)
-                        if (debug_rem) print*,"ECSNe II: Mc> Mch, Mup< Mbagb< Mec"
-                    else
-                        call check_ns_bh(pars)
-                    endif
+            else if(Mcbagb>= Mup_core .and. Mcbagb<= Mec_core)then
+                !Check for an electron-capture collapse of an ONe core.
+                if(ec_flag>0) then
+                    pars% phase = NS
+                    call initialize_ECSNe(pars)
+                    if (debug_rem) print*,"ECSNe II: Mc> Mch, Mup< Mbagb< Mec"
                 else
                     call check_ns_bh(pars)
                 endif
+            else
+                call check_ns_bh(pars)
             endif
-        if (debug_rem .and. pars% phase>9) print*,"In remnant phase", phase_label(pars% phase+1)," , mass", pars% mass
-        
+        endif
+        if (debug_rem .and. pars% phase>9) print*,"Assigned remnant phase ", phase_label(pars% phase+1)
+    
     end subroutine assign_remnant_METISSE
 
     subroutine post_agb_parameters(t,old_phase)
@@ -227,7 +185,7 @@
         pars% age = 0.0
 
         call evolve_white_dwarf(pars)
-        if (debug_rem) print*, "Remnant phase = ", phase_label(pars% phase+1), ", mass =", pars% mass
+        if (debug_rem) print*, phase_label(pars% phase+1), ", mass =", pars% mass
     end subroutine
 
     subroutine check_IFMR(mass, mc)
@@ -253,7 +211,7 @@
         if (debug_rem) print*,"In CCSNe section",pars% core_mass,pars% mass
         pars% age = 0.0
         Mrem = calculate_NSBH_mass(pars% core_mass,pars% mass)
-        if(debug_rem) print*, "Mrem= ", Mrem
+        if(debug_rem) print*, "Mrem = ", Mrem
 
         if(Mrem <= Max_NS_mass)then
             pars% phase = NS       !Zero-age Neutron star
@@ -265,7 +223,7 @@
             call evolve_black_hole(pars)
 
         endif
-        if (debug_rem) print*, "NS/BH mass from", trim(BHNS_mass_scheme),"scheme = ",pars% mass
+        if (debug_rem) print*, "NS/BH mass from ", trim(BHNS_mass_scheme)," scheme = ",pars% mass
     end subroutine
 
     real(dp) function calculate_NSBH_mass(Mc,Mt) result(Mrem)

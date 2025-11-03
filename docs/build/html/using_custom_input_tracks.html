@@ -5,9 +5,10 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Using custom input tracks &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=48bd8eb9" />
 
   
   <!--[if lt IE 9]>
@@ -19,6 +20,9 @@
         <script src="_static/documentation_options.js?v=2709fde1"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,8 +38,9 @@
 
           
           
-          <a href="index.html" class="icon icon-home">
-            METISSE
+          <a href="index.html">
+            
+              <img src="_static/metisse_sidebar.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,7 +50,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
@@ -62,6 +69,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -81,7 +91,6 @@
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Using custom input tracks</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/using_custom_input_tracks.md.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -91,7 +100,12 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="using-custom-input-tracks">
 <h1>Using custom input tracks<a class="headerlink" href="#using-custom-input-tracks" title="Link to this heading"></a></h1>
-<p>METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirement is that these tracks should converted to the equivalent evolutionary point (EEP) format before use in METISSE. In EEP format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal-age main sequence (TAMS) occur at the same line number across each file.
+<p>METISSE can use any set of stellar tracks computed with different stellar evolution codes. The only requirements are:</p>
+<ol class="arabic simple">
+<li><p>The tracks should be converted to the equivalent evolutionary point (EEP) format before use in METISSE.</p></li>
+<li><p>The tracks should contain the columns listed as <a class="reference internal" href="#essential-columns"><span class="std std-ref">essential columns</span></a>.</p></li>
+</ol>
+<p>In EEP format, significant evolutionary points such as the zero-age main sequence (ZAMS) or terminal-age main sequence (TAMS) occur at the same line number across each file.
 Stellar tracks can be easily converted to EEP format using code packages such as <a class="reference external" href="https://github.com/aarondotter/iso">ISO</a>. Important details about these tracks, such as their metallicity value, file structure, and names of certain major columns should also be provided through the inlists <code class="docutils literal notranslate"><span class="pre">metallicity_controls</span></code> and <code class="docutils literal notranslate"><span class="pre">format_controls</span></code>.</p>
 <section id="metallicity-controls">
 <h2>1.&nbsp;&nbsp;Metallicity controls<a class="headerlink" href="#metallicity-controls" title="Link to this heading"></a></h2>
@@ -124,9 +138,9 @@ Stellar tracks can be easily converted to EEP format using code packages such as
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">eep_tracks_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">Z_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
-<span class="n">format_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">eep_tracks_dir = &#39;&#39;</span>
+<span class="go">Z_files = -1.0</span>
+<span class="go">format_file = &#39;&#39;</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -141,7 +155,7 @@ Stellar tracks can be easily converted to EEP format using code packages such as
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">Y_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Y_files = -1.0</span>
 </pre></div>
 </div>
 <p>METISSE identifies specific critical masses, referred to as Z-parameters or mass cutoffs. These critical masses mark the point where certain physical properties begin to manifest in stellar tracks (refer to appendix A of <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract">Agrawal et al. 2020</a> for more details).
@@ -174,12 +188,12 @@ However, if certain columns are missing from the input tracks or if the Z-parame
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">Mhook</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
-<span class="n">Mhef</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
-<span class="n">Mfgb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
-<span class="n">Mup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
-<span class="n">Mec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span>
-<span class="n">Mextra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">1.0</span><span class="w">   </span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Mhook = -1.0</span>
+<span class="go">Mhef = -1.0</span>
+<span class="go">Mfgb = -1.0</span>
+<span class="go">Mup = -1.0</span>
+<span class="go">Mec = -1.0</span>
+<span class="go">Mextra = -1.0   </span>
 </pre></div>
 </div>
 </section>
@@ -217,12 +231,12 @@ While different sets of EEP tracks can share the same format file, users should 
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">read_eep_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
-<span class="n">file_extension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">header_location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">extra_char</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">column_name_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">total_cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">read_eep_files = .false.</span>
+<span class="go">file_extension = &#39;&#39;</span>
+<span class="go">header_location = -1</span>
+<span class="go">extra_char = &#39;&#39;</span>
+<span class="go">column_name_file = &#39;&#39;</span>
+<span class="go">total_cols = -1</span>
 </pre></div>
 </div>
 </section>
@@ -264,14 +278,14 @@ Make sure that the units are correct.
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">age_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">mass_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">log_L_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">Lum_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">log_R_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">Radius_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">he_core_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">co_core_mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">age_colname = &#39;&#39;</span>
+<span class="go">mass_colname = &#39;&#39;</span>
+<span class="go">log_L_colname = &#39;&#39;</span>
+<span class="go">Lum_colname = &#39;&#39;</span>
+<span class="go">log_R_colname = &#39;&#39;</span>
+<span class="go">Radius_colname = &#39;&#39;</span>
+<span class="go">he_core_mass = &#39;&#39;</span>
+<span class="go">co_core_mass = &#39;&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -303,11 +317,11 @@ METISSE will raise an error but not stop if these column names are not provided.
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">he_core_radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">    </span>
-<span class="n">co_core_radius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">mass_conv_envelope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">radius_conv_envelope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">binding_energy_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">he_core_radius = &#39;&#39;    </span>
+<span class="go">co_core_radius = &#39;&#39;</span>
+<span class="go">mass_conv_envelope = &#39;&#39;</span>
+<span class="go">radius_conv_envelope = &#39;&#39;</span>
+<span class="go">binding_energy_colname = &#39;&#39;</span>
 </pre></div>
 </div>
 <p>The following columns are used in determining various Z-parameters.
@@ -339,12 +353,12 @@ If these are not provided, then user-defined values for Z-parameters (through th
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">log_T_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">Teff_colname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">log_Tc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">he4_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">c12_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
-<span class="n">o16_mass_frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">log_T_colname = &#39;&#39;</span>
+<span class="go">Teff_colname = &#39;&#39;</span>
+<span class="go">log_Tc = &#39;&#39;</span>
+<span class="go">he4_mass_frac = &#39;&#39;</span>
+<span class="go">c12_mass_frac = &#39;&#39;</span>
+<span class="go">o16_mass_frac = &#39;&#39;</span>
 </pre></div>
 </div>
 </section>
@@ -409,24 +423,24 @@ From a set of input models, METISSE needs to know the locations of key EEPs in o
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">PreMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">ZAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">IAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">TAMS_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">BGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">cHeIgnition_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">cHeBurn_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">TA_cHeB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">TPAGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">cCBurn_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">post_AGB_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">PreMS_EEP = -1</span>
+<span class="go">ZAMS_EEP = -1</span>
+<span class="go">IAMS_EEP = -1</span>
+<span class="go">TAMS_EEP = -1</span>
+<span class="go">BGB_EEP = -1</span>
+<span class="go">cHeIgnition_EEP = -1</span>
+<span class="go">cHeBurn_EEP = -1</span>
+<span class="go">TA_cHeB_EEP = -1</span>
+<span class="go">TPAGB_EEP = -1</span>
+<span class="go">cCBurn_EEP = -1</span>
+<span class="go">post_AGB_EEP = -1</span>
 
-<span class="n">Extra_EEP1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">Extra_EEP2</span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">Extra_EEP3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="go">Extra_EEP1 = -1</span>
+<span class="go">Extra_EEP2= -1</span>
+<span class="go">Extra_EEP3 = -1</span>
 
-<span class="n">Initial_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">Final_EEP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="go">Initial_EEP = -1</span>
+<span class="go">Final_EEP = -1</span>
 </pre></div>
 </div>
 <p>When working with naked helium star tracks, all the above-mentioned format file options can be used to specify the file and the column details. However, only the following EEPs are used to assign naked helium star phases to the interpolated tracks:</p>
@@ -495,10 +509,10 @@ If any of the neighbouring tracks is incomplete, the interpolated track is also 
 </tr>
 </tbody>
 </table>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">low_mass_final_eep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">high_mass_final_eep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
-<span class="n">fix_track</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
-<span class="n">lookup_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">low_mass_final_eep = -1</span>
+<span class="go">high_mass_final_eep = -1</span>
+<span class="go">fix_track = .true.</span>
+<span class="go">lookup_index = 1.0</span>
 </pre></div>
 </div>
 <p>When evaluating the completeness of input tracks for naked helium stars, only the parameters <code class="docutils literal notranslate"><span class="pre">low_mass_final_eep</span></code> and <code class="docutils literal notranslate"><span class="pre">high_mass_final_eep</span></code> are considered and saved internally under helium-specific names.
@@ -518,7 +532,9 @@ The options <code class="docutils literal notranslate"><span class="pre">fix_tra
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+    <p>&#169; Copyright 2024, Poojan Agrawal.
+      <span class="lastupdated">Last updated on 2025 Nov 03 at 11:47:09 UTC.
+      </span></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
