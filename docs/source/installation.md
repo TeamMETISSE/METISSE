@@ -64,11 +64,11 @@ METISSE also supports a range of pre-published tracks, for example:
 
 1. **MIST** [(Choi et al., 2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C/abstract) models-
 
- EEP Tracks from MIST dataset can be downloaded from the [website](https://waps.cfa.harvard.edu/MIST/model_grids.html), while the corresponding metallicity and format files needed by METISSE are available from [this page](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/MIST).  
+    EEP Tracks from MIST dataset can be downloaded from the [website](https://waps.cfa.harvard.edu/MIST/model_grids.html), while the corresponding metallicity and format files needed by METISSE are available from [this page](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/MIST).  
 
 2. **BoOST** [(Szécsi et al., 2022)](https://ui.adsabs.harvard.edu/abs/2022A%26A...658A.125S/abstract)-
 
-Stellar model grids for the BoOST dataset, computed with the Bonn Code and coverted to EEP-format, are available [here](http://galaxy.asu.cas.cz/page/boost). The helper files required for METISSE are available [here](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/BoOST).
+    Stellar model grids for the BoOST dataset, computed with the Bonn Code and coverted to EEP-format, are available [here](http://galaxy.asu.cas.cz/page/boost). The helper files required for METISSE are available [here](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/BoOST).
 
 The provided metallicity file examples are configured for solar metallicity, but can be easily modified to work with eep tracks of other metallicities from the corresponding set. For more details, see [metallicity controls](using_custom_input_tracks.md#metallicity-controls). 
 
