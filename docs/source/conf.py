@@ -106,7 +106,7 @@ html_css_files = [
 # set default highlighting language
 highlight_language = 'console'
 
-nbsphinx_execute = 'always' 
+nbsphinx_execute = 'never' 
 nbsphinx_allow_errors = True
 exclude_patterns = ['**.ipynb_checkpoints']
 
