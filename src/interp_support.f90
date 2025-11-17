@@ -790,6 +790,7 @@ module interp_support
             allocate(min_eeps(1))
             min_eeps = t% eep(t% neep)
             if (debug)write(*,*)"age > t%neep",age, t% ntrack, t%neep, t% eep(t% neep)
+            return
         endif
                 
         last_age = 0.d0
