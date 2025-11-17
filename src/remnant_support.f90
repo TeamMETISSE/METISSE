@@ -27,7 +27,7 @@
     logical :: debug_rem = .false.
 
     contains
-
+    
     subroutine check_early_end(t,dt_hold,id)
         real(dp) :: dt_hold
         type(track), pointer :: t
@@ -90,39 +90,24 @@
     
     end subroutine assign_remnant_METISSE
 
-    subroutine post_agb_parameters(t,old_phase)
-        integer, intent(in) :: old_phase
+    subroutine post_agb_parameters(t)
         type(track), pointer :: t
 
         ! If a star becomes a WD, and construct_postagb_track is true,
         ! then we use post_agb_parameters and evolve_after_agb
         ! to mimic post-agb evolution of star on HRD until WD cooling phase is reached.
-        ! However naked helium stars don't go through this process
-        ! and should directly jump to WD cooling track.
-        ! So we use kw/old_phase as a check.
         
-        !first check if the remnant is a WD
-        if (t% pars% phase>HeWD .and. t% pars% phase<=ONeWD) then
-            if (old_phase <=TPAGB .and. construct_postagb_track) then
-                ! contruct the track
-                t% agb% phase_wd = t% pars% phase
-                t% pars% phase = TPAGB
-                t% post_agb = .true.
-                t% pars% age_old = 0.0
+        t% agb% phase_wd = t% pars% phase
+        t% pars% phase = TPAGB
+        t% post_agb = .true.
+        t% pars% age_old = 0.0
 
-                t% agb% tini = t% pars% age
-                t% agb% lum = t% pars% luminosity
-                t% agb% radius = t% pars% radius
-                t% agb% mass = t% pars% mass
-                call evolve_after_agb(t)
-                if (debug_rem) print*, "In post-agb phase, mass = ", t% pars% mass
-    !            print*,t% pars% luminosity, t% pars% radius
-            else
-                !jump to the WD cooling track
-                t% zams_mass = t% pars% mass
-                call initialize_white_dwarf(t% pars)
-            endif
-        endif
+        t% agb% tini = t% pars% age
+        t% agb% lum = t% pars% luminosity
+        t% agb% radius = t% pars% radius
+        t% agb% mass = t% pars% mass
+        call evolve_after_agb(t)
+        if (debug_rem) print*, "In post-agb phase, mass = ", t% pars% mass
         
     end subroutine post_agb_parameters
 
@@ -154,6 +139,7 @@
             t% pars% radius = alfa* r3 + beta* t% agb% radius
             t% pars% luminosity = alfa* 0.9*t% agb% lum + beta*t% agb% lum
             t% pars% extra = 1
+            ! these live in mlwind now
 !            t% pars% mass = alfa* mass_wd + beta*t% agb% mass
 !            t% pars% dms = (t% pars% mass-m0)/(dt*1.0d+06)
         else
@@ -170,9 +156,7 @@
             t% pars% age_old = t% pars% age
             t% pars% phase = t% agb% phase_wd
             t% zams_mass = t% pars% mass
-!            call initialize_white_dwarf(t% pars)
         endif
-!        print*, 'mass',t% pars% core_mass,t% pars% mass
     end subroutine
 
     subroutine initialize_white_dwarf(pars)
@@ -428,6 +412,24 @@
         pars% radius= 1.4d-05
     end subroutine
     
+    subroutine initialize_SSE_helium_star(t,HeI_time)
+        type(track), pointer, intent(inout) :: t
+        real(dp) :: HeI_time, HeB_time
+
+        call calculate_SSE_He_timescales(t)
+        
+        if (t% pars% phase == He_MS) then
+            HeB_time = t% times(4)-t% times(3)
+            t% pars% age = t% MS_time*((t% pars% age- HeI_time)/HeB_time)
+        else
+            t% pars% age = He_GB_age(t% pars% core_mass,t% times(8), &
+                            t% times(9),t% He_pars% D, t% He_pars% Mx)
+            t% pars% age = MAX(t% pars% age,t% MS_time)
+        endif
+        
+    end subroutine
+    
+    
     subroutine assign_stripped_star_phase(t,HeI_time)
     
         type(track), pointer :: t
@@ -443,13 +445,11 @@
         t% pars% age_old = t% pars% age
 
         select case(t% pars% phase)
-            case(MS:RGB)   !MS,HG or RGB
-            !ideally MS or Hg shouldn't directly jump to He_MS
-            !There should be something like a He_PreMS
+            case(low_mass_MS:RGB)   !MS,HG or RGB
                 if(t% zams_mass< Mhef)then
                     t% pars% phase = HeWD      !Zero-age helium white dwarf
+                    t% zams_mass = t% pars% mass
                     t% pars% core_mass = t% pars% mass
-!                    print*, 'hewd',t% pars% mass,Mhef
                 else
                     t% pars% phase = He_MS       !Zero-age helium star
                     t% pars% core_mass = 0.d0
@@ -470,25 +470,11 @@
                 t% pars% mass = t% pars% core_mass
                 t% pars% McHe = t% pars% mass
                 t% pars% core_mass = t% pars% McCO
+            case(TPAGB)
+                ! TPAGB star becomes a CO-WD/ONe WD upon losing envelope
+                t% pars% core_mass = t% pars% mass
+                
         end select
-        
-    end subroutine
-    
-    
-    subroutine initialize_SSE_helium_star(t,HeI_time)
-        type(track), pointer, intent(inout) :: t
-        real(dp) :: HeI_time, HeB_time
-
-        call calculate_SSE_He_timescales(t)
-        
-        if (t% pars% phase == He_MS) then
-            HeB_time = t% times(4)-t% times(3)
-            t% pars% age = t% MS_time*((t% pars% age- HeI_time)/HeB_time)
-        else
-            t% pars% age = He_GB_age(t% pars% core_mass,t% times(8), &
-                            t% times(9),t% He_pars% D, t% He_pars% Mx)
-            t% pars% age = MAX(t% pars% age,t% MS_time)
-        endif
         
     end subroutine
 
@@ -497,10 +483,6 @@
 
     real(dp) :: rg,tau,McHeI
     logical :: debug
-
-    ! This is to prevent re-assigning of HeWD to HeMS phase
-    ! if this function is called immediately after assign_stripped_star_phase
-    if(t% pars% phase == HeWD) return
 
     debug = .false.
     if (debug) print*,"In evolve_after_envelope_loss: phase age",t% pars% phase, t% pars% age,t% ms_time,t% zams_mass
