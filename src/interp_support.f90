@@ -6,7 +6,7 @@ module interp_support
     integer, parameter:: linear = 1
     integer, parameter:: Steffen1990 = 2
     !integer, parameter:: extrapolation = 3
-    logical:: debug_mass
+    logical:: debug_mass, debug_age
 
     contains
 
@@ -617,22 +617,20 @@ module interp_support
         integer:: j, k, mlo, mhi, pass, n_pass
         
         real(dp), allocatable:: new_line(:,:)
-        integer, allocatable:: min_eeps(:)
+        integer, allocatable:: nbr_eeps(:)
 
-        logical:: debug
+        debug_age = .false.
+!         if (t% is_he_track) debug_age = .true.
+!        if (t% pars% phase >= 4 .and. (present(icolumn).eqv..false.)) debug_age = .true.
 
-        debug = .false.
-!         if (t% is_he_track) debug = .true.
-!        if (t% pars% phase >= 4 .and. (present(icolumn).eqv..false.)) debug = .true.
-
-        if (debug) print*,"in interpolate age",t% pars% phase
+        if (debug_age) print*,"in interpolate age",t% pars% phase
         dx = 0d0; alfa = 0d0; beta = 0d0; x = 0d0; y = 0d0
         jstart = 1
         jend = t% ncol
         if (present(icolumn)) then
             jstart = icolumn
             jend = icolumn
-            if (debug) print*,"only interpolating in column number",icolumn
+            if (debug_age) print*,"only interpolating in column number",icolumn
         endif
         
         allocate (new_line(t% ncol, 1))
@@ -656,17 +654,17 @@ module interp_support
                 if (t% is_he_track) age_col = i_he_age
             endif
             
-            call find_nearest_eeps(t, min_eeps, age, age_col)
+            call find_neighboring_eeps(t, nbr_eeps, age, age_col)
 
-            mlo = minval(min_eeps)
-            mhi = maxval(min_eeps)
+            mlo = minval(nbr_eeps)
+            mhi = maxval(nbr_eeps)
 
-            if (debug) print*, 'pass', n_pass, pass, age_col, age, t% pars% phase
-            if (debug) print*,"neighbouring_eeps", min_eeps
-!            if (debug) print*,"ages", t% tr(age_col, mlo:mhi)
+            if (debug_age) print*, 'pass', n_pass, pass, age_col, age, t% pars% phase
+            if (debug_age) print*,"neighbouring_eeps", nbr_eeps
+!            if (debug_age) print*,"ages", t% tr(age_col, mlo:mhi)
 
             if (mhi == mlo) then
-                if (debug) print*, "no interp in age needed"
+                if (debug_age) print*, "no interp in age needed"
                 do j = jstart, jend
                     if (pass == 2) then
                         ! check if it is core-related quantity
@@ -679,7 +677,7 @@ module interp_support
                 !linear interpolation
                 alfa = (age-t% tr(age_col, mlo))/(t% tr(age_col, mhi) - t% tr(age_col, mlo))
                 beta = 1d0-alfa
-                if (debug) print*, "doing linear interp in age",alfa, age, t% tr(age_col, mlo), t% tr(age_col, mhi)
+                if (debug_age) print*, "doing linear interp in age",alfa, age, t% tr(age_col, mlo), t% tr(age_col, mhi)
 
                 do j = jstart, jend
                     if (pass == 2) then
@@ -696,11 +694,11 @@ module interp_support
                         return
                     endif
                 end do
-                if (debug) print*, "ending linear interp in age"
+                if (debug_age) print*, "ending linear interp in age"
 
             else
                 ! currently only linear interpolation is used
-                if (debug) print*, "doing cubic interp in age"
+                if (debug_age) print*, "doing cubic interp in age"
 
                 x = t% tr(age_col, mlo:mhi)
                 dx = new_line(age_col, 1) - x(2)
@@ -722,7 +720,7 @@ module interp_support
                     new_line(j, 1) = y(2) + dx*(f(1) + dx*(f(2) + dx*f(3)))
                 enddo
             endif
-            if (allocated(min_eeps)) deallocate(min_eeps)
+            if (allocated(nbr_eeps)) deallocate(nbr_eeps)
         end do
                     
         if (present(icolumn)) then
@@ -736,7 +734,7 @@ module interp_support
             write(UNIT = err_unit, fmt=*)"METISSE error: mass < 0 in interpolate age",input_age, t% pars% phase
 !            call stop_code(err_unit)
         endif
-        if (debug) print*, 'exiting interpolate_age'
+        if (debug_age) print*, 'exiting interpolate_age'
         
     end subroutine interpolate_age
     
@@ -762,95 +760,93 @@ module interp_support
     end function check_core_quant
 
 
-    subroutine find_nearest_eeps(t, min_eeps, age, age_col)
+    subroutine find_neighboring_eeps(t, nbr_eeps, age, age_col)
         implicit none
         type(track), pointer:: t
-        integer, allocatable, intent(out):: min_eeps(:)
+        integer, allocatable, intent(out):: nbr_eeps(:)
         real(dp), intent(in):: age
         integer:: i, j, len_eep, min_index, age_col, initial_eep
         real(dp), allocatable:: age_list(:)
         real(dp):: last_age
-        logical:: debug
-        
-        debug =  .false.
-        !Todo: min_eeps-> nbr_eeps
-!         if (t% is_he_track) debug = .true.
+
+!         if (t% is_he_track) debug_age = .true.
         
         initial_eep = ZAMS_EEP
         if (t% is_he_track) initial_eep = ZAMS_HE_EEP
         
         if (age .lt. t% tr(age_col, initial_eep)) then
         ! check for lower boundary
-            allocate(min_eeps(1))
-            min_eeps = initial_eep
-            if (debug)write(*,*)"age < initial_eep",age, t% tr(age_col, initial_eep)
+            allocate(nbr_eeps(1))
+            nbr_eeps = initial_eep
+            if (debug_age)write(*,*)"age < initial_eep",age, t% tr(age_col, initial_eep)
             return
         elseif (age .gt. t% tr(age_col, t% eep(t% neep))) then
         ! check for upper boundary
-            allocate(min_eeps(1))
-            min_eeps = t% eep(t% neep)
-            if (debug)write(*,*)"age > t%neep",age, t% ntrack, t%neep, t% eep(t% neep)
+            allocate(nbr_eeps(1))
+            nbr_eeps = t% eep(t% neep)
+            if (debug_age)write(*,*)"age > t%neep",age, t% ntrack, t%neep, t% eep(t% neep)
+            return
         endif
                 
         last_age = 0.d0
         
         do i = 1, t% neep-1
-            if (debug) print*,"loc_low", t% eep(i), t% eep(i+1), t%neep
+            if (debug_age) print*,"loc_low", t% eep(i), t% eep(i+1), t%neep
 
             last_age = t% tr(age_col, t% eep(i+1))
-            if (debug) print*,"ages", age, last_age, t% eep(i)< initial_eep
+            if (debug_age) print*,"ages", age, last_age, t% eep(i)< initial_eep
 
             if ((t% eep(i)< initial_eep) .or. (age .gt. last_age)) cycle
             len_eep = t% eep(i+1)-t% eep(i)+1
             allocate(age_list(len_eep))
             age_list = t% tr(age_col, t% eep(i):t% eep(i+1))
 
-            if (debug) print*,"len_eep:",len_eep, "bounds:",age_list(1), age_list(len_eep)
+            if (debug_age) print*,"len_eep:",len_eep, "bounds:",age_list(1), age_list(len_eep)
 
             call index_search(len_eep, age_list, age, min_index)
 
             if(abs(age_list(min_index)-age)< tiny) then        !less than a year
-                if (debug) print*,"no interpolation, min_index", age_list(min_index)
-                allocate(min_eeps(1))
-                min_eeps = min_index
+                if (debug_age) print*,"no interpolation, min_index", age_list(min_index)
+                allocate(nbr_eeps(1))
+                nbr_eeps = min_index
 !                            a => b(:,min_index: min_index)
             elseif(age < age_list(2)) then
-                if (debug) print*,"age < age_list(2)", age_list(1:2)
-                allocate(min_eeps(2))
-                min_eeps = [1, 2]
+                if (debug_age) print*,"age < age_list(2)", age_list(1:2)
+                allocate(nbr_eeps(2))
+                nbr_eeps = [1, 2]
 !                            a => b(:,1:2)
             elseif(age > age_list(len_eep-1)) then
-                if (debug) print*,"age > age_list(len_eep-1)", age_list(len_eep-1:len_eep)
-                allocate(min_eeps(2))
-                min_eeps = [len_eep-1, len_eep]
+                if (debug_age) print*,"age > age_list(len_eep-1)", age_list(len_eep-1:len_eep)
+                allocate(nbr_eeps(2))
+                nbr_eeps = [len_eep-1, len_eep]
 !                            a => b(:,len_eep-1:len_eep)
             elseif(age < age_list(min_index)) then
-                if (debug) print*,"age < min_index", age_list(min_index-2:min_index+1)
+                if (debug_age) print*,"age < min_index", age_list(min_index-2:min_index+1)
 
 !                            a => b(:,min_index-2:min_index+1)
-                allocate(min_eeps(2))
-                min_eeps = (/(j, j = min_index-1, min_index)/)
+                allocate(nbr_eeps(2))
+                nbr_eeps = (/(j, j = min_index-1, min_index)/)
 !                            a => b(:,min_index-1:min_index)  ! forcing linear
 
             else
-                if (debug) print*,"age > min_index",age_list(min_index-1:min_index+2)
+                if (debug_age) print*,"age > min_index",age_list(min_index-1:min_index+2)
 !                            a => b(:,min_index-1:min_index+2)
-                allocate(min_eeps(2))
-                min_eeps = (/(j, j = min_index, min_index+1)/)
+                allocate(nbr_eeps(2))
+                nbr_eeps = (/(j, j = min_index, min_index+1)/)
 !                            a => b(:,min_index:min_index+1)
             endif
-            ! original min_eeps were only a given primary eep, 
+            ! original nbr_eeps were only a given primary eep, 
             ! scale them back to full track
-            min_eeps = min_eeps+t% eep(i)-1
+            nbr_eeps = nbr_eeps+t% eep(i)-1
             deallocate(age_list)
             exit
         end do
     
-        if(.not.allocated(min_eeps)) then
-            write(UNIT = err_unit, fmt=*)'METISSE error: Cannot find nearest eeps for age:',age, age_col
+        if(.not.allocated(nbr_eeps)) then
+            write(UNIT = err_unit, fmt=*)'METISSE error: Cannot find neighboring eeps for age:',age, age_col
         endif
         
-    end subroutine find_nearest_eeps
+    end subroutine find_neighboring_eeps
     
     subroutine save_values(new_line, pars)
         type(star_parameters):: pars
