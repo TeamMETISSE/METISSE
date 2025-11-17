@@ -244,6 +244,12 @@
         !has_become_remnant is only for assigning remnants, setting it to false now
     ENDIF
 
+    ! destroy the star completely if it falls below a certain mass
+    if (t% pars% mass<1d-4) then
+        t% pars% phase = Massless_REM
+        call initialize_massless_rem(t% pars)
+    endif
+                
     ! Evolution of stellar remnants
     IF(t% pars% phase >= HeWD) THEN
         if (front_end <= main .or. front_end == BSE .or. front_end ==AMUSE) then
