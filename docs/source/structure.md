@@ -50,9 +50,9 @@ However, they cannot function by themselves. They must be called through a wrapp
 
 ## Workflow
 
-Here is a flowchart describing the workflow of METISSE:
+Here is a flowchart describing the workflow of METISSE. Colored boxes represent parts specific to METISSE, while parts in grey boxes may come from the overlying code.
 
-![METISSE's flowchart](images/METISSE_flowchart.png)
+![METISSE's flowchart](images/metisse.drawio.svg)
 
 # Adding METISSE to your code
 
