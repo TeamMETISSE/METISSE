@@ -6,3 +6,4 @@ This section demonstrates how to use METISSE right from a Jupyter notebook. You 
 
 notebook/demo.ipynb
 
+notebook/metisse_cosmic_example.ipynb
