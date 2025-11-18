@@ -185,7 +185,7 @@ Update your Makefile or compilation instructions to:
 
 Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv2.f and comenv.f) may require minor modifications to work with METISSE. 
 
-If you are unsure about the required changes, you can refer to the integrations of METISSE within COSMIC and BSE as examples. You can find usage examples on the [Using METISSE with binary evolution codes](usage_other.md) page.
+If you are unsure about the required changes, you can refer to the integrations of METISSE within COSMIC and BSE as examples. You can find usage examples on the [using METISSE with binary evolution codes](usage_other.md) page.
 If you need help, feel free to reach out through [GitHub Discussions](https://github.com/TeamMETISSE/METISSE/discussions).
 
 
