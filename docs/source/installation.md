@@ -62,7 +62,7 @@ The tracks have been computed using the stellar evolution code [MESA](https://do
 
 METISSE also supports a range of pre-published tracks, for example: 
 
-1. **MIST** [(Choi et al., 2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C/abstract) models-
+1. **MIST** [(Choi et al., 2016)](https://ui.adsabs.harvard.edu/abs/2016ApJ...823..102C/abstract)-
 
     EEP Tracks from MIST dataset can be downloaded from the [website](https://waps.cfa.harvard.edu/MIST/model_grids.html), while the corresponding metallicity and format files needed by METISSE are available from [this page](https://github.com/TeamMETISSE/METISSE/tree/develop/example_files/MIST).  
 

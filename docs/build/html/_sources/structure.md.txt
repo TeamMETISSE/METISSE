@@ -50,9 +50,9 @@ However, they cannot function by themselves. They must be called through a wrapp
 
 ## Workflow
 
-Here is a flowchart describing the workflow of METISSE:
+Here is a flowchart describing the workflow of METISSE. Colored boxes represent parts specific to METISSE, while parts in grey boxes may come from the overlying code.
 
-![METISSE's flowchart](images/METISSE_flowchart.png)
+![METISSE's flowchart](images/metisse.drawio.svg)
 
 # Adding METISSE to your code
 
@@ -185,10 +185,8 @@ Update your Makefile or compilation instructions to:
 
 Depending on the code, additional subroutines related to stellar and binary evolution (e.g., evolv2.f and comenv.f) may require minor modifications to work with METISSE. 
 
-<!-- | comenv_lambda.f90   | Get the appropriate ZAMS radius and calculate common envelope lambda (only for binaries).       -->
-
-In case of any doubts, you can refer to how METISSE has been added to COSMIC and BSE. 
-For help, please get in touch through GitHub [discussions](https://github.com/TeamMETISSE/METISSE/discussions).
+If you are unsure about the required changes, you can refer to the integrations of METISSE within COSMIC and BSE as examples. You can find usage examples on the [using METISSE with binary evolution codes](usage_other.md) page.
+If you need help, feel free to reach out through [GitHub Discussions](https://github.com/TeamMETISSE/METISSE/discussions).
 
 
 <!-- # module details

@@ -2,6 +2,8 @@ name: Draft PDF
 on: 
   push:
     branches: [ "JOSS" ]
+  pull_request:
+    branches: [ "JOSS" ]
 
 
 
