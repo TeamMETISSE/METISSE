@@ -145,3 +145,4 @@ For more details please refer to COSMIC's [official documentation](https://cosmi
 
     `bcm` → binary parameters at user specified time steps during the binary’s evolution.
 
+For a jupyter notebook with above example, as well as comparison with SSE checkout [examples](demo.md) page.

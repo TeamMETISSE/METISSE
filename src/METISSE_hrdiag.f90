@@ -56,6 +56,7 @@
         if (t% post_agb) then
             ! contruct an artficial track until WD cooling phase is reached
             call evolve_after_agb(t)
+            if (t% post_agb .eqv. .false.) has_become_remnant = .true.
         else
             !check if phase/type/kw of the star has changed
 
@@ -80,6 +81,7 @@
             else
                 t% pars% mass = mt
             endif
+            
             IF (check_ge(t% pars% age,t% times(11))) THEN
                 !check if have reached the end of the eep track
                 if (debug)print*,"end of file:aj,tn ",t% pars% age,t% times(11),t% times(max(kw,1))
@@ -90,30 +92,25 @@
                 ! mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
 
                 t% pars% core_mass = t% pars% McCO
-                if ((t% initial_mass.gt.very_low_mass_limit) .and. (t% pars% core_mass<tiny)) then
+                if (t% initial_mass<=very_low_mass_limit) then
+                    t% pars% phase = HeWD
+                elseif (t% pars% core_mass<tiny) then
                     write(UNIT=err_unit,fmt=*)"METISSE error: non-positive core mass",t% pars% core_mass
                     code_error = .true.
                     !assigning an ad-hoc non-zero core mass so the code doesn't break
                     t% pars% core_mass = 0.75*t% pars% McHe
                 endif
+                
                 has_become_remnant = .true.
             
             ELSEIF (check_ge(t% pars% core_mass,t% pars% mass)) THEN
                 !check if envelope has been lost
-    
+
                 if (debug)print*,"envelope lost at",t% pars% age,t% pars% phase,t% pars% mass,t% pars% core_mass
+                call assign_stripped_star_phase(t, HeI_time)
                 
-                if (t% pars% phase == TPAGB) then
-                    ! TPAGB star becomes a CO-WD/ONe WD upon losing envelope
-                    j_bagb = min(t% ntrack, TA_cHeB_EEP)
-                    Mcbagb = t% tr(i_he_core, j_bagb)
-                    has_become_remnant = .true.
-                    !TODO: add a check if it's not a white dwarf
-                else
-                    call assign_stripped_star_phase(t, HeI_time)
-                    if(t% pars% phase == HeWD) then
-                        has_become_remnant = .true.
-                    elseif (use_sse_NHe) then
+                if(t% pars% phase>=He_MS .and. t% pars% phase<=He_GB) then
+                    if (use_sse_NHe) then
                         t% star_type = sse_he_star
                         t% zams_mass = t% pars% mass
 
@@ -131,10 +128,16 @@
                         endif
                         ! zams_mass is assigned in the star
                         call METISSE_star(t% pars% phase, mass,t% pars% mass,tm,tn,tscls,lums,GB,zpars,0.d0,id)
-!                        t% pars% age_old = t% pars% age
+    !                        t% pars% age_old = t% pars% age
 
                         if (debug)print*, 'after env loss', t% pars% phase, t% pars% age,t% MS_time,t% nuc_time,id
                     endif
+                else
+                    j_bagb = min(t% ntrack, TA_cHeB_EEP)
+                    Mcbagb = t% tr(i_he_core, j_bagb)
+                    has_become_remnant = .true.
+                    ! below is so that we accidentally don't recreate postagb phase for wds
+                    t% star_type = remnant
                 endif
             ELSE
                 ! Calculate mass and radius of convective envelope, and envelope gyration radius.
@@ -158,6 +161,7 @@
                 if ((t% pars% core_mass >=mc_max) .or. (abs(mc_max-t% pars% core_mass)<tiny)) then
                     t% pars% core_mass = mc_max
                     has_become_remnant = .true.
+                    t% star_type = remnant
                 endif
             endif
             
@@ -196,6 +200,7 @@
                 ! mc_max = MAX(M_ch,0.773* Mcbagb-0.35)
                 t% pars% core_mass = t% pars% McCO
                 has_become_remnant = .true.
+                t% star_type = remnant
             else
                 ! Calculate mass and radius of convective envelope, and envelope gyration radius.
                 if (t% pars% core_radius<0) CALL calculate_rc(t,tscls,zpars,t% pars% core_radius)
@@ -204,37 +209,47 @@
             endif
         endif
     ENDIF
-      
+    
     kw = t% pars% phase
     ! remnants phases 10:15
     IF(has_become_remnant) THEN
 !        print*, 'star',id,'is remnant',t% pars% mass,mcbagb,t% pars% core_mass
         t% pars% age_old = t% pars% age
-        t% star_type = remnant
-        if (front_end <= main .or. front_end == BSE .or. front_end ==AMUSE) then
-            if(t% pars% phase /= HeWD) then
+        if(t% pars% phase /= HeWD) then
+            IF (front_end <= BSE .or. front_end == AMUSE) THEN
                 call assign_remnant_METISSE(t% pars, mcbagb)
-                ! kw at this point contains old phase of the star,
-                ! before the star became a remnant or lost its envelope
-                call post_agb_parameters(t,kw)
-            endif
-        elseif (front_end == COSMIC) then
-            ! storing mass that remnant would be in mt
-            mt = t% pars% mass
-            if(t% pars% phase /= HeWD) then
+                if (t% pars% phase<=ONeWD) then
+                    if (t% star_type /= remnant .and. construct_postagb_track) then
+                        call post_agb_parameters(t)
+                    else
+                        !jump straight to the WD cooling track
+                        t% zams_mass = t% pars% mass
+                        call initialize_white_dwarf(t% pars)
+                    endif
+                endif
+            ELSEIF (front_end == COSMIC) then
+                ! storing mass that remnant would be in mt
+                mt = t% pars% mass
                 call assign_remnant(zpars,t% pars% core_mass,&
                                 mcbagb,t% zams_mass,mt,t% pars% phase,bhspin,id)
                 t% pars% bhspin = bhspin
-                !kw at this point contains old phase of the star
-                call post_agb_parameters(t,kw)
+                if (t% star_type /= remnant .and. construct_postagb_track) call post_agb_parameters(t)
                 ! if t% post_agb is .false., assign correct remnant mass
-            endif
-            if(t% pars% phase >=10) t% pars% mass = mt
+                if(t% pars% phase >=10) t% pars% mass = mt
+            ENDIF
         endif
+        ! set stellar type to remnant if it wasn't already
+        t% star_type = remnant
         has_become_remnant = .false.
         !has_become_remnant is only for assigning remnants, setting it to false now
     ENDIF
 
+    ! destroy the star completely if it falls below a certain mass
+    if (t% pars% mass<1d-4) then
+        t% pars% phase = Massless_REM
+        call initialize_massless_rem(t% pars)
+    endif
+                
     ! Evolution of stellar remnants
     IF(t% pars% phase >= HeWD) THEN
         if (front_end <= main .or. front_end == BSE .or. front_end ==AMUSE) then
