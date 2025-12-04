@@ -1176,8 +1176,6 @@ module z_support
             if (y(k)% is_he_track)start = ZAMS_HE_EEP
             y(k)% tr(i_age2,:) = y(k)% tr(i_age2,:)- y(k)% tr(i_age2,start)
             
-            !TODO: check track completion and BGB phase?
-
         end do
         
         !Now deallocate xa
@@ -1834,12 +1832,8 @@ module z_support
                 xa(i)% initial_mass = xa(i)% tr(i_mass,ZAMS_EEP)
             endif
             call set_star_type_from_history(xa(i))
-            
-            print*, xa(i)% initial_mass, i_mass, ZAMS_EEP, ZAMS_HE_EEP
-
 
             offset = offset + ntrack_arr(i)
-
         end do  
 
     end subroutine set_tracks_from_python_inputs
