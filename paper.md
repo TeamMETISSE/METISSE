@@ -36,7 +36,7 @@ affiliations:
    index: 1
  - name: Department of Physics and Astronomy, University of North Carolina at Chapel Hill, 120 E. Cameron Avenue, Chapel Hill, NC 27599, USA
    index: 2
- - name: McWilliams Center for Cosmology, Department of Physics, Carnegie Mellon University, 5000 Forbes Avenue, Pittsburgh, PA 15213, USA
+ - name: McWilliams Center for Cosmology & Astrophysics, Department of Physics, Carnegie Mellon University, 5000 Forbes Avenue, Pittsburgh, PA 15213, USA
    index: 3
  - name: Centre for Astrophysics and Supercomputing, Swinburne University of Technology, Hawthorn, VIC 3122, Australia
    index: 4 
