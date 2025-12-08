@@ -7,7 +7,7 @@ METALLICITY_DIR = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Hydroge
             
 METALLICITY_DIR_HE = '/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Helium/'
 
-verbose = .true.
+verbose = .false.
 
 /
 
