@@ -1429,6 +1429,7 @@ module z_support
             call index_search (num_tracks, mass_list, Mcrit(i)% mass, min_index)
             !Once again, ensure that the location for Mup does not exceed Mec
             if (i ==6 .and. Mcrit(7)% loc>1) min_index = min(min_index,Mcrit(7)% loc-1)
+            if (min_index>size(mass_list)) cycle
             Mcrit(i)% mass = mass_list(min_index)
             Mcrit(i)% loc = min_index
             if (debug) print*, i, Mcrit(i)% mass, min_index
