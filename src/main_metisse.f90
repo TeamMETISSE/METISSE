@@ -50,12 +50,15 @@ program metisse_main
         close(io)
         call free_iounit(io)
     else
+         min_mass = max(min_mass,Mcrit(1)% mass)
+         max_mass = min(max_mass,Mcrit(9)% mass)
+         ! put a print statement here
         if (n>1) then
             if (sampling_scheme=='Uniform') then
             
                 call sample_uniform(n,min_mass,max_mass,mass_array)
             elseif(sampling_scheme=='Kroupa2001') then
-                call sample_kroupa_imf(mass_array, n, min_mass, 0.5d0, max_mass)
+                call sample_kroupa_imf(mass_array, n, min_mass, max_mass)
             else
                 print*, 'Error generating mass function: '
                 print*, 'n>1 but sampling_scheme is invalid'

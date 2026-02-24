@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Glossary" href="glossary.html" />
-    <link rel="prev" title="Running METISSE via Python (Optional)" href="notebook/demo.html" /> 
+    <link rel="prev" title="Comparing SSE and METISSE with COSMIC" href="notebook/metisse_cosmic_example.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -100,14 +100,18 @@
 <h1>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h1>
 <section id="how-to-cite-metisse">
 <h2>1.&nbsp;&nbsp;How to cite METISSE?<a class="headerlink" href="#how-to-cite-metisse" title="Link to this heading"></a></h2>
-<p>Please cite the following papers if you are using METISSE in your work.</p>
-<!-- - TBA
-
-More details about METISSE including code capabilities are described in the following papers: -->
+<p>Please cite the following paper if you are using METISSE in your work.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2025JOSS...10.8817A/abstract">METISSE: METhod of Interpolation for Single Star Evolution</a></p></li>
+</ul>
+<p>More details about METISSE including code capabilities are described in the following papers:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract">Modelling stellar evolution in mass-transferring binaries and gravitational-wave progenitors with METISSE</a></p></li>
 <li><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract">The fates of massive stars: exploring uncertainties in stellar evolution with METISSE</a></p></li>
 </ul>
+<p>METISSE is also available at the software citation station: <a href="https://www.tomwagg.com/software-citation-station/?auto-select=METISSE">
+<img alt="https://img.shields.io/badge/Cite-METISSE-5f65cd" src="https://img.shields.io/badge/Cite-METISSE-5f65cd" />
+</a></p>
 </section>
 <section id="which-interpolation-method-is-used-by-metisse">
 <h2>2.&nbsp;&nbsp;Which interpolation method is used by METISSE?<a class="headerlink" href="#which-interpolation-method-is-used-by-metisse" title="Link to this heading"></a></h2>
@@ -120,11 +124,11 @@ More details about METISSE including code capabilities are described in the foll
 </section>
 <section id="can-metisse-interpolate-in-metallicity">
 <h2>4.&nbsp;&nbsp;Can METISSE interpolate in metallicity?<a class="headerlink" href="#can-metisse-interpolate-in-metallicity" title="Link to this heading"></a></h2>
-<p>METISSE delibertely does not support interpolation in metallicity. However, you can choose the nearest metallicity value by adjusting <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code>. Please refer to <a class="reference internal" href="usage_standalone.html#if-the-metallicity-value-is-not-present-in-the-input-grid"><span class="std std-ref">If the metallicity value is not present in the input grid</span></a> for more details.</p>
+<p>METISSE delibertely does not support interpolation in metallicity. However, you can choose the nearest metallicity value by adjusting <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code>. Please refer to the section: <a class="reference internal" href="usage_standalone.html#if-the-metallicity-value-is-not-present-in-the-input-grid"><span class="std std-ref">if the metallicity value is not present in the input grid</span></a> for more details.</p>
 </section>
 <section id="can-i-add-metisse-to-my-code">
 <h2>5.&nbsp;&nbsp;Can I add METISSE to my code?<a class="headerlink" href="#can-i-add-metisse-to-my-code" title="Link to this heading"></a></h2>
-<p>Yes, if it uses Fortran based fitting formulae from SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> to compute stellar parameters. Your code must contain Fortran77 subroutines - namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f that come with the SSE code. For details refer to <a class="reference internal" href="structure.html#adding-metisse-to-your-code"><span class="std std-ref">Adding METISSE to your code</span></a>.</p>
+<p>Yes, if it uses Fortran based fitting formulae from SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> to compute stellar parameters. Your code must contain Fortran77 subroutines - namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f that come with the SSE code. For details refer to the section: <a class="reference internal" href="structure.html#adding-metisse-to-your-code"><span class="std std-ref">adding metisse to your code</span></a>.</p>
 </section>
 <section id="how-can-i-contribute-to-metisse">
 <h2>6.&nbsp;&nbsp;How can I contribute to METISSE?<a class="headerlink" href="#how-can-i-contribute-to-metisse" title="Link to this heading"></a></h2>
@@ -147,7 +151,7 @@ For general questions or discussion, use GitHub <a class="reference external" hr
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="notebook/demo.html" class="btn btn-neutral float-left" title="Running METISSE via Python (Optional)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="notebook/metisse_cosmic_example.html" class="btn btn-neutral float-left" title="Comparing SSE and METISSE with COSMIC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
@@ -155,7 +159,7 @@ For general questions or discussion, use GitHub <a class="reference external" hr
 
   <div role="contentinfo">
     <p>&#169; Copyright 2024, Poojan Agrawal.
-      <span class="lastupdated">Last updated on 2025 Nov 18 at 15:00:08 UTC.
+      <span class="lastupdated">Last updated on 2026 Feb 24 at 18:35:33 UTC.
       </span></p>
   </div>
 
