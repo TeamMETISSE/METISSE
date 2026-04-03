@@ -1234,6 +1234,7 @@ module z_support
             x => sa_he
         else
             x => sa
+            Rmax = 0
         endif
         
         if (allocated(Mmax)) deallocate(Mmax, Mmin)
@@ -1242,7 +1243,6 @@ module z_support
         allocate(Mmax(nmax), Mmin(nmax))
         Mmax = 0.d0
         Mmin = huge(0.0d0)    !largest float
-        
         do i = 1,size(x)
             !Find maximum and minimum mass at each eep
             do j = 1, nmax
@@ -1251,9 +1251,14 @@ module z_support
                     Mmin(j) = min(Mmin(j),x(i)% tr(i_mass,j))
                 endif
             end do
+            ! Find max radius (used in determining limiting radius in case of extrapolation)
+            ! currently only for hydrogen stars
+            if (is_he_track.eqv..false.) Rmax = max(Rmax, maxval(x(i)% tr(i_logR,:)))
         end do
         
         nullify(x)
+               if (is_he_track.eqv..false.) print*, 'rmax', Rmax
+
     end subroutine get_minmax
 
     subroutine set_zparameters(num_tracks,zpars)
