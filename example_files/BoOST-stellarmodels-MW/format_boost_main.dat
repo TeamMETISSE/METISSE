@@ -8,7 +8,7 @@
     header_location = -1
 
     total_cols = 94 !number of columns
-    column_name_file = './boost_columns.txt'
+    column_name_file = 'boost_columns.txt'
 
     !EEPS
     ZAMS_EEP = 1

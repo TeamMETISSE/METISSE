@@ -2,7 +2,7 @@ module z_support
     use track_support
     implicit none
 
-    character(LEN=strlen) :: eep_tracks_dir
+    character(LEN=strlen) :: eep_tracks_dir, USE_DIR
     logical :: read_eep_files, read_all_columns, get_cols
     
     integer :: max_files = 50
@@ -221,8 +221,8 @@ module z_support
         
     end subroutine read_metallicity_file
     
-    subroutine read_format(USE_DIR,filename,ierr)
-        character(LEN=strlen), intent(in) :: USE_DIR, filename
+    subroutine read_format(filename,ierr)
+        character(LEN=strlen), intent(in) :: filename
         integer, intent(out) :: ierr
         integer :: io
         logical :: res
@@ -725,17 +725,26 @@ module z_support
 
     !reading column names from file - from iso_eep_support.f90
     subroutine process_columns(filename,cols,ierr)
-        character(LEN=strlen), intent(in) :: filename
+        character(LEN=strlen) :: filename
         integer, intent(out) :: ierr
         integer :: i, ncols(2), nchar, column_length, pass
         character(LEN=strlen) :: line, column_name
-        logical :: is_int,debug
+        logical :: is_int,debug,res
         type(column), allocatable, intent(out) :: cols(:)
         integer :: ncol,io
 
         debug =.false.
         ierr = 0
         io = alloc_iounit(ierr)
+
+         ! check if the file exists
+        inquire(file=trim(filename), exist=res)
+        
+        if (res .eqv. .False.) then
+            if(debug) write(*,*)trim(filename),' not found; appending ',trim(USE_DIR)
+            filename = trim(USE_DIR)//'/'//trim(filename)
+        endif
+
         open(io,file=trim(filename),action='read',status='old',iostat=ierr)
         if(ierr/=0) then
            write(out_unit,*) 'failed to open the file: ', trim(filename)
@@ -1257,7 +1266,6 @@ module z_support
         end do
         
         nullify(x)
-               if (is_he_track.eqv..false.) print*, 'rmax', Rmax
 
     end subroutine get_minmax
 

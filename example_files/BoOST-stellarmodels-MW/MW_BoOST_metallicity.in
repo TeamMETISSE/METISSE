@@ -3,7 +3,7 @@
 &metallicity_controls
 
     ! Location of the folder containing input files for a given metallicity
-    eep_tracks_dir = './tracks'
+    eep_tracks_dir = '/Users/poojan/Downloads/BoOST-stellarmodels-MW/tracks'
 
     ! Metallicity of input tracks
     ! It is only used to cross-check 
