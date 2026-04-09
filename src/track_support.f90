@@ -157,6 +157,8 @@ module track_support
     real(dp), allocatable:: t_incomplete(:), t_notfound(:)
     real(dp), allocatable:: Mmax_array(:), Mmin_array(:)
     real(dp), allocatable:: Mmax_he_array(:), Mmin_he_array(:)
+    real(dp), allocatable:: Rmax
+
 
     !holds current parameters of star-- used by track
     type star_parameters
