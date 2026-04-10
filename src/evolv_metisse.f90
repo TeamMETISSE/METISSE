@@ -60,7 +60,7 @@ subroutine evolv_metisse(mass, max_age, ierr, id)
         write (output_file, "(a, a, i5.5, a)") trim(METISSE_DIR), "/output/evolve_", str, "M.dat"
         open (io, FILE = trim(output_file), action="write")
         write(io, '(9a15, 2a10)') "time", "age", "mass","core_mass","He_core" &
-                    ,"CO_core","log_L","log_Teff","log_radius", "phase","e"
+                    ,"CO_core","log_L","log_Teff","log_radius", "phase"
     endif
     
     do while(.true.)
@@ -91,14 +91,14 @@ subroutine evolv_metisse(mass, max_age, ierr, id)
             !it is different to end_of_file defined in hrdiag
         end if
        
-        !write output if flag is true
         if ((old_phase /= t% pars% phase) .or. t_end) then
             if (verbose) write(*,'(a10, f10.1, 3a10, f7.3)') "Time ", tphys, "Phase ", phase_label(t% pars% phase+1), &
                                                                                 "Mass ", t% pars% mass
-            if (output) call write_dat_track(tphys, t% pars, io)
-        else if (lines < 3000 .and. output) then
-            call write_dat_track(tphys, t% pars, io)
         endif
+        !write output to file if the flag is true
+        if (lines < 3000 .and. output) write(io, '(1p9e15.6, 2i10)') tphys, t% pars% age, &
+                                t% pars% mass, t% pars% core_mass, t% pars% McHe, t% pars% McCO, &
+                                t% pars% log_L, t% pars% log_Teff, t% pars% log_R, t% pars% phase
     
         if (t_end) exit
          

@@ -4,10 +4,11 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to METISSE’s documentation! &mdash; METISSE 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+  <title>What you can do with METISSE? &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=058af07a" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=48bd8eb9" />
 
   
   <!--[if lt IE 9]>
@@ -19,6 +20,9 @@
         <script src="_static/documentation_options.js?v=2709fde1"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -33,8 +37,9 @@
 
           
           
-          <a href="#" class="icon icon-home">
-            METISSE
+          <a href="#">
+            
+              <img src="_static/metisse_sidebar.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,14 +49,17 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guidelines.html">Community guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FAQ.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
 </ul>
 
@@ -69,9 +77,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to METISSE’s documentation!</li>
+      <li class="breadcrumb-item active">What you can do with METISSE?</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -79,22 +86,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="welcome-to-metisse-s-documentation">
-<h1>Welcome to METISSE’s documentation!<a class="headerlink" href="#welcome-to-metisse-s-documentation" title="Link to this heading"></a></h1>
-<p><strong>METISSE</strong> is an acronym for <strong>MET</strong>hod of <strong>I</strong>nterpolation for <strong>S</strong>ingle <strong>S</strong>tar <strong>E</strong>volution. It is a code package designed for rapidly computing the evolution of stellar populations by interpolating within a set of pre-computed stellar evolutionary tracks. These input tracks can be computed from various stellar structure and evolution codes.</p>
-<p>It can be used as a <a class="reference external" href="usage_standalone.html">standalone code</a> for evolving populations of single stars or in conjunction with <a class="reference external" href="usage_other.html">binary population synthesis codes</a> for evolving populations of single and binary stars.
-Check out the following sections for more information about METISSE and how to use it.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guidelines.html">Community guidelines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+  <h1 style="text-align:center;">Welcome to METISSE's documentation!</h1><figure class="align-center">
+<a class="largepadding reference internal image-reference" href="_images/metisse_logo_rect.png"><img alt="_images/metisse_logo_rect.png" class="largepadding" src="_images/metisse_logo_rect.png" style="width: 60%;" /></a>
+</figure>
+<p><strong>METISSE</strong> stands for <strong>MET</strong>hod of <strong>I</strong>nterpolation for <strong>S</strong>ingle <strong>S</strong>tar <strong>E</strong>volution. It is an open-source stellar evolution tool designed to provide a fast and flexible alternative to traditional rapid stellar evolution prescriptions.</p>
+<p>At its core, METISSE interpolates between pre-computed stellar evolution tracks to determine stellar parameters such as luminosity, radius, and core mass at any evolutionary stage. This approach allows users to incorporate stellar models directly into large-scale stellar and binary population synthesis simulations.</p>
+<section id="what-you-can-do-with-metisse">
+<h1>What you can do with METISSE?<a class="headerlink" href="#what-you-can-do-with-metisse" title="Link to this heading"></a></h1>
+<p>METISSE has been specifically designed to be integrated with binary evolution and population synthesis frameworks that currently rely on the Fortran 77-based SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> code.</p>
+<p>Although METISSE can be run as a standalone program to evolve individual stars or simple stellar populations, its main strength lies in serving as an stellar engine within population synthesis environments. You can:</p>
+<ul class="simple">
+<li><p>Run METISSE independently to evolve single stellar systems from pre-computed tracks</p></li>
+<li><p>Use METISSE with supported binary evolution codes to evolve stars in binaries</p></li>
+<li><p>Use your own custom stellar tracks to test different physical assumptions</p></li>
+<li><p>Combine METISSE with your code to perform population studies using modern stellar data</p></li>
 </ul>
+</section>
+<section id="learn-more">
+<h1>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading"></a></h1>
+<div>
+<ul>
+  <li><a href="installation.html"><b>Installation</b> — how to download METISSE</a></li>
+  <li><a href="usage_standalone.html">Use METISSE to <b>evolve single stars </b></a></li>
+  <li><a href="usage_other.html">Use METISSE as the stellar engine to <b>evolve binaries </b></a></li>
+  <li><a href="using_custom_input_tracks.html"><b>Use custom tracks</b> — how to use your own tracks with METISSE</a></li>
+  <li><a href="structure.html"><b>Structure and integration</b> — how METISSE works under the hood</a></li>
+</ul>
+</div><div class="toctree-wrapper compound">
 </div>
 </section>
 
@@ -108,7 +126,9 @@ Check out the following sections for more information about METISSE and how to u
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Poojan Agrawal.</p>
+    <p>&#169; Copyright 2024, Poojan Agrawal.
+      <span class="lastupdated">Last updated on 2025 Nov 18 at 17:35:27 UTC.
+      </span></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=48bd8eb9" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="Running METISSE via Python (Optional)" href="notebook/demo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/metisse_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_standalone.html">Using METISSE to evolve single stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage_other.html">Using METISSE to evolve binaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input_files.html">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_custom_input_tracks.html">Using custom input tracks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-cite-metisse">How to cite METISSE?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#which-interpolation-method-is-used-by-metisse">Which interpolation method is used by METISSE?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#can-i-use-metisse-to-restart-the-evolution-of-binaries">Can I use METISSE to restart the evolution of binaries?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#can-metisse-interpolate-in-metallicity">Can METISSE interpolate in metallicity?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#can-i-add-metisse-to-my-code">Can I add METISSE to my code?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-can-i-contribute-to-metisse">How can I contribute to METISSE?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#i-seek-support-or-have-to-report-problems-with-metisse">I seek support or have to report problems with METISSE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">METISSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">FAQ</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="faq">
+<h1>FAQ<a class="headerlink" href="#faq" title="Link to this heading"></a></h1>
+<section id="how-to-cite-metisse">
+<h2>1.&nbsp;&nbsp;How to cite METISSE?<a class="headerlink" href="#how-to-cite-metisse" title="Link to this heading"></a></h2>
+<p>Please cite the following papers if you are using METISSE in your work.</p>
+<!-- - TBA
+
+More details about METISSE including code capabilities are described in the following papers: -->
+<ul class="simple">
+<li><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract">Modelling stellar evolution in mass-transferring binaries and gravitational-wave progenitors with METISSE</a></p></li>
+<li><p><a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract">The fates of massive stars: exploring uncertainties in stellar evolution with METISSE</a></p></li>
+</ul>
+</section>
+<section id="which-interpolation-method-is-used-by-metisse">
+<h2>2.&nbsp;&nbsp;Which interpolation method is used by METISSE?<a class="headerlink" href="#which-interpolation-method-is-used-by-metisse" title="Link to this heading"></a></h2>
+<p>METISSE uses monotonic interpolation with a piece-wise cubic from <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/1990A%26A...239..443S/abstract">Steffen 1990</a> to estimate stellar properties between pre-computed tracks. The method ensures smooth and accurate results but requires two points below and two points above the target value; consequently, METISSE switches to linear interpolation near the boundaries where sufficient points are not available.</p>
+<!-- The interpolation method is is fixed; changing it requires modifying the source code. -->
+</section>
+<section id="can-i-use-metisse-to-restart-the-evolution-of-binaries">
+<h2>3.&nbsp;&nbsp;Can I use METISSE to restart the evolution of binaries?<a class="headerlink" href="#can-i-use-metisse-to-restart-the-evolution-of-binaries" title="Link to this heading"></a></h2>
+<p>We are working hard to add this capability, but currently METISSE cannot restart the evolution of binaries with any of the supported overlying binary codes.</p>
+</section>
+<section id="can-metisse-interpolate-in-metallicity">
+<h2>4.&nbsp;&nbsp;Can METISSE interpolate in metallicity?<a class="headerlink" href="#can-metisse-interpolate-in-metallicity" title="Link to this heading"></a></h2>
+<p>METISSE delibertely does not support interpolation in metallicity. However, you can choose the nearest metallicity value by adjusting <code class="docutils literal notranslate"><span class="pre">Z_accuracy_limit</span></code>. Please refer to <a class="reference internal" href="usage_standalone.html#if-the-metallicity-value-is-not-present-in-the-input-grid"><span class="std std-ref">If the metallicity value is not present in the input grid</span></a> for more details.</p>
+</section>
+<section id="can-i-add-metisse-to-my-code">
+<h2>5.&nbsp;&nbsp;Can I add METISSE to my code?<a class="headerlink" href="#can-i-add-metisse-to-my-code" title="Link to this heading"></a></h2>
+<p>Yes, if it uses Fortran based fitting formulae from SSE <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract">(Hurley et al. 2000)</a> to compute stellar parameters. Your code must contain Fortran77 subroutines - namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f that come with the SSE code. For details refer to <a class="reference internal" href="structure.html#adding-metisse-to-your-code"><span class="std std-ref">Adding METISSE to your code</span></a>.</p>
+</section>
+<section id="how-can-i-contribute-to-metisse">
+<h2>6.&nbsp;&nbsp;How can I contribute to METISSE?<a class="headerlink" href="#how-can-i-contribute-to-metisse" title="Link to this heading"></a></h2>
+<p>We are always working on improving METISSE.
+If you would like to contribute by adding a new feature or creating with a bug fix, please</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://github.com/TeamMETISSE/METISSE/fork">Fork</a> the METISSE repository from GitHub.</p></li>
+<li><p>Make your changes in a feature branch.</p></li>
+<li><p>Create a <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/pulls">pull request</a> with your proposed changes.</p></li>
+</ol>
+</section>
+<section id="i-seek-support-or-have-to-report-problems-with-metisse">
+<h2>7.&nbsp;&nbsp;I seek support or have to report problems with METISSE<a class="headerlink" href="#i-seek-support-or-have-to-report-problems-with-metisse" title="Link to this heading"></a></h2>
+<p>For bug reports or issues, create an <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/issues/new">issue</a> on GitHub.
+For general questions or discussion, use GitHub <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/discussions">discussions</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notebook/demo.html" class="btn btn-neutral float-left" title="Running METISSE via Python (Optional)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="glossary.html" class="btn btn-neutral float-right" title="Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Poojan Agrawal.
+      <span class="lastupdated">Last updated on 2025 Nov 18 at 15:00:08 UTC.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

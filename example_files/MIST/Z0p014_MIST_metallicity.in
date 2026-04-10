@@ -1,0 +1,22 @@
+! Make sure to ADD a new line at the end (after / symbol)
+
+&metallicity_controls 
+
+    ! Location of the folder containing the EEP tracks relative to the metallicity file.
+    !Empty string will raise an error
+    
+    eep_tracks_dir = './MIST_v1.2_feh_p0.00_afe_p0.0_vvcrit0.0_EEPS'
+
+
+    ! Metallicity value of the EEP tracks.
+    ! This is cross-matched against the input metallicity value.
+    
+    Z_files = 0.014
+
+    ! Location of the format file relative to the metallicity file.
+    ! Empty string will raise an error
+
+    format_file = './format_mist.dat'
+
+   
+/

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparing SSE and METISSE with COSMIC &mdash; METISSE 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=48bd8eb9" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=2709fde1"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="../_static/copybutton.js?v=b7c22cce"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FAQ" href="../FAQ.html" />
+    <link rel="prev" title="Running METISSE via Python (Optional)" href="demo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html">
+            
+              <img src="../_static/metisse_sidebar.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage_standalone.html">Using METISSE to evolve single stars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage_other.html">Using METISSE to evolve binaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../input_files.html">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using_custom_input_tracks.html">Using custom input tracks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../structure.html">Code structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../structure.html#adding-metisse-to-your-code">Adding METISSE to your code</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../demo.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="demo.html">Running METISSE via Python (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demo.html#Hertzsprung–Russell-Diagram">Hertzsprung–Russell Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demo.html#Maximum-Stellar-Radius">Maximum Stellar Radius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demo.html#Remnant-Mass-vs-Initial-Stellar-Mass">Remnant Mass vs Initial Stellar Mass</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Comparing SSE and METISSE with COSMIC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Comparing-the-Outputs:">Comparing the Outputs:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Hertzsprung–Russell-Diagram">Hertzsprung–Russell Diagram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Mass-vs-Time">Mass vs Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Radius-vs-Time">Radius vs Time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Radial-separation-over-time">Radial separation over time</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">METISSE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../demo.html">Examples</a></li>
+      <li class="breadcrumb-item active">Comparing SSE and METISSE with COSMIC</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Comparing-SSE-and-METISSE-with-COSMIC">
+<h1>Comparing SSE and METISSE with COSMIC<a class="headerlink" href="#Comparing-SSE-and-METISSE-with-COSMIC" title="Link to this heading"></a></h1>
+<p>Let us rerun the example for COSMIC that we used in <a class="reference internal" href="../cosmic.html"><span class="doc">METISSE with COSMIC</span></a> page, but now let us compare the output when the same binary is evolved using COSMIC and SSE.</p>
+<p>This page is based on a Jupyter notebook created by Tom Wagg. Used with permission.</p>
+<div class="note docutils container">
+<ul class="simple">
+<li><p>This tutorial was generated from a Jupyter notebook using NBSphinx. The notebook is available <a class="reference external" href="https://github.com/TeamMETISSE/METISSE/tree/develop/docs/source/notebook/metisse_cosmic_example.ipynb">here</a>.</p></li>
+<li><p>If you choose to run this notebook, make sure the paths in the notebook for the track libraries are correct.</p></li>
+</ul>
+</div>
+<p>Import Python Packages</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import cosmic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cosmic.evolve</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evolve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cosmic.sample.initialbinarytable</span><span class="w"> </span><span class="kn">import</span> <span class="n">InitialBinaryTable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">astropy.constants</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">consts</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">astropy.units</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">u</span>
+
+<span class="n">fs</span> <span class="o">=</span> <span class="mi">24</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># matplotlibrc file for prettier plots</span>
+<span class="c1"># Courtesy: Earl Bellinger</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;matplotlibrc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kstar_translator</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Main Sequence (Low mass)&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;MS &lt; 0.7&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.996078</span><span class="p">,</span> <span class="mf">0.843476</span><span class="p">,</span> <span class="mf">0.469158</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Main Sequence&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;MS&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.996078</span><span class="p">,</span> <span class="mf">0.843476</span><span class="p">,</span> <span class="mf">0.469158</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Hertzsprung Gap&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;HG&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.939608</span><span class="p">,</span> <span class="mf">0.471373</span><span class="p">,</span> <span class="mf">0.094902</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;First Giant Branch&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;FGB&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.716186</span><span class="p">,</span> <span class="mf">0.833203</span><span class="p">,</span> <span class="mf">0.916155</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Core Helium Burning&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;CHeB&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.29098</span><span class="p">,</span> <span class="mf">0.59451</span><span class="p">,</span> <span class="mf">0.78902</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Early AGB&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;EAGB&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.294902</span><span class="p">,</span> <span class="mf">0.690196</span><span class="p">,</span> <span class="mf">0.384314</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Thermally Pulsing AGB&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;TPAGB&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.723122</span><span class="p">,</span> <span class="mf">0.889612</span><span class="p">,</span> <span class="mf">0.697178</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Helium Main Sequence&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;HeMS&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.254627</span><span class="p">,</span> <span class="mf">0.013882</span><span class="p">,</span> <span class="mf">0.615419</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Helium Hertsprung Gap&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;HeHG&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.562738</span><span class="p">,</span> <span class="mf">0.051545</span><span class="p">,</span> <span class="mf">0.641509</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Helium Giant Branch&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;HeGB&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.798216</span><span class="p">,</span> <span class="mf">0.280197</span><span class="p">,</span> <span class="mf">0.469538</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Helium White Dwarf&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;HeWD&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.368166</span><span class="p">,</span> <span class="mf">0.232828</span><span class="p">,</span> <span class="mf">0.148275</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Carbon/Oxygen White Dwarf&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;COWD&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.620069</span><span class="p">,</span> <span class="mf">0.392132</span><span class="p">,</span> <span class="mf">0.249725</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Oxygen/Neon White Dwarf&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;ONeWD&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.867128</span><span class="p">,</span> <span class="mf">0.548372</span><span class="p">,</span> <span class="mf">0.349225</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Neutron Star&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;NS&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.501961</span><span class="p">,</span> <span class="mf">0.501961</span><span class="p">,</span> <span class="mf">0.501961</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Black Hole&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;BH&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Massless Remnant&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;MR&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s1">&#39;long&#39;</span><span class="p">:</span> <span class="s1">&#39;Chemically Homogeneous&#39;</span><span class="p">,</span> <span class="s1">&#39;short&#39;</span><span class="p">:</span> <span class="s1">&#39;CHE&#39;</span><span class="p">,</span> <span class="s1">&#39;colour&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.647059</span><span class="p">,</span> <span class="mf">0.164706</span><span class="p">,</span> <span class="mf">0.164706</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>Set up input</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SSEDict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;stellar_engine&#39;</span><span class="p">:</span> <span class="s1">&#39;metisse&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;path_to_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Hydrogen/&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;path_to_he_tracks&#39;</span><span class="p">:</span> <span class="s1">&#39;/Users/poojan/stellar_tracks/MESA/METISSE_INPUT_FILES/Helium/&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BSEDict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;xi&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;bhflag&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;neta&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;windflag&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;wdflag&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;alpha1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],</span> <span class="s1">&#39;pts1&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;pts3&#39;</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">,</span> <span class="s1">&#39;pts2&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;epsnov&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;hewind&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;ck&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;bwind&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;lambdaf&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;mxns&#39;</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;beta&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;tflag&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;acc2&#39;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="s1">&#39;grflag&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;remnantflag&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;ceflag&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;eddfac&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;ifflag&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;bconst&#39;</span><span class="p">:</span> <span class="mi">3000</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">265.0</span><span class="p">,</span> <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="s1">&#39;pisn&#39;</span><span class="p">:</span> <span class="mf">45.0</span><span class="p">,</span> <span class="s1">&#39;natal_kick_array&#39;</span> <span class="p">:</span> <span class="p">[[</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="o">-</span><span class="mf">100.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]],</span> <span class="s1">&#39;bhsigmafrac&#39;</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;polar_kick_angle&#39;</span> <span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s1">&#39;qcrit_array&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="s1">&#39;cekickflag&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;cehestarflag&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;cemergeflag&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;ecsn&#39;</span> <span class="p">:</span> <span class="mf">2.25</span><span class="p">,</span> <span class="s1">&#39;ecsn_mlow&#39;</span> <span class="p">:</span> <span class="mf">1.6</span><span class="p">,</span> <span class="s1">&#39;aic&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;ussn&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;sigmadiv&#39;</span> <span class="p">:</span><span class="o">-</span><span class="mf">20.0</span><span class="p">,</span> <span class="s1">&#39;qcflag&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;eddlimflag&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;fprimc_array&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">,</span><span class="mf">2.0</span><span class="o">/</span><span class="mf">21.0</span><span class="p">],</span> <span class="s1">&#39;bhspinflag&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;bhspinmag&#39;</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;rejuv_fac&#39;</span> <span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;rejuvflag&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;htpmb&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;ST_cr&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;ST_tide&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bdecayfac&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;rembar_massloss&#39;</span> <span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;kickflag&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;zsun&#39;</span> <span class="p">:</span> <span class="mf">0.014</span><span class="p">,</span> <span class="s1">&#39;bhms_coll_flag&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;don_lim&#39;</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;acc_lim&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;rtmsflag&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;wd_mass_lim&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_binary</span> <span class="o">=</span> <span class="n">InitialBinaryTable</span><span class="o">.</span><span class="n">InitialBinaries</span><span class="p">(</span><span class="n">m1</span><span class="o">=</span><span class="mi">85</span><span class="p">,</span> <span class="n">m2</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">porb</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                                                <span class="n">ecc</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">tphysf</span><span class="o">=</span><span class="mf">13700.0</span><span class="p">,</span>
+                                                <span class="n">kstar1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">kstar2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">metallicity</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Run COSMIC, first using METISSE as the stellar engine and then using SSE.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bcms</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;metisse&#39;</span><span class="p">:</span> <span class="n">Evolve</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span>
+        <span class="n">initialbinarytable</span><span class="o">=</span><span class="n">single_binary</span><span class="p">,</span>
+        <span class="n">BSEDict</span><span class="o">=</span><span class="n">BSEDict</span><span class="p">,</span>
+        <span class="n">SSEDict</span><span class="o">=</span><span class="n">SSEDict</span><span class="p">,</span>
+        <span class="n">dtp</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="s1">&#39;sse&#39;</span><span class="p">:</span> <span class="n">Evolve</span><span class="o">.</span><span class="n">evolve</span><span class="p">(</span>
+        <span class="n">initialbinarytable</span><span class="o">=</span><span class="n">single_binary</span><span class="p">,</span>
+        <span class="n">BSEDict</span><span class="o">=</span><span class="n">BSEDict</span><span class="p">,</span>
+        <span class="n">SSEDict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;stellar_engine&#39;</span><span class="p">:</span> <span class="s1">&#39;sse&#39;</span><span class="p">,},</span>
+        <span class="n">dtp</span><span class="o">=</span><span class="mf">0.0</span>
+    <span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<section id="Comparing-the-Outputs:">
+<h2>1.&nbsp;&nbsp;Comparing the Outputs:<a class="headerlink" href="#Comparing-the-Outputs:" title="Link to this heading"></a></h2>
+<p>When the binary is evolved using <strong>COSMIC with METISSE</strong>, it forms a <strong>binary black hole system</strong>. However, when evolved using <strong>COSMIC with SSE</strong>, the stars merge, leaving behind a <strong>single black hole</strong>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bcms</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;--- </span><span class="si">{</span><span class="n">k</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s1"> ---&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Primary </span><span class="se">\t</span><span class="s1">= </span><span class="si">{</span><span class="n">bcms</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;mass_1&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">1.2f</span><span class="si">}</span><span class="s1"> Msun (</span><span class="si">{</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">bcms</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;kstar_1&quot;</span><span class="p">]][</span><span class="s2">&quot;short&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Secondary </span><span class="se">\t</span><span class="s1">= </span><span class="si">{</span><span class="n">bcms</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;mass_2&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">1.2f</span><span class="si">}</span><span class="s1"> Msun (</span><span class="si">{</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">bcms</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;kstar_2&quot;</span><span class="p">]][</span><span class="s2">&quot;short&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Separation </span><span class="se">\t</span><span class="s1">= </span><span class="si">{</span><span class="n">bcms</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;sep&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">1.2f</span><span class="si">}</span><span class="s1"> Rsun&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+--- METISSE ---
+Primary         = 12.47 Msun (BH)
+Secondary       = 18.66 Msun (BH)
+Separation      = 7460.18 Rsun
+
+--- SSE ---
+Primary         = 4.43 Msun (BH)
+Secondary       = 8.18 Msun (BH)
+Separation      = -1.00 Rsun
+
+</pre></div></div>
+</div>
+</section>
+<section id="Hertzsprung–Russell-Diagram">
+<h2>2.&nbsp;&nbsp;Hertzsprung–Russell Diagram<a class="headerlink" href="#Hertzsprung–Russell-Diagram" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_R_from_L_T</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">L</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">consts</span><span class="o">.</span><span class="n">sigma_sb</span> <span class="o">*</span> <span class="n">T</span><span class="o">**</span><span class="mi">4</span><span class="p">))</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">Rsun</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># loop over different engines and create an HRD</span>
+<span class="k">for</span> <span class="n">bcm</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bcms</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">axes</span><span class="p">):</span>
+
+    <span class="c1"># plot the primary star</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;kstar_1&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">13</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;teff_1&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;lum_1&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]),</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;kstar_1&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]],</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;teff_1&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;lum_1&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]),</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># plot the secondary star</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;kstar_2&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">13</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;teff_2&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;lum_2&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]),</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;kstar_2&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]],</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;teff_2&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;lum_2&quot;</span><span class="p">][</span><span class="n">mask</span><span class="p">]),</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">ax</span><span class="o">.</span><span class="n">invert_xaxis</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;METISSE&#39;</span><span class="p">,</span> <span class="s1">&#39;SSE&#39;</span><span class="p">]):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">xlabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\log_</span><span class="si">{10}</span><span class="s1">(T_{\mathrm</span><span class="si">{eff}</span><span class="s1">}/\mathrm</span><span class="si">{K}</span><span class="s1">)$&#39;</span><span class="p">,</span>
+        <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\log_</span><span class="si">{10}</span><span class="s1">(L/L_{\odot})$&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># add lines of constant radius using a grid of Teff and L, with the get_R_from_L_T function</span>
+
+
+    <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+    <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+
+    <span class="c1"># create a range of temperatures and luminosities (and use Astropy units)</span>
+    <span class="n">T_eff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">K</span>
+    <span class="n">Lum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">Lsun</span>
+
+    <span class="c1"># turn these into a grid</span>
+    <span class="n">L</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">Lum</span><span class="p">,</span> <span class="n">T_eff</span><span class="p">)</span>
+
+    <span class="c1"># compute the radius for this grid and convert to solar radii</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">get_R_from_L_T</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+
+    <span class="c1"># make a contour plot of these values</span>
+    <span class="n">cont</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">R</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">Rsun</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+                        <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s2">&quot;dotted&quot;</span><span class="p">)</span>
+
+    <span class="c1"># format the labels nicely with solar radii</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fmt</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;$\,{\rm R_{\odot}}$&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;$\,{\rm R_{\odot}}$&quot;</span>
+
+    <span class="c1"># label the lines</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cont</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span> <span class="n">use_clabeltext</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rightside_up</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">fs</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round,pad=0.3&#39;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">kstar</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">kstar</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]],</span> <span class="n">label</span><span class="o">=</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">kstar</span><span class="p">][</span><span class="s2">&quot;short&quot;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Stellar Type&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebook_metisse_cosmic_example_14_0.png" src="../_images/notebook_metisse_cosmic_example_14_0.png" />
+</div>
+</div>
+<p>Clearly, binaries show different evolutionary patterns with METISSE compared to SSE. To investigate this further, let’s compare how the mass and radius of the stars changes over time.</p>
+</section>
+<section id="Mass-vs-Time">
+<h2>3.&nbsp;&nbsp;Mass vs Time<a class="headerlink" href="#Mass-vs-Time" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1"># loop over different engines</span>
+<span class="k">for</span> <span class="n">bcm</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bcms</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">axes</span><span class="p">):</span>
+
+    <span class="c1"># plot the primary star</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;mass_1&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;kstar_1&quot;</span><span class="p">]],</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;mass_1&quot;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># plot the secondary star</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;mass_2&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;kstar_2&quot;</span><span class="p">]],</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;mass_2&quot;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Identify rows where mass transfer occurs (RRLO_1 &gt; 1)</span>
+    <span class="n">mt_rows</span> <span class="o">=</span> <span class="n">bcm</span><span class="p">[</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;RRLO_1&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mt_rows</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">mt_rows</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">&quot;Mass transfer&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">mt_rows</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">10</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
+
+
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">bcms</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time [Myr]&#39;</span><span class="p">,</span>
+        <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Mass [Msun]&#39;</span><span class="p">,</span>
+        <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span>
+        <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round,pad=0.3&#39;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">kstar</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">14</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">kstar</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]],</span> <span class="n">label</span><span class="o">=</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">kstar</span><span class="p">][</span><span class="s2">&quot;short&quot;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Stellar Type&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebook_metisse_cosmic_example_17_0.png" src="../_images/notebook_metisse_cosmic_example_17_0.png" />
+</div>
+</div>
+</section>
+<section id="Radius-vs-Time">
+<h2>4.&nbsp;&nbsp;Radius vs Time<a class="headerlink" href="#Radius-vs-Time" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">for</span> <span class="n">bcm</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bcms</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">axes</span><span class="p">):</span>
+
+    <span class="c1"># plot the primary star</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;rad_1&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;kstar_1&quot;</span><span class="p">]],</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;rad_1&quot;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># plot the secondary star</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;rad_2&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;kstar_2&quot;</span><span class="p">]],</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;rad_2&quot;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Identify rows where mass transfer occurs (RRLO_1 &gt; 1)</span>
+    <span class="n">mt_rows</span> <span class="o">=</span> <span class="n">bcm</span><span class="p">[</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;RRLO_1&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mt_rows</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">mt_rows</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">&quot;Mass transfer&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">mt_rows</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">10</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+                    <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">0.3</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">bcms</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time [Myr]&#39;</span><span class="p">,</span>
+        <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Radius [Rsun]&#39;</span><span class="p">,</span>
+        <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span>
+        <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mf">5e3</span><span class="p">),</span>
+        <span class="n">yscale</span><span class="o">=</span><span class="s2">&quot;log&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s1">&#39;axes fraction&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s1">&#39;round,pad=0.3&#39;</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">kstar</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">14</span><span class="p">]:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([],</span> <span class="p">[],</span> <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">kstar</span><span class="p">][</span><span class="s2">&quot;colour&quot;</span><span class="p">]],</span> <span class="n">label</span><span class="o">=</span><span class="n">kstar_translator</span><span class="p">[</span><span class="n">kstar</span><span class="p">][</span><span class="s2">&quot;short&quot;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Stellar Type&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span> <span class="n">title_fontsize</span><span class="o">=</span><span class="mf">0.6</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">)</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebook_metisse_cosmic_example_19_0.png" src="../_images/notebook_metisse_cosmic_example_19_0.png" />
+</div>
+</div>
+<p>SSE and METISSE predict different radial evolutions of the star. This is the reason why the evolution of the binary is so different. This is also shown by the following plot:</p>
+</section>
+<section id="Radial-separation-over-time">
+<h2>5.&nbsp;&nbsp;Radial separation over time<a class="headerlink" href="#Radial-separation-over-time" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">bcm</span> <span class="ow">in</span> <span class="n">bcms</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;tphys&quot;</span><span class="p">],</span> <span class="n">bcm</span><span class="p">[</span><span class="s2">&quot;sep&quot;</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span> <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;sse&quot;</span> <span class="k">else</span> <span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time [Myr]&#39;</span><span class="p">,</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Separation [Rsun]&#39;</span><span class="p">,</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7200</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x177642620&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebook_metisse_cosmic_example_22_1.png" src="../_images/notebook_metisse_cosmic_example_22_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="demo.html" class="btn btn-neutral float-left" title="Running METISSE via Python (Optional)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../FAQ.html" class="btn btn-neutral float-right" title="FAQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Poojan Agrawal.
+      <span class="lastupdated">Last updated on 2025 Nov 18 at 17:35:27 UTC.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
