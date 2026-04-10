@@ -219,7 +219,8 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
                 ! end if
             endif
             
-            if (debug) print*, "num_tracks", size(xa)
+            num_tracks = size(xa)
+            if (debug) print*, "num_tracks", num_tracks
             if (debug) print*, "tracks set by COSMIC"
 
         case default
