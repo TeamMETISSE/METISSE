@@ -2,7 +2,7 @@ module z_support
     use track_support
     implicit none
 
-    character(LEN=strlen) :: eep_tracks_dir
+    character(LEN=strlen) :: eep_tracks_dir, USE_DIR
     logical :: read_eep_files, read_all_columns, get_cols
     
     integer :: max_files = 50
@@ -221,8 +221,8 @@ module z_support
         
     end subroutine read_metallicity_file
     
-    subroutine read_format(USE_DIR,filename,ierr)
-        character(LEN=strlen), intent(in) :: USE_DIR, filename
+    subroutine read_format(filename,ierr)
+        character(LEN=strlen), intent(in) :: filename
         integer, intent(out) :: ierr
         integer :: io
         logical :: res
@@ -725,17 +725,26 @@ module z_support
 
     !reading column names from file - from iso_eep_support.f90
     subroutine process_columns(filename,cols,ierr)
-        character(LEN=strlen), intent(in) :: filename
+        character(LEN=strlen) :: filename
         integer, intent(out) :: ierr
         integer :: i, ncols(2), nchar, column_length, pass
         character(LEN=strlen) :: line, column_name
-        logical :: is_int,debug
+        logical :: is_int,debug,res
         type(column), allocatable, intent(out) :: cols(:)
         integer :: ncol,io
 
         debug =.false.
         ierr = 0
         io = alloc_iounit(ierr)
+
+         ! check if the file exists
+        inquire(file=trim(filename), exist=res)
+        
+        if (res .eqv. .False.) then
+            if(debug) write(*,*)trim(filename),' not found; appending ',trim(USE_DIR)
+            filename = trim(USE_DIR)//'/'//trim(filename)
+        endif
+
         open(io,file=trim(filename),action='read',status='old',iostat=ierr)
         if(ierr/=0) then
            write(out_unit,*) 'failed to open the file: ', trim(filename)
@@ -1176,8 +1185,6 @@ module z_support
             if (y(k)% is_he_track)start = ZAMS_HE_EEP
             y(k)% tr(i_age2,:) = y(k)% tr(i_age2,:)- y(k)% tr(i_age2,start)
             
-            !TODO: check track completion and BGB phase?
-
         end do
         
         !Now deallocate xa
@@ -1236,6 +1243,7 @@ module z_support
             x => sa_he
         else
             x => sa
+            Rmax = 0
         endif
         
         if (allocated(Mmax)) deallocate(Mmax, Mmin)
@@ -1244,7 +1252,6 @@ module z_support
         allocate(Mmax(nmax), Mmin(nmax))
         Mmax = 0.d0
         Mmin = huge(0.0d0)    !largest float
-        
         do i = 1,size(x)
             !Find maximum and minimum mass at each eep
             do j = 1, nmax
@@ -1253,9 +1260,13 @@ module z_support
                     Mmin(j) = min(Mmin(j),x(i)% tr(i_mass,j))
                 endif
             end do
+            ! Find max radius (used in determining limiting radius in case of extrapolation)
+            ! currently only for hydrogen stars
+            if (is_he_track.eqv..false.) Rmax = max(Rmax, maxval(x(i)% tr(i_logR,:)))
         end do
         
         nullify(x)
+
     end subroutine get_minmax
 
     subroutine set_zparameters(num_tracks,zpars)
@@ -1431,6 +1442,7 @@ module z_support
             call index_search (num_tracks, mass_list, Mcrit(i)% mass, min_index)
             !Once again, ensure that the location for Mup does not exceed Mec
             if (i ==6 .and. Mcrit(7)% loc>1) min_index = min(min_index,Mcrit(7)% loc-1)
+            if (min_index>size(mass_list)) cycle
             Mcrit(i)% mass = mass_list(min_index)
             Mcrit(i)% loc = min_index
             if (debug) print*, i, Mcrit(i)% mass, min_index
@@ -1834,12 +1846,8 @@ module z_support
                 xa(i)% initial_mass = xa(i)% tr(i_mass,ZAMS_EEP)
             endif
             call set_star_type_from_history(xa(i))
-            
-            print*, xa(i)% initial_mass, i_mass, ZAMS_EEP, ZAMS_HE_EEP
-
 
             offset = offset + ntrack_arr(i)
-
         end do  
 
     end subroutine set_tracks_from_python_inputs

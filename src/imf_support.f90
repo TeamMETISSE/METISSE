@@ -23,33 +23,39 @@ module imf_support
 !  !for log spaced
 !  end subroutine
 
-  subroutine sample_kroupa_imf(marray, n, mmin, mbreak, mmax)
+  subroutine sample_kroupa_imf(marray, n, mmin, mmax)
     implicit none
     integer, intent(in) :: n
-    real(dp), intent(in) :: mmin, mbreak, mmax
+    real(dp), intent(in) :: mmin,  mmax
     real(dp), intent(out) :: marray(n)
-    real(dp) :: r, x, norm1, norm2, total
+    real(dp) :: r, x, norm1, norm2, nfrac, mbreak
     real(dp), parameter :: alpha1 = 1.3d0, alpha2 = 2.3d0
     integer :: i
 
     marray = 0.d0
+    mbreak = max(mmin,0.5d0)
+
     ! Compute cumulative normalization for piecewise power-law
     norm1 = (mbreak**(1.d0 - alpha1) - mmin**(1.d0 - alpha1)) / (1.d0 - alpha1)
     norm2 = (mmax**(1.d0 - alpha2) - mbreak**(1.d0 - alpha2)) / (1.d0 - alpha2)
-    total = norm1 + norm2
-
+    nfrac = norm1 /(norm1 + norm2)
+ 
     call random_seed()  ! Initialize RNG
 
-    do i = 1, n
+    i=1
+    do while(i<=n)
        call random_number(r)
-       if (r < norm1 / total) then
+       if ((norm1>0.d0) .and. (r < nfrac)) then
           call random_number(x)
           marray(i) = ((x * (mbreak**(1.d0 - alpha1) - mmin**(1.d0 - alpha1)) + mmin**(1.d0 - alpha1)))**(1.d0 / (1.d0 - alpha1))
+          i=i+1
        else
           call random_number(x)
           marray(i) = ((x * (mmax**(1.d0 - alpha2) - mbreak**(1.d0 - alpha2)) + mbreak**(1.d0 - alpha2)))**(1.d0 / (1.d0 - alpha2))
+          i=i+1
        end if
     end do
+    
   end subroutine sample_kroupa_imf
 
 end module imf_support

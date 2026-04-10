@@ -3,7 +3,7 @@
 &metallicity_controls
 
     ! Location of the folder containing input files for a given metallicity
-    eep_tracks_dir = './MW-fixed-core-mass'
+    eep_tracks_dir = '/Users/poojan/Downloads/BoOST-stellarmodels-MW/tracks'
 
     ! Metallicity of input tracks
     ! It is only used to cross-check 
@@ -15,6 +15,6 @@
     ! Details about the file structure (see format_defaults.dat)
     ! Empty string will raise an error
 
-    format_file = './format_stellar_model_grid'
+    format_file = './format_boost_main.dat'
 
 /

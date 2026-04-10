@@ -2,16 +2,19 @@
 
 
 ## How to cite METISSE?
-Please cite the following papers if you are using METISSE in your work. 
+Please cite the following paper if you are using METISSE in your work. 
 
+- [METISSE: METhod of Interpolation for Single Star Evolution](https://ui.adsabs.harvard.edu/abs/2025JOSS...10.8817A/abstract)
 
-<!-- - TBA
-
-More details about METISSE including code capabilities are described in the following papers: -->
-
+More details about METISSE including code capabilities are described in the following papers:
 
 - [Modelling stellar evolution in mass-transferring binaries and gravitational-wave progenitors with METISSE](https://ui.adsabs.harvard.edu/abs/2023MNRAS.525..933A/abstract)
 - [The fates of massive stars: exploring uncertainties in stellar evolution with METISSE](https://ui.adsabs.harvard.edu/abs/2020MNRAS.497.4549A/abstract)
+
+METISSE is also available at the software citation station: <a href="https://www.tomwagg.com/software-citation-station/?auto-select=METISSE">
+    <img src="https://img.shields.io/badge/Cite-METISSE-5f65cd" />
+</a>
+
 
 ## Which interpolation method is used by METISSE? 
 
@@ -24,10 +27,10 @@ We are working hard to add this capability, but currently METISSE cannot restart
 
 
 ## Can METISSE interpolate in metallicity?
-METISSE delibertely does not support interpolation in metallicity. However, you can choose the nearest metallicity value by adjusting `Z_accuracy_limit`. Please refer to [](usage_standalone.md#if-the-metallicity-value-is-not-present-in-the-input-grid) for more details.
+METISSE delibertely does not support interpolation in metallicity. However, you can choose the nearest metallicity value by adjusting `Z_accuracy_limit`. Please refer to the section: [if the metallicity value is not present in the input grid](usage_standalone.md#if-the-metallicity-value-is-not-present-in-the-input-grid) for more details.
 
 ## Can I add METISSE to my code?
-Yes, if it uses Fortran based fitting formulae from SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) to compute stellar parameters. Your code must contain Fortran77 subroutines - namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f that come with the SSE code. For details refer to [](structure.md#adding-metisse-to-your-code).
+Yes, if it uses Fortran based fitting formulae from SSE [(Hurley et al. 2000)](https://ui.adsabs.harvard.edu/abs/2000MNRAS.315..543H/abstract) to compute stellar parameters. Your code must contain Fortran77 subroutines - namely zcnsts.f, star.f, hrdiag.f, deltat.f, mlwind.f that come with the SSE code. For details refer to the section: [adding metisse to your code](structure.md#adding-metisse-to-your-code).
 
 ## How can I contribute to METISSE?
 We are always working on improving METISSE. 

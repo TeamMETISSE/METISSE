@@ -8,7 +8,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
     integer, intent(out):: ierr
     
     character(LEN = strlen), allocatable:: track_list(:)
-    character(LEN = strlen):: USE_DIR, find_cmd, rnd, infile, temp_filename
+    character(LEN = strlen):: find_cmd, rnd, infile, temp_filename
     integer:: i, j, nloop, num_tracks
     logical:: load_tracks, debug
     
@@ -257,7 +257,7 @@ subroutine METISSE_zcnsts(z, zpars, ierr)
             endif
             
             !read file-format
-            call read_format(USE_DIR,format_file,ierr); if (ierr/=0) return
+            call read_format(format_file,ierr); if (ierr/=0) return
                 
             !get filenames from eep_tracks_dir
             if (read_eep_files) file_extension = '.eep'
