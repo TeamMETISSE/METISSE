@@ -5,62 +5,9 @@ COSMIC [(Breivik et al. 2020)](https://ui.adsabs.harvard.edu/abs/2020ApJ...898..
 METISSE can be used as the stellar evolution module inside COSMIC.
 
 This section provides a short, step-by-step guide to using METISSE with COSMIC.
-For more details please refer to COSMIC's [official documentation](https://cosmic-popsynth.github.io/COSMIC/index.html). 
+For more details please refer to COSMIC's [official documentation](https://cosmic-popsynth.github.io/COSMIC/index.html).  
 
-1. Follow COSMIC’s official [installation guide](https://cosmic-popsynth.github.io/COSMIC/pages/install.html) to load the COSMIC environment and activate it in your terminal.
-
-    If you don’t already have COSMIC installed, download it from [GitHub](https://github.com/COSMIC-PopSynth/COSMIC/tree/develop).
-
-
-    ``` console
-
-    $ git clone https://github.com/COSMIC-PopSynth/COSMIC
-
-    ```
-
-    Next, change into the COSMIC directory and compile the library: 
-
-
-    ``` console
-
-    $ pip install .
-
-    ```
-
-
-    Try evolving an example binary following the instructions on [this page](https://cosmic-popsynth.github.io/COSMIC/pages/examples.html). 
-
-
-2. Next checkout the METISSE-Integrate branch of COSMIC. In the COSMIC's directory, do:
-
-
-    ``` console
-
-    $ git checkout METISSE-integrate
-
-    ```
-
-    Get the METISSE submodule.
-
-    ``` console
-
-    $ git submodule update --init --recursive
-
-    ```
-
-
-    Re-compile the library
-
-
-    ``` console
-
-    $ pip install .
-
-    ```
-
-    METISSE is now ready to use with COSMIC.
-
-<!-- 1. Get COSMIC (version 4.0)
+1. Get COSMIC (version 4.0.0)
 
     Follow COSMIC’s official [installation guide](https://cosmic-popsynth.github.io/COSMIC/pages/install.html) to load the COSMIC environment and activate it in your terminal.
 
@@ -91,7 +38,7 @@ For more details please refer to COSMIC's [official documentation](https://cosmi
 
     ```
 
-    METISSE is now ready to use with COSMIC.  -->
+    METISSE is now ready to use with COSMIC.  
 
 
 3. Configure METISSE inside COSMIC
