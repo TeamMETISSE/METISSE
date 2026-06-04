@@ -16,7 +16,7 @@
     
     integer :: kw,i,idd,j_bagb,old_phase
     real(dp) :: rg,rzams,rtms
-    real(dp) :: Mcbagb, mc_max,HeI_time,dt_hold
+    real(dp) :: Mcbagb, mc_max,HeI_time,dt_hold,env_frac
     real(dp) :: bhspin ! only for cosmic
     type(star_parameters) :: old_pars
 
@@ -51,6 +51,7 @@
     dt_hold = aj - t% pars% age
     if (aj/=aj) aj = t% pars% age
     t% pars% age = aj
+    env_frac = MAX((mt - mc)/mt,0.d0)
     
     IF (t% pars% phase<=TPAGB) THEN
         if (t% post_agb) then
@@ -103,7 +104,7 @@
                 
                 has_become_remnant = .true.
             
-            ELSEIF (check_ge(t% pars% core_mass,t% pars% mass)) THEN
+            ELSEIF (env_frac<1.d-8.and.t% pars% phase >= HG) THEN
                 !check if envelope has been lost
 
                 if (debug)print*,"envelope lost at",t% pars% age,t% pars% phase,t% pars% mass,t% pars% core_mass
