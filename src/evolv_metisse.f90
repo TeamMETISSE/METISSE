@@ -67,9 +67,15 @@ subroutine evolv_metisse(mass, max_age, ierr, id)
         
         ! advance the time
         tphys = tphys+timestep
-        
+      
+        if (tphys >= max_age) then
+            tphys = max_age
+            t_end  = .true. ! to print output before exiting
+            !it is different to end_of_file defined in hrdiag
+        end if
+
         !evolve the star-calculate stellar parameters at tphys
-       if ((use_sse_NHe.eqv..false.) .and.(t% pars% phase >= He_MS)) then
+        if ((use_sse_NHe.eqv..false.) .and.(t% pars% phase >= He_MS)) then
             epoch = t% pars% age_old-t% pars% age 
         endif
         
@@ -84,12 +90,6 @@ subroutine evolv_metisse(mass, max_age, ierr, id)
             t% pars% log_Teff = log10(t% pars% Teff)
             t% pars% log_R =  log10(t% pars% radius)
         endif
-      
-        if (tphys >= max_age) then
-            tphys = max_age
-            t_end  = .true. ! to print output before exiting
-            !it is different to end_of_file defined in hrdiag
-        end if
        
         if ((old_phase /= t% pars% phase) .or. t_end) then
             if (verbose) write(*,'(a10, f10.1, 3a10, f7.3)') "Time ", tphys, "Phase ", phase_label(t% pars% phase+1), &
