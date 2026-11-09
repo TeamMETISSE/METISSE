@@ -93,7 +93,8 @@ contains
                                      initEEP, finalEEP, fixtrack, lowEEP, highEEP, &
                                      age_col, mass_col, logL_col, logT_col, logR_col, &
                                      he_mass_col, co_mass_col, he_radius_col, co_radius_col, &
-                                     mass_env_col, radius_env_col, logTc_col, He4_col, c12_col, o16_col)
+                                     mass_env_col, radius_env_col, logTc_col, He4_col, c12_col, o16_col, &
+                                     lookup)
                                      
         logical, intent(in) :: read_eep, fixtrack
         integer, intent(in) :: prems, zams, iams, tams, bgb
@@ -104,6 +105,7 @@ contains
         character(len=*), intent(in) :: he_mass_col, co_mass_col, he_radius_col, co_radius_col
         character(len=*), intent(in) :: mass_env_col, radius_env_col
         character(len=*), intent(in) :: logTc_col, He4_col, c12_col, o16_col
+        real(dp), intent(in) :: lookup
 
         py_read_eep_files_H = read_eep
         py_PreMS_EEP_H = prems
@@ -138,6 +140,8 @@ contains
         py_He4_mass_frac_H = He4_col
         py_c12_mass_frac_H = c12_col
         py_o16_mass_frac_H = o16_col
+
+        py_lookup = lookup
     end subroutine set_format_controls_H
 
     ! --------------------------
