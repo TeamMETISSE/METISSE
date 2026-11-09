@@ -66,6 +66,8 @@ module c_m_interface
     character(len=f2py_strlen) :: py_he_core_radius_H, py_co_core_radius_H
     character(len=f2py_strlen) :: py_mass_conv_envelope_H, py_radius_conv_envelope_H
     character(len=f2py_strlen) :: py_log_Tc_H, py_He4_mass_frac_H, py_c12_mass_frac_H, py_o16_mass_frac_H
+    real(dp) :: py_lookup_index
+
 
     ! -----------------------
     ! Helium format controls
@@ -82,7 +84,6 @@ module c_m_interface
     character(len=f2py_strlen) :: py_he_core_radius_He, py_co_core_radius_He
     character(len=f2py_strlen) :: py_mass_conv_envelope_He, py_radius_conv_envelope_He
     character(len=f2py_strlen) :: py_log_Tc_He, py_He4_mass_frac_He, py_c12_mass_frac_He, py_o16_mass_frac_He
-    real(dp) :: py_lookup_index
 
 contains
 
