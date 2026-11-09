@@ -1709,6 +1709,8 @@ module z_support
             c12_mass_frac = py_c12_mass_frac_H
             o16_mass_frac = py_o16_mass_frac_H
 
+            lookup_index = py_lookup_index
+
         else if (track_type == 'He') then
             read_eep_files = py_read_eep_files_He
             BGB_EEP = py_BGB_EEP_He
