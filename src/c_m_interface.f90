@@ -66,6 +66,7 @@ module c_m_interface
     character(len=f2py_strlen) :: py_he_core_radius_H, py_co_core_radius_H
     character(len=f2py_strlen) :: py_mass_conv_envelope_H, py_radius_conv_envelope_H
     character(len=f2py_strlen) :: py_log_Tc_H, py_He4_mass_frac_H, py_c12_mass_frac_H, py_o16_mass_frac_H
+    character(len=f2py_strlen) :: py_gam1_center_colname_H, py_gam1_integral_colname_H
 
     ! -----------------------
     ! Helium format controls
@@ -82,6 +83,7 @@ module c_m_interface
     character(len=f2py_strlen) :: py_he_core_radius_He, py_co_core_radius_He
     character(len=f2py_strlen) :: py_mass_conv_envelope_He, py_radius_conv_envelope_He
     character(len=f2py_strlen) :: py_log_Tc_He, py_He4_mass_frac_He, py_c12_mass_frac_He, py_o16_mass_frac_He
+    character(len=f2py_strlen) :: py_gam1_center_colname_He, py_gam1_integral_colname_He
 
 contains
 
@@ -93,7 +95,8 @@ contains
                                      initEEP, finalEEP, fixtrack, lowEEP, highEEP, &
                                      age_col, mass_col, logL_col, logT_col, logR_col, &
                                      he_mass_col, co_mass_col, he_radius_col, co_radius_col, &
-                                     mass_env_col, radius_env_col, logTc_col, He4_col, c12_col, o16_col)
+                                     mass_env_col, radius_env_col, logTc_col, He4_col, c12_col, o16_col,&
+                                     gam1_center_col, gam1_integral_col)
                                      
         logical, intent(in) :: read_eep, fixtrack
         integer, intent(in) :: prems, zams, iams, tams, bgb
@@ -104,6 +107,7 @@ contains
         character(len=*), intent(in) :: he_mass_col, co_mass_col, he_radius_col, co_radius_col
         character(len=*), intent(in) :: mass_env_col, radius_env_col
         character(len=*), intent(in) :: logTc_col, He4_col, c12_col, o16_col
+        character(len=*), intent(in) :: gam1_center_col, gam1_integral_col
 
         py_read_eep_files_H = read_eep
         py_PreMS_EEP_H = prems
@@ -138,6 +142,8 @@ contains
         py_He4_mass_frac_H = He4_col
         py_c12_mass_frac_H = c12_col
         py_o16_mass_frac_H = o16_col
+        py_gam1_center_colname_H = gam1_center_col
+        py_gam1_integral_colname_H = gam1_integral_col
     end subroutine set_format_controls_H
 
     ! --------------------------
@@ -147,7 +153,9 @@ contains
                                       initEEP, finalEEP, fixtrack, lowEEP, highEEP, &
                                       age_col, mass_col, logL_col, logT_col, logR_col, &
                                       he_mass_col, co_mass_col, he_radius_col, co_radius_col, &
-                                      mass_env_col, radius_env_col, logTc_col, He4_col, c12_col, o16_col)
+                                      mass_env_col, radius_env_col, logTc_col, He4_col, c12_col, o16_col,&
+                                      gam1_center_col, gam1_integral_col)
+
         logical, intent(in) :: read_eep, fixtrack
         integer, intent(in) :: bgb, cHeBurn, ta_cHeB, tpagb
         integer, intent(in) :: cCBurn, postAGB, initEEP, finalEEP
@@ -156,6 +164,7 @@ contains
         character(len=*), intent(in) :: he_mass_col, co_mass_col, he_radius_col, co_radius_col
         character(len=*), intent(in) :: mass_env_col, radius_env_col
         character(len=*), intent(in) :: logTc_col, He4_col, c12_col, o16_col
+        character(len=*), intent(in) :: gam1_center_col, gam1_integral_col
 
         py_read_eep_files_He = read_eep
         py_BGB_EEP_He = bgb
@@ -185,6 +194,8 @@ contains
         py_He4_mass_frac_He = He4_col
         py_c12_mass_frac_He = c12_col
         py_o16_mass_frac_He = o16_col
+        py_gam1_center_colname_He = gam1_center_col
+        py_gam1_integral_colname_He = gam1_integral_col
     end subroutine set_format_controls_He
 
     ! --------------------------

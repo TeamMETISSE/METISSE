@@ -58,7 +58,8 @@ module z_support
                         Lum_colname, Teff_colname, Radius_colname, &
                         he_core_mass, co_core_mass, he_core_radius, co_core_radius, &
                         log_Tc, c12_mass_frac, o16_mass_frac,he4_mass_frac, &
-                        mass_conv_envelope, radius_conv_envelope, binding_energy_colname
+                        mass_conv_envelope, radius_conv_envelope, binding_energy_colname, &
+                        gam1_center_colname, gam1_integral_colname
                         
     contains
     
@@ -559,6 +560,12 @@ module z_support
             i_binding_energy = locate_column(cols, binding_energy_colname)
             ! find the binding energy column, convert it to unit log BE later
         endif
+
+        i_gam1_center = -1
+        i_gam1_integral = -1
+        if (gam1_center_colname/= '') i_gam1_center = locate_column(cols, gam1_center_colname) 
+        if (gam1_integral_colname/= '') i_gam1_integral = locate_column(cols, gam1_integral_colname) 
+
 
         if (is_he_track) then
             if (co_core_radius/= '') i_he_RCO = locate_column(cols, co_core_radius)

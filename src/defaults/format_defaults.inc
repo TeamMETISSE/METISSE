@@ -84,7 +84,13 @@
     ! binding_energy of the envelope
     ! in ergs (do not use log)
     binding_energy_colname = ''
-    
+
+    ! the following two used for (P)PISN
+    ! pressure-weighted adiabatic index (Gamma1) at the core
+    gam1_center_colname = ''
+    ! pressure-weighted adiabatic index (Gamma1) integrated over mass
+    gam1_integral_colname = ''
+
     ! radius of He enriched/H depleted core
     ! in solar units (do not use log)
     
